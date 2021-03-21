@@ -23,11 +23,11 @@ export const NETWORK = {
   RegTest: 2
 }
 export const DOMAIN = {
-  0: 'explorer.qiswap.com',
+  0: 'infoapi.backend.com',
   1: 'testnet.qtum.info'
 }
 export const INSIGHT_DOMAIN = {
-  0: 'api.qiswap.com',
+  0: 'insight.backendq.com',
   1: 'testnet-api.qiswap.com'
 }
 Object.keys(DOMAIN).forEach(chainId => {
