@@ -1,4 +1,11 @@
-import { reactive, computed, useContext, watch, onMounted, getCurrentInstance } from '@nuxtjs/composition-api'
+import {
+  reactive,
+  computed,
+  useContext,
+  watch,
+  onMounted,
+  getCurrentInstance
+} from '@nuxtjs/composition-api'
 import BigNumber from 'bignumber.js'
 import { getDeadline, slippageAmounts } from '../utils'
 import {
@@ -8,7 +15,9 @@ import {
   SWAP_EXACT_OUTPUT,
   MINIMUM_LIQUIDITY,
   BASE_FEE,
-  NETWORK, TYPE_APPROVE, DOMAIN
+  NETWORK,
+  TYPE_APPROVE,
+  DOMAIN
 } from '../constants'
 import Transaction from '../transaction'
 import Fraction from '../fraction'
@@ -22,22 +31,35 @@ import LiquidityToken from './liquidity-token'
 export { Token, TokenAmount, Pair, LiquidityToken }
 
 export class Swap {
-  constructor (type) {
+  constructor(type) {
     const vm = getCurrentInstance()
-    const { store: { state } } = useContext()
+    const {
+      store: { state }
+    } = useContext()
     this.vm = vm
 
     this.type = type
     this.tokenAmount0 = new TokenAmount(Token.QTUM)
     this.tokenAmount1 = new TokenAmount(null)
     this.independentTokenAmount = this.tokenAmount0
-    this.dependentTokenAmount = computed(() => this.independentTokenAmount === this.tokenAmount0 ? this.tokenAmount1 : this.tokenAmount0)
+    this.dependentTokenAmount = computed(() =>
+      this.independentTokenAmount === this.tokenAmount0
+        ? this.tokenAmount1
+        : this.tokenAmount0
+    )
     this.hashStateRoot = ''
 
     // data from store
     this.account = computed(() => state.swap.account)
-    this.tokens = computed(() => state.swap.tokens.filter(token => token.isQTUM || token.chainId === NETWORK[this.account?.network]))
-    this.txs = computed(() => state.swap.txs.filter(tx => tx.address === this.account?.address))
+    this.tokens = computed(() =>
+      state.swap.tokens.filter(
+        token =>
+          token.isQTUM || token.chainId === NETWORK[this.account?.network]
+      )
+    )
+    this.txs = computed(() =>
+      state.swap.txs.filter(tx => tx.address === this.account?.address)
+    )
     this.tolerance = computed(() => state.swap.tolerance)
     this.deadline = computed(() => state.swap.deadline)
     this.connected = computed(() => state.swap.connected)
@@ -65,38 +87,38 @@ export class Swap {
     })
   }
 
-  get tokenAmounts () {
+  get tokenAmounts() {
     return [this.tokenAmount0, this.tokenAmount1]
   }
 
-  canProcess () {
+  canProcess() {
     return false
   }
 
-  get selected () {
+  get selected() {
     return this.tokenAmount0.selected && this.tokenAmount1.selected
   }
 
-  get token0 () {
+  get token0() {
     return this.tokenAmount0.token
   }
 
-  get token1 () {
+  get token1() {
     return this.tokenAmount1.token
   }
 
-  get invertRatio () {
+  get invertRatio() {
     return this.ratio.invert()
   }
 
-  makePairsWithCommonTokens (token) {
+  makePairsWithCommonTokens(token) {
     if (!token) {
       return []
     }
     return this.commonTokens.map(t => Pair.from(token, t))
   }
 
-  watchAll () {
+  watchAll() {
     this.watchInput()
     this.watchToken()
     this.watchAccount()
@@ -106,62 +128,78 @@ export class Swap {
     })
   }
 
-  watchAccount () {
+  watchAccount() {
     // update balance if account has been changed
-    watch(() => this.account, account => {
-      if (account?.loggedIn) {
-        this.updateTokens()
-      } else {
-        this.tokenAmount0.amountSatoshi = BigNumber(0)
-        this.tokenAmount1.amountSatoshi = BigNumber(0)
+    watch(
+      () => this.account,
+      account => {
+        if (account?.loggedIn) {
+          this.updateTokens()
+        } else {
+          this.tokenAmount0.amountSatoshi = BigNumber(0)
+          this.tokenAmount1.amountSatoshi = BigNumber(0)
+        }
       }
-    })
+    )
   }
 
-  watchInput () {
-    this.tokenAmounts.forEach(tokenAmount => watch(() => tokenAmount.inputing, inputing => {
-      if (inputing) {
-        this.independentTokenAmount = tokenAmount
-      }
-    }))
+  watchInput() {
+    this.tokenAmounts.forEach(tokenAmount =>
+      watch(
+        () => tokenAmount.inputing,
+        inputing => {
+          if (inputing) {
+            this.independentTokenAmount = tokenAmount
+          }
+        }
+      )
+    )
     // watch when the input changed
-    watch(() => this.independentTokenAmount.input, input => {
-      const amount = BigNumber(input || 0)
-      // change the amount in Satoshi
-      this.independentTokenAmount.amount = amount
-      // if it's not the current input, don't change anything
-      if (!this.independentTokenAmount.inputing) {
-        return
+    watch(
+      () => this.independentTokenAmount.input,
+      input => {
+        const amount = BigNumber(input || 0)
+        // change the amount in Satoshi
+        this.independentTokenAmount.amount = amount
+        // if it's not the current input, don't change anything
+        if (!this.independentTokenAmount.inputing) {
+          return
+        }
+        this.updateDependentTokenAmount()
       }
-      this.updateDependentTokenAmount()
-    })
+    )
   }
 
-  updateDependentTokenAmount () {
+  updateDependentTokenAmount() {}
 
-  }
-
-  watchToken () {
+  watchToken() {
     // update each token if it changes
     this.tokenAmounts.forEach(tokenAmount => {
-      watch(() => tokenAmount.token, token => {
-        // tokenAmount.input = ''
-        this.updateBalance(token)
-        this.updateShouldApprove(token)
-        this.updateDependentTokenAmount()
-      })
-      const stop = watch(() => tokenAmount.token, () => {
-        if (this.commonPairs.length > 0) {
-          stop()
+      watch(
+        () => tokenAmount.token,
+        token => {
+          // tokenAmount.input = ''
+          this.updateBalance(token)
+          this.updateShouldApprove(token)
+          this.updateDependentTokenAmount()
         }
-      })
+      )
+      const stop = watch(
+        () => tokenAmount.token,
+        () => {
+          if (this.commonPairs.length > 0) {
+            stop()
+          }
+        }
+      )
     })
-    watch(() => this.tokens, () => {
-      this.updateTokens()
-    })
+    watch(
+      () => this.tokens,
+      () => this.updateTokens()
+    )
   }
 
-  async approve (tokenAmount) {
+  async approve(tokenAmount) {
     const token = tokenAmount.token
     this.updateToken(token, {
       approving: true
@@ -182,29 +220,34 @@ export class Swap {
         })
       }
     } catch (e) {
-      console.log('approve failed', e)
+      console.log('approve failed', e) // eslint-disable-line
     }
   }
 
-  switchTokens () {
-    [this.tokenAmount1, this.tokenAmount0] = [this.tokenAmount0, this.tokenAmount1]
+  switchTokens() {
+    [this.tokenAmount1, this.tokenAmount0] = [this.tokenAmount0, this.tokenAmount1] // eslint-disable-line
   }
 
-  changeToken (index, token) {
+  changeToken(index, token) {
     this[`tokenAmount${index}`].token = token
   }
 
-  getReserves () {
-    return useQrypto().getReserves(this.tokenAmount0.wrappedToken, this.tokenAmount1.wrappedToken)
+  getReserves() {
+    return useQrypto().getReserves(
+      this.tokenAmount0.wrappedToken,
+      this.tokenAmount1.wrappedToken
+    )
   }
 
-  async updateShouldApprove (token) {
+  async updateShouldApprove(token) {
     let shouldApprove = false
     let approving = false
     if (token.isQTUM) {
       shouldApprove = false
     } else {
-      const tx = this.txs.find(tx => tx.type === TYPE_APPROVE && tx.token.address === token.address)
+      const tx = this.txs.find(
+        tx => tx.type === TYPE_APPROVE && tx.token.address === token.address
+      )
       if (tx) {
         shouldApprove = tx.raw.confirmations === 0
         if (shouldApprove) {
@@ -220,18 +263,18 @@ export class Swap {
     })
   }
 
-  updateToken (token, values) {
+  updateToken(token, values) {
     this.vm.$store.commit('swap/updateToken', { token, values })
   }
 
-  updateTokens () {
+  updateTokens() {
     this.tokens.forEach(token => {
       this.updateBalance(token)
       this.updateShouldApprove(token)
     })
   }
 
-  async updateBalance (token, forceUpdate = false) {
+  async updateBalance(token, forceUpdate = false) {
     if (!token) {
       return
     }
@@ -241,27 +284,33 @@ export class Swap {
     })
   }
 
-  slippageAmounts (value) {
+  slippageAmounts(value) {
     const tolerance = this.tolerance
     return slippageAmounts(value, tolerance)
   }
 }
 
 class Exchange extends Swap {
-  constructor () {
+  constructor() {
     super(TYPE_SWAP)
 
     this.maximumAmountIn = computed(() => {
       if (this.exactInput) {
         return this.tokenAmount0.amountSatoshi
       }
-      return this.tokenAmount0.amountSatoshi.times(100 + this.tolerance).div(100).dp(0, BigNumber.ROUND_DOWN)
+      return this.tokenAmount0.amountSatoshi
+        .times(100 + this.tolerance)
+        .div(100)
+        .dp(0, BigNumber.ROUND_DOWN)
     })
     this.minimumAmountOut = computed(() => {
       if (this.exactOutput) {
         return this.tokenAmount1.amountSatoshi
       }
-      return this.tokenAmount1.amountSatoshi.times(100).div(100 + this.tolerance).dp(0, BigNumber.ROUND_DOWN)
+      return this.tokenAmount1.amountSatoshi
+        .times(100)
+        .div(100 + this.tolerance)
+        .dp(0, BigNumber.ROUND_DOWN)
     })
 
     this.allPairs = computed(() => {
@@ -272,7 +321,9 @@ class Exchange extends Swap {
         ? []
         : this.makePairsWithCommonTokens(this.token1)
       return [
-        ...token0Pairs.length > 0 && token1Pairs.length > 0 ? [Pair.from(this.token0, this.token1)] : [],
+        ...(token0Pairs.length > 0 && token1Pairs.length > 0
+          ? [Pair.from(this.token0, this.token1)]
+          : []),
         ...token0Pairs,
         ...token1Pairs,
         ...this.commonPairs
@@ -286,15 +337,25 @@ class Exchange extends Swap {
         return []
       }
       return this.exactInput
-        ? Route.bestRoutesExactIn(this.allPairs, new TokenAmount(this.token0, this.tokenAmount0.amountSatoshi), this.token1)
-        : Route.bestRoutesExactOut(this.allPairs, this.token0, new TokenAmount(this.token1, this.tokenAmount1.amountSatoshi))
+        ? Route.bestRoutesExactIn(
+            this.allPairs,
+            new TokenAmount(this.token0, this.tokenAmount0.amountSatoshi),
+            this.token1
+          )
+        : Route.bestRoutesExactOut(
+            this.allPairs,
+            this.token0,
+            new TokenAmount(this.token1, this.tokenAmount1.amountSatoshi)
+          )
     })
     this.route = computed(() => this.routes[0])
     this.fee = computed(() => {
       if (!this.route) {
         return new Fraction(0)
       }
-      return new Fraction(1).minus(this.route.pairs.reduce(fee => fee.times(1 - BASE_FEE), new Fraction(1)))
+      return new Fraction(1).minus(
+        this.route.pairs.reduce(fee => fee.times(1 - BASE_FEE), new Fraction(1))
+      )
     })
     this.priceImpact = computed(() => {
       if (!this.route) {
@@ -310,24 +371,26 @@ class Exchange extends Swap {
     })
   }
 
-  get canProcess () {
+  get canProcess() {
     return this.route !== undefined || this.independentTokenAmount.amount.eq(0)
   }
 
-  get swapType () {
+  get swapType() {
     // see if last input is token0 or token1
-    return this.independentTokenAmount === this.tokenAmount0 ? SWAP_EXACT_INPUT : SWAP_EXACT_OUTPUT
+    return this.independentTokenAmount === this.tokenAmount0
+      ? SWAP_EXACT_INPUT
+      : SWAP_EXACT_OUTPUT
   }
 
-  get exactInput () {
+  get exactInput() {
     return this.swapType === SWAP_EXACT_INPUT
   }
 
-  get exactOutput () {
+  get exactOutput() {
     return this.swapType === SWAP_EXACT_OUTPUT
   }
 
-  async swapTokens () {
+  async swapTokens() {
     const qrypto = useQrypto()
     try {
       const tokenAmount0 = this.tokenAmount0
@@ -336,7 +399,9 @@ class Exchange extends Swap {
       const isQTUM1 = tokenAmount1.token.isQTUM
       const amountIn = this.maximumAmountIn
       const amountOut = this.minimumAmountOut
-      const path = this.route.path.map(token => qrypto.wrapHex(Token.wrapToken(token).address))
+      const path = this.route.path.map(token =>
+        qrypto.wrapHex(Token.wrapToken(token).address)
+      )
       const to = qrypto.wrapHex(qrypto.hexAddress)
       const deadline = getDeadline(this.deadline)
       let method
@@ -347,61 +412,27 @@ class Exchange extends Swap {
         case SWAP_EXACT_INPUT:
           if (isQTUM0) {
             method = 'swapExactETHForTokens'
-            params = [
-              amountOut,
-              path,
-              to,
-              deadline
-            ]
+            params = [amountOut, path, to, deadline]
             value = amountIn
           } else if (isQTUM1) {
             method = 'swapExactTokensForETH'
-            params = [
-              amountIn,
-              amountOut,
-              path,
-              to,
-              deadline
-            ]
+            params = [amountIn, amountOut, path, to, deadline]
           } else {
             method = 'swapExactTokensForTokens'
-            params = [
-              amountIn,
-              amountOut,
-              path,
-              to,
-              deadline
-            ]
+            params = [amountIn, amountOut, path, to, deadline]
           }
           break
         case SWAP_EXACT_OUTPUT:
           if (isQTUM0) {
             method = 'swapETHForExactTokens'
-            params = [
-              amountOut,
-              path,
-              to,
-              deadline
-            ]
+            params = [amountOut, path, to, deadline]
             value = amountIn
           } else if (isQTUM1) {
             method = 'swapTokensForExactETH'
-            params = [
-              amountOut,
-              amountIn,
-              path,
-              to,
-              deadline
-            ]
+            params = [amountOut, amountIn, path, to, deadline]
           } else {
             method = 'swapTokensForExactTokens'
-            params = [
-              amountOut,
-              amountIn,
-              path,
-              to,
-              deadline
-            ]
+            params = [amountOut, amountIn, path, to, deadline]
           }
           break
       }
@@ -418,51 +449,55 @@ class Exchange extends Swap {
         })
       }
     } catch (e) {
-      console.log('swap error', e)
+      console.log('swap error', e) // eslint-disable-line
     }
   }
 
-  watchAll () {
+  watchAll() {
     super.watchAll()
 
-    watch(() => this.height, async height => {
-      if (height > 0) {
-        try {
-          const { hashStateRoot } = await this.vm.$axios.$get(`https://${DOMAIN[this.account?.network]}/api/block/${height}`)
-          if (this.hashStateRoot !== hashStateRoot) {
-            this.hashStateRoot = hashStateRoot
-            Pair.updatePairs()
-            this.updateTokens()
+    watch(
+      () => this.height,
+      async height => {
+        if (height > 0) {
+          try {
+            const { hashStateRoot } = await this.vm.$axios.$get(`https://${DOMAIN[this.account?.network]}/api/block/${height}`) // eslint-disable-line
+            if (this.hashStateRoot !== hashStateRoot) {
+              this.hashStateRoot = hashStateRoot
+              Pair.updatePairs()
+              this.updateTokens()
+            }
+          } catch (e) {
+            console.log(e) // eslint-disable-line
           }
-        } catch (e) {
-          console.log(e)
         }
       }
-    })
+    )
 
-    watch(() => this.ratio, () => {
-      this.updateDependentTokenAmount()
-    })
+    watch(
+      () => this.ratio,
+      () => this.updateDependentTokenAmount()
+    )
   }
 
-  updateDependentTokenAmount () {
+  updateDependentTokenAmount() {
     const ratio = this.exactInput ? this.ratio : this.ratio.invert()
     const amount = ratio.times(this.independentTokenAmount.amount).quotient
     this.dependentTokenAmount.amount = amount
-    this.dependentTokenAmount.input = this.dependentTokenAmount.amount.eq(0) ? '' : this.dependentTokenAmount.amount.toString()
+    this.dependentTokenAmount.input = this.dependentTokenAmount.amount.eq(0)
+      ? ''
+      : this.dependentTokenAmount.amount.toString()
   }
 }
 
 class Pool extends Swap {
-  constructor () {
+  constructor() {
     super(TYPE_ADD_LIQUIDITY)
     this.allPairs = computed(() => [
       ...this.commonPairs,
-      ...this.customTokens.map(token => this.commonTokens.map(t => Pair.from(token, t)))
-        .reduce((customPairs, pairs) => [
-          ...customPairs,
-          ...pairs
-        ], [])
+      ...this.customTokens
+        .map(token => this.commonTokens.map(t => Pair.from(token, t)))
+        .reduce((customPairs, pairs) => [...customPairs, ...pairs], [])
     ])
     this.pair = computed(() => {
       if (this.selected) {
@@ -472,18 +507,31 @@ class Pool extends Swap {
     })
     this.shareOfPool = computed(() => {
       if (!this.pair.exists) {
-        return new Fraction(this.tokenAmount0.amount.gt(0) && this.tokenAmount1.amount.gt(0) ? 100 : 0)
+        return new Fraction(
+          this.tokenAmount0.amount.gt(0) && this.tokenAmount1.amount.gt(0)
+            ? 100
+            : 0
+        )
       }
       // share of pool
       let minted
       if (this.pair.totalSupply.eq(0)) {
-        minted = this.tokenAmount0.amount.times(this.tokenAmount1.amount).sqrt() - MINIMUM_LIQUIDITY
+        minted =
+          this.tokenAmount0.amount.times(this.tokenAmount1.amount).sqrt() -
+          MINIMUM_LIQUIDITY
       } else {
-        const amount0 = this.tokenAmount0.amount.times(this.pair.totalSupply).div(this.pair.reserve0)
-        const amount1 = this.tokenAmount1.amount.times(this.pair.totalSupply).div(this.pair.reserve1)
+        const amount0 = this.tokenAmount0.amount
+          .times(this.pair.totalSupply)
+          .div(this.pair.reserve0)
+        const amount1 = this.tokenAmount1.amount
+          .times(this.pair.totalSupply)
+          .div(this.pair.reserve1)
         minted = amount0.lt(amount1) ? amount0 : amount1
       }
-      return new Fraction(minted, this.pair.totalSupply.div(10 ** 8).plus(minted)).times(100)
+      return new Fraction(
+        minted,
+        this.pair.totalSupply.div(10 ** 8).plus(minted)
+      ).times(100)
     })
     this.ratio = computed(() => {
       if (this.pair.exists) {
@@ -491,16 +539,18 @@ class Pool extends Swap {
       } else {
         const amount0 = this.tokenAmount0.amount
         const amount1 = this.tokenAmount1.amount
-        return amount0.gt(0) && amount1.gt(0) ? new Fraction(amount1, amount0) : new Fraction(0)
+        return amount0.gt(0) && amount1.gt(0)
+          ? new Fraction(amount1, amount0)
+          : new Fraction(0)
       }
     })
   }
 
-  get canProcess () {
+  get canProcess() {
     return true
   }
 
-  async addLiquidity () {
+  async addLiquidity() {
     const qrypto = useQrypto()
     try {
       const tokenAmount0 = this.tokenAmount0
@@ -563,18 +613,23 @@ class Pool extends Swap {
         })
       }
     } catch (e) {
-      console.log('add error', e)
+      console.log('add error', e) // eslint-disable-line
     }
   }
 
-  updateDependentTokenAmount () {
+  updateDependentTokenAmount() {
     if (!this.pair.exists) {
       return
     }
-    const ratio = this.independentTokenAmount === this.tokenAmount0 ? this.ratio : this.ratio.invert()
+    const ratio =
+      this.independentTokenAmount === this.tokenAmount0
+        ? this.ratio
+        : this.ratio.invert()
     const amount = ratio.times(this.independentTokenAmount.amount).quotient
     this.dependentTokenAmount.amount = amount.isNaN() ? BigNumber(0) : amount
-    this.dependentTokenAmount.input = this.dependentTokenAmount.amount.eq(0) ? '' : this.dependentTokenAmount.amount.toString()
+    this.dependentTokenAmount.input = this.dependentTokenAmount.amount.eq(0)
+      ? ''
+      : this.dependentTokenAmount.amount.toString()
   }
 }
 

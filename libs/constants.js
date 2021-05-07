@@ -8,7 +8,9 @@ export const SWAP_EXACT_INPUT = 'input'
 export const SWAP_EXACT_OUTPUT = 'output'
 
 export { default as ABI } from './abi'
-export const MAX_UINT_256 = BigNumber('0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff')
+export const MAX_UINT_256 = BigNumber(
+  '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'
+)
 export const MINIMUM_LIQUIDITY = 0.00001
 export const BASE_FEE = 0.003
 export const ZERO_ADDRESS = '0000000000000000000000000000000000000000'

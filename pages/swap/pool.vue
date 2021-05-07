@@ -8,25 +8,39 @@
       :token-amount1="tokenAmount1"
       @change="changeToken"
     />
-    <div v-if="swap.selected && !swap.pair.exists" class="rounded-lg mb-6 px-6 py-4 text-sm" :class="`bg-${theme}-assist-300 text-${theme}-assist-400`">
+    <div
+      v-if="swap.selected && !swap.pair.exists"
+      class="rounded-lg mb-6 px-6 py-4 text-sm"
+      :class="`bg-${theme}-assist-300 text-${theme}-assist-400`"
+    >
       <p class="font-semibold mb-1">
         {{ $t('swap.poolInfo.first') }}
       </p>
       <p>
-        {{ $t('swap.poolInfo.ratio') }}<br>
+        {{ $t('swap.poolInfo.ratio') }}<br />
         {{ $t('swap.poolInfo.click') }}
       </p>
     </div>
     <!-- 信息部分 -->
-    <div v-if="tokenAmount0.selected && tokenAmount1.selected && !swap.ratio.eq(0)" class="rounded-lg mb-6 px-6 py-4 text-sm" :class="`bg-${theme}-main-200 text-${theme}-inverse-400`">
+    <div
+      v-if="tokenAmount0.selected && tokenAmount1.selected && !swap.ratio.eq(0)"
+      class="rounded-lg mb-6 px-6 py-4 text-sm"
+      :class="`bg-${theme}-main-200 text-${theme}-inverse-400`"
+    >
       <div class="text-center mb-2">
         1 {{ tokenAmount0.symbol }} = {{ swap.ratio }} {{ tokenAmount1.symbol }}
       </div>
       <div class="text-center mb-2">
-        1 {{ tokenAmount1.symbol }} = {{ swap.invertRatio }} {{ tokenAmount0.symbol }}
+        1 {{ tokenAmount1.symbol }} = {{ swap.invertRatio }}
+        {{ tokenAmount0.symbol }}
       </div>
       <div class="text-center">
-        {{ $t('swap.poolInfo.share') }} {{ swap.shareOfPool.quotient.lt(0.01) ? '&lt;0.01' : swap.shareOfPool.toFixed(2) }}%
+        {{ $t('swap.poolInfo.share') }}
+        {{
+          swap.shareOfPool.quotient.lt(0.01)
+            ? '&lt;0.01'
+            : swap.shareOfPool.toFixed(2)
+        }}%
       </div>
     </div>
     <!-- 按钮 -->
@@ -41,9 +55,12 @@
       :texts="[$t('swap.status.add'), $t('swap.status.adding')]"
     />
     <!-- 矿池选择 -->
-    <div class="flex items-center justify-center my-6 cursor-pointer" @click="poolModal = true">
-      <img src="@/assets/icons/user.svg" class="w-5 h-5 mr-3">
-      <span class=" text-lg font-thin">{{ $t('swap.poolInfo.my') }}</span>
+    <div
+      class="flex items-center justify-center my-6 cursor-pointer"
+      @click="poolModal = true"
+    >
+      <img src="@/assets/icons/user.svg" class="w-5 h-5 mr-3" />
+      <span class="text-lg font-thin">{{ $t('swap.poolInfo.my') }}</span>
     </div>
 
     <!-- 模态框 -->
@@ -54,13 +71,20 @@
 </template>
 
 <script>
-import { defineComponent, ref, computed, useContext } from '@nuxtjs/composition-api'
+import {
+  defineComponent,
+  ref,
+  computed,
+  useContext
+} from '@nuxtjs/composition-api'
 import { TYPE_ADD_LIQUIDITY } from '~/libs/constants'
 import { usePool } from '~/libs/swap'
 
 export default defineComponent({
-  setup () {
-    const { store: { state } } = useContext()
+  setup() {
+    const {
+      store: { state }
+    } = useContext()
     const swap = usePool()
 
     const theme = computed(() => state.theme)
@@ -89,6 +113,4 @@ export default defineComponent({
 })
 </script>
 
-<style>
-
-</style>
+<style></style>

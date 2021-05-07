@@ -12,8 +12,8 @@ export default class Pair extends Token {
   reserve0 = BigNumber(0)
   reserve1 = BigNumber(0)
 
-  constructor (token0, token1) {
-    [token0, token1] = sortTokens(token0, token1)
+  constructor(token0, token1) {
+    [token0, token1] = sortTokens(token0, token1) // eslint-disable-line
     super({
       chainId: token0.chainId || token1.chainId,
       decimals: 8,
@@ -25,8 +25,7 @@ export default class Pair extends Token {
     this.updating = false
   }
 
-  static updatePairs () {
-    console.log('update pairs')
+  static updatePairs() {
     for (const _pairs of Object.values(pairs)) {
       for (const pair of Object.values(_pairs)) {
         pair.init(true)
@@ -34,9 +33,11 @@ export default class Pair extends Token {
     }
   }
 
-  static from (token0, token1) {
-    [token0, token1] = sortTokens(token0, token1)
-    if (!pairs[Token.wrapToken(token0).address]?.[Token.wrapToken(token1).address]) {
+  static from(token0, token1) {
+    ;[token0, token1] = sortTokens(token0, token1) // elsint-disable-line
+    if (
+      !pairs[Token.wrapToken(token0).address]?.[Token.wrapToken(token1).address]
+    ) {
       const pair = reactive(new Pair(token0, token1))
       pair.init()
       pairs[Token.wrapToken(token0).address] = {
@@ -44,10 +45,12 @@ export default class Pair extends Token {
         [Token.wrapToken(token1).address]: pair
       }
     }
-    return pairs[Token.wrapToken(token0).address]?.[Token.wrapToken(token1).address]
+    return pairs[Token.wrapToken(token0).address]?.[
+      Token.wrapToken(token1).address
+    ]
   }
 
-  async init (forceUpdate = false) {
+  async init(forceUpdate = false) {
     if (this.updating) {
       // return
     }
@@ -62,30 +65,36 @@ export default class Pair extends Token {
         this.updateReserves(forceUpdate)
         this.updateTotalSupply(forceUpdate)
       }
-    } catch (e) {
-
-    }
+    } catch (e) {}
     this.updating = false
   }
 
-  priceOf (token) {
-    const price = new Fraction(this.token1.getAmount(this.reserve1), this.token0.getAmount(this.reserve0))
+  priceOf(token) {
+    const price = new Fraction(
+      this.token1.getAmount(this.reserve1),
+      this.token0.getAmount(this.reserve0)
+    )
     return this.token0.eq(token) ? price : price.invert()
   }
 
-  reserveOf (token) {
+  reserveOf(token) {
     return this.token0.eq(token) ? this.reserve0 : this.reserve1
   }
 
-  anotherTokenOf (token) {
+  anotherTokenOf(token) {
     return this.token0.eq(token) ? this.tokens[1] : this.tokens[0]
   }
 
-  getAmountIn ({ amountSatoshi: amountOut, token }) {
+  getAmountIn({ amountSatoshi: amountOut, token }) {
     const anotherToken = this.anotherTokenOf(token)
     const reserveOut = this.reserveOf(token)
     const reserveIn = this.reserveOf(anotherToken)
-    if (amountOut.eq(0) || reserveIn.eq(0) || reserveOut.eq(0) || amountOut.gt(reserveOut)) {
+    if (
+      amountOut.eq(0) ||
+      reserveIn.eq(0) ||
+      reserveOut.eq(0) ||
+      amountOut.gt(reserveOut)
+    ) {
       return new TokenAmount(anotherToken)
     }
     // amountIn = reserveIn / (0.997 * (reserveOut / amountOut - 1)) + 1
@@ -95,7 +104,7 @@ export default class Pair extends Token {
     return new TokenAmount(anotherToken, numerator.idiv(denominator).plus(1))
   }
 
-  getAmountOut ({ amountSatoshi: amountIn, token }) {
+  getAmountOut({ amountSatoshi: amountIn, token }) {
     const anotherToken = this.anotherTokenOf(token)
     const reserveIn = this.reserveOf(token)
     const reserveOut = this.reserveOf(anotherToken)
@@ -110,15 +119,19 @@ export default class Pair extends Token {
     return new TokenAmount(anotherToken, numerator.idiv(denominator))
   }
 
-  async updateReserves (forceUpdate = false) {
-    [this.reserve0, this.reserve1] = await useQrypto().getReserves(this.token0, this.token1, forceUpdate)
+  async updateReserves(forceUpdate = false) {
+    ;[this.reserve0, this.reserve1] = await useQrypto().getReserves(
+      this.token0,
+      this.token1,
+      forceUpdate
+    )
   }
 
-  get token0 () {
+  get token0() {
     return Token.wrapToken(this.tokens[0])
   }
 
-  get token1 () {
+  get token1() {
     return Token.wrapToken(this.tokens[1])
   }
 }

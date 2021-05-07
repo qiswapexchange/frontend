@@ -9,7 +9,11 @@
       }"
       @click="approve(tokenAmount0)"
     >
-      {{ tokenAmount0.approving ? $t('swap.status.approving', {tokenName: tokenAmount0.symbol}) : $t('swap.status.approve', {tokenName: tokenAmount0.symbol}) }}
+      {{
+        tokenAmount0.approving
+          ? $t('swap.status.approving', { tokenName: tokenAmount0.symbol })
+          : $t('swap.status.approve', { tokenName: tokenAmount0.symbol })
+      }}
     </button>
     <button
       v-if="shouldApprove[1] && !tokenAmount1.amountExceeded && !isSwap"
@@ -20,7 +24,11 @@
       }"
       @click="approve(tokenAmount1)"
     >
-      {{ tokenAmount1.approving ? $t('swap.status.approving', {tokenName: tokenAmount1.symbol}) : $t('swap.status.approve', {tokenName: tokenAmount1.symbol}) }}
+      {{
+        tokenAmount1.approving
+          ? $t('swap.status.approving', { tokenName: tokenAmount1.symbol })
+          : $t('swap.status.approve', { tokenName: tokenAmount1.symbol })
+      }}
     </button>
     <button
       v-if="!tokenAmount0.selected || !tokenAmount1.selected"
@@ -48,20 +56,25 @@
       class="process-button cursor-not-allowed"
       :class="`bg-${theme}-inverse-300`"
     >
-      {{ $t('swap.status.balance', {tokenName: tokenAmount0.symbol}) }}
+      {{ $t('swap.status.balance', { tokenName: tokenAmount0.symbol }) }}
     </button>
     <button
       v-else-if="tokenAmount1.amountExceeded && !isSwap"
       class="process-button cursor-not-allowed"
       :class="`bg-${theme}-inverse-300`"
     >
-      {{ $t('swap.status.balance', {tokenName: tokenAmount1.symbol}) }}
+      {{ $t('swap.status.balance', { tokenName: tokenAmount1.symbol }) }}
     </button>
     <button
-      v-else-if="tokenAmount0.amount.gt(0) && tokenAmount1.amount.gt(0) && !tokenAmount0.shouldApprove && (!tokenAmount1.shouldApprove || isSwap)"
+      v-else-if="
+        tokenAmount0.amount.gt(0) &&
+        tokenAmount1.amount.gt(0) &&
+        !tokenAmount0.shouldApprove &&
+        (!tokenAmount1.shouldApprove || isSwap)
+      "
       class="process-button"
       :class="{
-        [`bg-${theme}-assist-200 hover:bg-${theme}-assist-100`]: true,
+        [`bg-${theme}-assist-200 hover:bg-${theme}-assist-100`]: true
       }"
       @click="process"
     >
@@ -80,7 +93,7 @@ export default {
     tokenAmount0: Object,
     tokenAmount1: {
       type: Object,
-      default () {
+      default() {
         return {
           selected: true,
           amountExceeded: false,
@@ -96,16 +109,16 @@ export default {
     approve: Function
   },
   computed: {
-    theme () {
+    theme() {
       return this.$store.state.theme
     },
-    shouldApprove () {
+    shouldApprove() {
       return [
         this.tokenAmount0?.shouldApprove && this.tokenAmount0.amount.gt(0),
         this.tokenAmount1?.shouldApprove && this.tokenAmount1.amount.gt(0)
       ]
     },
-    isSwap () {
+    isSwap() {
       return this.type === TYPE_SWAP
     }
   }

@@ -10,10 +10,8 @@
       <div>
         {{ $t('swap.liquidityInfo.amount') }}
       </div>
-      <div class="text-6xl text-center mb-3">
-        {{ percent }}%
-      </div>
-      <input v-model="percent" class="w-full" type="range" min="1" max="100">
+      <div class="text-6xl text-center mb-3">{{ percent }}%</div>
+      <input v-model="percent" class="w-full" type="range" min="1" max="100" />
     </div>
     <!-- <div>
       <div class="p-2">
@@ -50,16 +48,18 @@ import { computed, defineComponent, useContext } from '@nuxtjs/composition-api'
 import Fraction from '~/libs/fraction'
 
 export default defineComponent({
-  setup (props) {
-    const { store: { state } } = useContext()
+  setup(props) {
+    const {
+      store: { state }
+    } = useContext()
     const theme = computed(() => state.theme)
     const tokenAmount0 = computed(() => props.liquidity.tokenAmount0)
     const tokenAmount1 = computed(() => props.liquidity.tokenAmount1)
     const percent = computed({
-      get () {
+      get() {
         return props.liquidity.percent.times(100).quotient.dp(0).toNumber()
       },
-      set (percent) {
+      set(percent) {
         props.liquidity.percent = new Fraction(percent, 100)
       }
     })
@@ -71,10 +71,10 @@ export default defineComponent({
       tokenAmount1,
       percent,
       // method
-      approve () {
+      approve() {
         props.swap.approve(props.liquidity)
       },
-      remove () {
+      remove() {
         props.liquidity.remove(state.swap.tolerance, state.swap.deadline)
       }
     }

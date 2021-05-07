@@ -4,7 +4,13 @@ import { DOMAIN } from './constants'
 import { useWs } from './ws'
 
 export default class Transaction extends EventEmmiter {
-  constructor (txid, network, confirmations = 0, success = false, blockHeight = 0) {
+  constructor(
+    txid,
+    network,
+    confirmations = 0,
+    success = false,
+    blockHeight = 0
+  ) {
     super()
     this.confirmations = confirmations
     this.blockHeight = blockHeight
@@ -15,9 +21,9 @@ export default class Transaction extends EventEmmiter {
     this.init()
   }
 
-  async init () {
+  async init() {
     this.onConfirmed = this.onConfirmed.bind(this)
-    this.on('error', err => console.log('tx error', err))
+    this.on('error', err => console.log('tx error', err)) // eslint-disable-line
     if (this.confirmations === 0) {
       await this.updateInfo()
     }
@@ -38,7 +44,7 @@ export default class Transaction extends EventEmmiter {
     }
   }
 
-  confirm () {
+  confirm() {
     if (this.confirmations > 0) {
       return true
     }
@@ -47,12 +53,12 @@ export default class Transaction extends EventEmmiter {
     })
   }
 
-  get confirmed () {
+  get confirmed() {
     return this.confirmations > 0
   }
 
-  async onConfirmed () {
-    console.log('confirmed!!!')
+  async onConfirmed() {
+    console.log('confirmed!!!') // eslint-disable-line
     await this.updateInfo()
     this.emit('confirmed')
     this.ws.$unsubscribe(
@@ -62,19 +68,19 @@ export default class Transaction extends EventEmmiter {
     )
   }
 
-  async updateInfo () {
+  async updateInfo() {
     try {
-      const info = await axios.get(`https://${DOMAIN[this.network]}/api/tx/${this.txid}`).then(res => res.data)
+      const info = await axios
+        .get(`https://${DOMAIN[this.network]}/api/tx/${this.txid}`)
+        .then(res => res.data)
       this.blockHeight = info.blockHeight
       this.confirmations = info.confirmations
       this.success = info.outputs[0].receipt?.excepted === 'None'
       return info
-    } catch (e) {
-
-    }
+    } catch (e) {}
   }
 
-  toJSON () {
+  toJSON() {
     return {
       blockHeight: this.blockHeight,
       confirmations: this.confirmations,

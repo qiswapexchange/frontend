@@ -3,7 +3,7 @@ import { SWAP_EXACT_INPUT, SWAP_EXACT_OUTPUT } from '../constants'
 import Fraction from '../fraction'
 import { sortedInsert } from '../utils'
 
-export function comparator (a, b) {
+export function comparator(a, b) {
   let temp = 0
   if (a.outputTokenAmount.amount.eq(b.outputTokenAmount.amount)) {
     if (a.inputTokenAmount.amount.lt(b.inputTokenAmount.amount)) {
@@ -11,12 +11,10 @@ export function comparator (a, b) {
     } else {
       temp = 1
     }
+  } else if (a.outputTokenAmount.amount.lt(b.outputTokenAmount.amount)) {
+    temp = 1
   } else {
-    if (a.outputTokenAmount.amount.lt(b.outputTokenAmount.amount)) {
-      temp = 1
-    } else {
-      temp = -1
-    }
+    temp = -1
   }
   if (temp !== 0) {
     return temp
@@ -34,7 +32,7 @@ export function comparator (a, b) {
 }
 
 export default class Route {
-  constructor (pairs, tokenAmount, type) {
+  constructor(pairs, tokenAmount, type) {
     this.pairs = pairs
     this.tokenAmount = tokenAmount
     this.type = type
@@ -87,7 +85,10 @@ export default class Route {
       return this.tokenAmounts[this.tokenAmounts.length - 1]
     })
     this.price = computed(() => {
-      return new Fraction(this.outputTokenAmount.amount, this.inputTokenAmount.amount)
+      return new Fraction(
+        this.outputTokenAmount.amount,
+        this.inputTokenAmount.amount
+      )
     })
     this.priceStr = computed(() => this.price.toString())
     this.midPrice = computed(() => {
@@ -97,25 +98,30 @@ export default class Route {
         token = pair.anotherTokenOf(token)
         return price
       })
-      return prices.reduce((price, currnetPrice) => price.times(currnetPrice), new Fraction(1))
+      return prices.reduce(
+        (price, currnetPrice) => price.times(currnetPrice),
+        new Fraction(1)
+      )
     })
     this.priceImpact = computed(() => {
       const exactQuote = this.midPrice.times(this.inputTokenAmount.amount)
-      const slippage = exactQuote.minus(this.outputTokenAmount.amount).div(exactQuote)
+      const slippage = exactQuote
+        .minus(this.outputTokenAmount.amount)
+        .div(exactQuote)
       return slippage
     })
     this.priceImpactStr = computed(() => this.priceImpact.toString())
   }
 
-  get exactInput () {
+  get exactInput() {
     return this.type === SWAP_EXACT_INPUT
   }
 
-  get exactOutput () {
+  get exactOutput() {
     return this.type === SWAP_EXACT_OUTPUT
   }
 
-  static bestRoutesExactIn (
+  static bestRoutesExactIn(
     pairs,
     tokenAmountIn,
     tokenOut,
@@ -127,7 +133,10 @@ export default class Route {
     for (let i = 0; i < pairs.length; i++) {
       const pair = pairs[i]
       // pair irrelevant
-      if (!pair.token0.eq(tokenAmountIn.token) && !pair.token1.eq(tokenAmountIn.token)) {
+      if (
+        !pair.token0.eq(tokenAmountIn.token) &&
+        !pair.token1.eq(tokenAmountIn.token)
+      ) {
         continue
       }
       if (pair.reserve0.eq(0) || pair.reserve1.eq(0)) {
@@ -142,16 +151,20 @@ export default class Route {
       if (tokenAmount.token.eq(tokenOut)) {
         sortedInsert(
           bestRoutes,
-          reactive(new Route(
-            [...currentPairs, pair],
-            originalTokenAmount,
-            SWAP_EXACT_INPUT
-          )),
+          reactive(
+            new Route(
+              [...currentPairs, pair],
+              originalTokenAmount,
+              SWAP_EXACT_INPUT
+            )
+          ),
           maxNumResults,
           comparator
         )
       } else if (maxHops > 1 && pairs.length > 1) {
-        const pairsExcludingThisPair = pairs.slice(0, i).concat(pairs.slice(i + 1, pairs.length))
+        const pairsExcludingThisPair = pairs
+          .slice(0, i)
+          .concat(pairs.slice(i + 1, pairs.length))
 
         // otherwise, consider all the other paths that lead from this token as long as we have not exceeded maxHops
         Route.bestRoutesExactIn(
@@ -172,7 +185,7 @@ export default class Route {
     return bestRoutes
   }
 
-  static bestRoutesExactOut (
+  static bestRoutesExactOut(
     pairs,
     tokenIn,
     tokenAmountOut,
@@ -184,7 +197,10 @@ export default class Route {
     for (let i = 0; i < pairs.length; i++) {
       const pair = pairs[i]
       // pair irrelevant
-      if (!pair.token0.eq(tokenAmountOut.token) && !pair.token1.eq(tokenAmountOut.token)) {
+      if (
+        !pair.token0.eq(tokenAmountOut.token) &&
+        !pair.token1.eq(tokenAmountOut.token)
+      ) {
         continue
       }
       if (pair.reserve0.eq(0) || pair.reserve1.eq(0)) {
@@ -199,16 +215,20 @@ export default class Route {
       if (tokenAmount.token.eq(tokenIn)) {
         sortedInsert(
           bestRoutes,
-          reactive(new Route(
-            [pair, ...currentPairs],
-            originalTokenAmount,
-            SWAP_EXACT_OUTPUT
-          )),
+          reactive(
+            new Route(
+              [pair, ...currentPairs],
+              originalTokenAmount,
+              SWAP_EXACT_OUTPUT
+            )
+          ),
           maxNumResults,
           comparator
         )
       } else if (maxHops > 1 && pairs.length > 1) {
-        const pairsExcludingThisPair = pairs.slice(0, i).concat(pairs.slice(i + 1, pairs.length))
+        const pairsExcludingThisPair = pairs
+          .slice(0, i)
+          .concat(pairs.slice(i + 1, pairs.length))
 
         // otherwise, consider all the other paths that arrive at this token as long as we have not exceeded maxHops
         Route.bestRoutesExactOut(

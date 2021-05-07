@@ -10,7 +10,7 @@ import Token from './token'
 import TokenAmount from './token-amount'
 
 export default class LiquidityToken extends Pair {
-  constructor (pair) {
+  constructor(pair) {
     super(new Token(pair.tokens[0]), new Token(pair.tokens[1]))
     this.isQTUM0 = pair.tokens[0].isQTUM
     this.isQTUM1 = pair.tokens[1].isQTUM
@@ -20,10 +20,16 @@ export default class LiquidityToken extends Pair {
     this.totalSupply = computed(() => pair.totalSupply)
     this.reserve0 = computed(() => pair.reserve0)
     this.reserve1 = computed(() => pair.reserve1)
-    this.pooledRatio = computed(() => new Fraction(this.balanceSatoshi, this.totalSupply))
+    this.pooledRatio = computed(
+      () => new Fraction(this.balanceSatoshi, this.totalSupply)
+    )
 
-    this.token0.balanceSatoshi = computed(() => this.pooledRatio.times(this.reserve0).quotient.dp(0))
-    this.token1.balanceSatoshi = computed(() => this.pooledRatio.times(this.reserve1).quotient.dp(0))
+    this.token0.balanceSatoshi = computed(() =>
+      this.pooledRatio.times(this.reserve0).quotient.dp(0)
+    )
+    this.token1.balanceSatoshi = computed(() =>
+      this.pooledRatio.times(this.reserve1).quotient.dp(0)
+    )
 
     this.tokenAmount0 = new TokenAmount(this.token0)
     this.tokenAmount1 = new TokenAmount(this.token1)
@@ -33,41 +39,60 @@ export default class LiquidityToken extends Pair {
     this.percent = new Fraction(0)
   }
 
-  get amount () {
+  get amount() {
     return this.getAmount(this.amountSatoshi)
   }
 
-  get selected () {
+  get selected() {
     return true
   }
 
-  get pooledPercent () {
+  get pooledPercent() {
     return this.pooledRatio.times(100).toSd(2)
   }
 
-  get token () {
+  get token() {
     return this
   }
 
-  watchAll () {
+  watchAll() {
     const tokenAmounts = [this, this.tokenAmount0, this.tokenAmount1]
     tokenAmounts.forEach(tokenAmount => {
-      watch(() => tokenAmount.input, input => {
-        tokenAmount.amountSatoshi = BigNumber(input || 0).times(10 ** tokenAmount.decimals).dp(0, BigNumber.ROUND_DOWN)
-        if (!tokenAmount.inputing) {
-          return
+      watch(
+        () => tokenAmount.input,
+        input => {
+          tokenAmount.amountSatoshi = BigNumber(input || 0)
+            .times(10 ** tokenAmount.decimals)
+            .dp(0, BigNumber.ROUND_DOWN)
+          if (!tokenAmount.inputing) {
+            return
+          }
+          this.percent = new Fraction(
+            tokenAmount.amountSatoshi,
+            tokenAmount.balanceSatoshi
+          )
         }
-        this.percent = new Fraction(tokenAmount.amountSatoshi, tokenAmount.balanceSatoshi)
-      })
-      watch(() => this.percent, percent => {
-        this.input = percent.times(this.balance).toFixed(this.decimals)
-        this.tokenAmount0.input = percent.eq(0) ? '' : percent.times(this.tokenAmount0.balance).toFixed(this.tokenAmount0.decimals)
-        this.tokenAmount1.input = percent.eq(0) ? '' : percent.times(this.tokenAmount1.balance).toFixed(this.tokenAmount1.decimals)
-      })
+      )
+      watch(
+        () => this.percent,
+        percent => {
+          this.input = percent.times(this.balance).toFixed(this.decimals)
+          this.tokenAmount0.input = percent.eq(0)
+            ? ''
+            : percent
+                .times(this.tokenAmount0.balance)
+                .toFixed(this.tokenAmount0.decimals)
+          this.tokenAmount1.input = percent.eq(0)
+            ? ''
+            : percent
+                .times(this.tokenAmount1.balance)
+                .toFixed(this.tokenAmount1.decimals)
+        }
+      )
     })
   }
 
-  async remove (tolerance, deadline) {
+  async remove(tolerance, deadline) {
     if (this.processing) {
       return
     }
@@ -132,7 +157,7 @@ export default class LiquidityToken extends Pair {
         await tx.confirm()
       }
     } catch (e) {
-      console.log('add error', e)
+      console.log('add error', e) // eslint-disable-line
     } finally {
       // this.processing = false
     }

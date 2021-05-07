@@ -2,11 +2,15 @@
   <!-- 首页 板块 -->
   <section class="container mx-auto pt-24">
     <!-- 标题部分 -->
-    <section v-if="title" data-aos="fade-up" class="flex flex-col items-center mb-16">
+    <section
+      v-if="title"
+      data-aos="fade-up"
+      class="flex flex-col items-center mb-16"
+    >
       <h2 class="text-2xl font-bold tracking-widest mb-10 uppercase">
         {{ title }}
       </h2>
-      <img src="@/assets/icons/home/arrow.svg" alt="">
+      <img src="@/assets/icons/home/arrow.svg" alt="" />
     </section>
 
     <!-- 内容部分 -->
@@ -19,11 +23,18 @@
         data-aos="fade-up"
         :data-aos-delay="100 * index"
       >
-        <img v-if="item.icon" :src="require(`@/assets/icons/home/${item.icon}.svg`)" class="w-12 h-12 mb-8">
+        <img
+          v-if="item.icon"
+          :src="require(`@/assets/icons/home/${item.icon}.svg`)"
+          class="w-12 h-12 mb-8"
+        />
         <h3 class="text-base text-center font-bold mb-6">
           {{ item.title }}
         </h3>
-        <p class="text-sm tracking-wider font-thin" :class="`text-${theme}-inverse-200 text-${align}`">
+        <p
+          class="text-sm tracking-wider font-thin"
+          :class="`text-${theme}-inverse-200 text-${align}`"
+        >
           {{ item.content }}
         </p>
         <a
@@ -62,14 +73,14 @@ export default {
     }
   },
   computed: {
-    ...mapState([
-      'theme'
-    ]),
-    contentStyle () {
+    ...mapState(['theme']),
+    contentStyle() {
       const result = []
 
       // 判断背景色
-      this.outstand ? result.push(`bg-${this.theme}-assist-100`) : result.push(`bg-${this.theme}-main-300`)
+      this.outstand
+        ? result.push(`bg-${this.theme}-assist-100`)
+        : result.push(`bg-${this.theme}-main-300`)
 
       // 判断对齐方式
       switch (this.align) {
@@ -85,7 +96,3 @@ export default {
   }
 }
 </script>
-
-<style>
-
-</style>

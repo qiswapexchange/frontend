@@ -1,10 +1,16 @@
 <template>
   <!-- 设置面板 -->
-  <section class="max-w-md w-full mx-auto rounded-lg flow-root mt-8" :class="`bg-${theme}-main-300`">
+  <section
+    class="max-w-md w-full mx-auto rounded-lg flow-root mt-8"
+    :class="`bg-${theme}-main-300`"
+  >
     <!-- 顶部按钮 -->
     <div class="p-4 mb-2 text-sm flex justify-end">
-      <div class="cursor-pointer flex items-center hover:opacity-75" @click="modalShow = true">
-        <img src="@/assets/icons/setting.svg" alt="" class="w-4 h-4 mr-2">
+      <div
+        class="cursor-pointer flex items-center hover:opacity-75"
+        @click="modalShow = true"
+      >
+        <img src="@/assets/icons/setting.svg" alt="" class="w-4 h-4 mr-2" />
         <span class="font-thin tracking-wider">{{ $t('swap.setting') }}</span>
       </div>
     </div>
@@ -25,7 +31,11 @@
               v-for="val in toleranceList"
               :key="val"
               class="py-1 sm:py-2 mr-2 w-16 text-center rounded-full border cursor-pointer hover:opacity-75"
-              :class="tolerance === val ? `bg-${theme}-assist-200 border-${theme}-assist-200` : `bg-transparent border-${theme}-inverse-200`"
+              :class="
+                tolerance === val
+                  ? `bg-${theme}-assist-200 border-${theme}-assist-200`
+                  : `bg-transparent border-${theme}-inverse-200`
+              "
               @click="setTolerance(val)"
             >
               {{ val }}%
@@ -39,10 +49,8 @@
                   [`bg-${theme}-main-200 focus:border-${theme}-assist-200`]: true,
                   [`border-${theme}-assist-200`]: customTolerance
                 }"
-              >
-              <div class="absolute top-0 right-0 pr-3 py-2 my-px">
-                %
-              </div>
+              />
+              <div class="absolute top-0 right-0 pr-3 py-2 my-px">%</div>
             </div>
           </div>
         </div>
@@ -50,7 +58,11 @@
         <div class="text-sm font-thin mb-10">
           <span class="">{{ $t('swap.modal.deadline') }}</span>
           <div class="flex items-center mt-4">
-            <input v-model.number="deadline" class="px-5 py-2 rounded-full mr-2 w-20 border focus:outline-none text-center" :class="`bg-${theme}-main-200`">
+            <input
+              v-model.number="deadline"
+              class="px-5 py-2 rounded-full mr-2 w-20 border focus:outline-none text-center"
+              :class="`bg-${theme}-main-200`"
+            />
             <span>{{ $t('swap.modal.minutes') }}</span>
           </div>
         </div>
@@ -63,21 +75,19 @@
 import { mapState, mapMutations } from 'vuex'
 
 export default {
-  data () {
+  data() {
     return {
       modalShow: false,
       toleranceList: [0.1, 0.5, 1]
     }
   },
   computed: {
-    ...mapState([
-      'theme'
-    ]),
+    ...mapState(['theme']),
     deadline: {
-      get () {
+      get() {
         return this.$store.state.swap.deadline
       },
-      set (deadline) {
+      set(deadline) {
         deadline = parseInt(deadline)
         if (deadline < 1 || Number.isNaN(deadline)) {
           return
@@ -86,10 +96,10 @@ export default {
       }
     },
     tolerance: {
-      get () {
+      get() {
         return this.$store.state.swap.tolerance
       },
-      set (tolerance) {
+      set(tolerance) {
         tolerance = parseFloat(tolerance)
         if (tolerance < 0 || tolerance >= 50 || Number.isNaN(tolerance)) {
           return
@@ -97,21 +107,12 @@ export default {
         this.setTolerance(tolerance)
       }
     },
-    customTolerance () {
+    customTolerance() {
       return !this.toleranceList.includes(this.tolerance)
     }
   },
-  watch: {
-  },
   methods: {
-    ...mapMutations('swap', [
-      'setTolerance',
-      'setDeadline'
-    ])
+    ...mapMutations('swap', ['setTolerance', 'setDeadline'])
   }
 }
 </script>
-
-<style>
-
-</style>

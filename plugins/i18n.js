@@ -1,7 +1,16 @@
 import Cookie from 'cookie'
-import { detectBrowserLanguage, localeCodes, vueI18n, routesNameSeparator, defaultLocaleRouteNameSuffix } from '~/.nuxt/nuxt-i18n/options'
+import {
+  detectBrowserLanguage,
+  localeCodes,
+  vueI18n,
+  routesNameSeparator,
+  defaultLocaleRouteNameSuffix
+} from '~/.nuxt/nuxt-i18n/options'
 import { createLocaleFromRouteGetter } from '~/.nuxt/nuxt-i18n/utils-common'
-const getLocaleFromRoute = createLocaleFromRouteGetter(localeCodes, { routesNameSeparator, defaultLocaleRouteNameSuffix })
+const getLocaleFromRoute = createLocaleFromRouteGetter(localeCodes, {
+  routesNameSeparator,
+  defaultLocaleRouteNameSuffix
+})
 
 export default ({ route, isHMR, req, res, redirect }) => {
   if (isHMR) {
@@ -29,7 +38,8 @@ export default ({ route, isHMR, req, res, redirect }) => {
   const { cookieKey } = detectBrowserLanguage
   let cookieLocale
   if (req && typeof req.headers.cookie !== 'undefined') {
-    const cookies = req.headers && req.headers.cookie ? Cookie.parse(req.headers.cookie) : {}
+    const cookies =
+      req.headers && req.headers.cookie ? Cookie.parse(req.headers.cookie) : {}
     cookieLocale = cookies[cookieKey]
   }
   // redirect for root
@@ -37,8 +47,15 @@ export default ({ route, isHMR, req, res, redirect }) => {
     // cookie first
     let redirectLocale = cookieLocale
     // browser second
-    if (!redirectLocale && req && typeof req.headers['accept-language'] !== 'undefined') {
-      redirectLocale = req.headers['accept-language'].split(',')[0].toLocaleLowerCase().substring(0, 2)
+    if (
+      !redirectLocale &&
+      req &&
+      typeof req.headers['accept-language'] !== 'undefined'
+    ) {
+      redirectLocale = req.headers['accept-language']
+        .split(',')[0]
+        .toLocaleLowerCase()
+        .substring(0, 2)
     }
     // fallback third
     if (!localeCodes.includes(redirectLocale)) {
@@ -48,14 +65,20 @@ export default ({ route, isHMR, req, res, redirect }) => {
       req.headers.cookie += `;${cookieKey}=${routeLocale}`
     }
     setLocaleCookie(redirectLocale)
-    redirect(`/${redirectLocale}${route.path}`.replace(/^(.+)?\/+$/, '$1'), route.query)
+    redirect(
+      `/${redirectLocale}${route.path}`.replace(/^(.+)?\/+$/, '$1'),
+      route.query
+    )
     return res.end()
   }
   // redirect for not matching cookie
   if (routeLocale !== null && routeLocale !== cookieLocale) {
     if (req && req.headers) {
       if (req.headers.cookie) {
-        req.headers.cookie = req.headers.cookie.replace(new RegExp(`${cookieKey}=${cookieLocale}`), `${cookieKey}=${routeLocale}`)
+        req.headers.cookie = req.headers.cookie.replace(
+          new RegExp(`${cookieKey}=${cookieLocale}`),
+          `${cookieKey}=${routeLocale}`
+        )
       } else {
         req.headers.cookie = `${cookieKey}=${routeLocale}`
       }

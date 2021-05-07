@@ -3,8 +3,19 @@
     <SwapSettingsPanel>
       <!-- 选择部分 -->
       <div class="flex rounded-lg overflow-hidden">
-        <swap-link to="/swap/exchange" :label="$t('swap.exchange')" :theme="theme" :active="activeNav === 'exchange'" right />
-        <swap-link to="/swap/pool" :label="$t('swap.pool')" :theme="theme" :active="activeNav === 'pool'" />
+        <swap-link
+          to="/swap/exchange"
+          :label="$t('swap.exchange')"
+          :theme="theme"
+          :active="activeNav === 'exchange'"
+          right
+        />
+        <swap-link
+          to="/swap/pool"
+          :label="$t('swap.pool')"
+          :theme="theme"
+          :active="activeNav === 'pool'"
+        />
       </div>
 
       <!-- 展示部分 -->
@@ -30,14 +41,19 @@
 </template>
 
 <script>
-import { defineComponent, ref, computed, useContext } from '@nuxtjs/composition-api'
+import {
+  defineComponent,
+  ref,
+  computed,
+  useContext
+} from '@nuxtjs/composition-api'
 import { NETWORK } from '~/libs/constants'
 import { useQrypto } from '~/libs/qrypto'
 import { Token } from '~/libs/swap'
 import { useWs } from '~/libs/ws'
 
 export default defineComponent({
-  setup () {
+  setup() {
     const { store, route, $axios } = useContext()
     const { state, commit, dispatch } = store
     const qrypto = useQrypto(state.swap.extensionId)
@@ -53,15 +69,19 @@ export default defineComponent({
     const installed = computed(() => state.swap.extensionInstalled)
     qrypto.on('account', account => {
       commit('swap/setAccount', account)
-      useWs(account.network || NETWORK.MainNet).$subscribe('tip', 'tip', tip => {
-        commit('swap/setHeight', tip.height)
-      }).$subscribe('tip', 'reorg', tip => {
-        commit('swap/setHeight', tip.height)
-      })
+      useWs(account.network || NETWORK.MainNet)
+        .$subscribe('tip', 'tip', tip => {
+          commit('swap/setHeight', tip.height)
+        })
+        .$subscribe('tip', 'reorg', tip => {
+          commit('swap/setHeight', tip.height)
+        })
     })
-    qrypto.on('installed', installed => commit('swap/setExtensionInstalled', installed))
+    qrypto.on('installed', installed =>
+      commit('swap/setExtensionInstalled', installed)
+    )
     qrypto.on('connected', () => {
-      console.log('connected')
+      console.log('connected') // eslint-disable-line
       commit('swap/setConnected', true)
     })
     qrypto.on('txValidating', () => {
@@ -88,13 +108,13 @@ export default defineComponent({
       })
       dispatch('swap/addTx', tx)
     })
-    $axios.$get('/tokens.json').then(tokens => [
-      Token.QTUM,
-      ...tokens.map(t => new Token(t))
-    ]).then(tokens => {
-      commit('swap/setTokens', tokens)
-      dispatch('swap/loadTokens')
-    })
+    $axios
+      .$get('/tokens.json')
+      .then(tokens => [Token.QTUM, ...tokens.map(t => new Token(t))])
+      .then(tokens => {
+        commit('swap/setTokens', tokens)
+        dispatch('swap/loadTokens')
+      })
     return {
       waitingValidating,
       waitingConfirmation,
@@ -106,6 +126,4 @@ export default defineComponent({
 })
 </script>
 
-<style>
-
-</style>
+<style></style>

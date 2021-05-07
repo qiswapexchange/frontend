@@ -8,16 +8,13 @@ export const useWs = network => {
   if (wsInstaces[network]) {
     return wsInstaces[network]
   }
-  const ws = io(
-    `wss://${DOMAIN[network]}/`,
-    { transports: ['websocket'] }
-  )
+  const ws = io(`wss://${DOMAIN[network]}/`, { transports: ['websocket'] })
 
   const subscriptions = {}
   const listeners = {}
 
   Object.assign(ws, {
-    $subscribe (room, event, callback) {
+    $subscribe(room, event, callback) {
       const eventMapping = subscriptions[room]
       if (eventMapping) {
         const mapping = eventMapping[event]
@@ -45,7 +42,7 @@ export const useWs = network => {
       }
       return this
     },
-    $unsubscribe (room, event, callback) {
+    $unsubscribe(room, event, callback) {
       const eventMapping = subscriptions[room]
       if (eventMapping) {
         const mapping = eventMapping[event]

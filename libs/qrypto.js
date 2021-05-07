@@ -24,9 +24,7 @@ export const MESSAGE_TYPE = {
   QRYPTO_ACCOUNT_CHANGED: 'QRYPTO_ACCOUNT_CHANGED'
 }
 
-class CallContractError extends Error {
-
-}
+class CallContractError extends Error {}
 
 export default class Qrypto extends EventEmmiter {
   extensionId
@@ -35,50 +33,52 @@ export default class Qrypto extends EventEmmiter {
   #qrypto = null
   #opened = false
 
-  constructor (extensionId) {
+  constructor(extensionId) {
     super()
     this.extensionId = extensionId
   }
 
-  init () {
+  init() {
     window.postMessage({ message: { type: 'CONNECT_QRYPTO' } }, '*')
     window.addEventListener('message', this.handleMessage.bind(this), false)
     this.on('error', err => {
-      console.log('Something wrong', err)
+      console.log('Something wrong', err) // eslint-disable-line
     })
     this.checkInstalled()
   }
 
-  setExtensionId (extensionId) {
+  setExtensionId(extensionId) {
     this.extensionId = extensionId
     this.checkInstalled()
   }
 
-  get rpcProvider () {
+  get rpcProvider() {
     return this.#qrypto?.rpcProvider
   }
 
-  get connected () {
+  get connected() {
     return this.#qrypto !== null
   }
 
-  get loggedIn () {
+  get loggedIn() {
     return this.account?.loggedIn === true
   }
 
-  get hexAddress () {
-    return this.account?.address ? qtum.address.fromBase58Check(this.account.address).hash.toString('hex') : ''
+  get hexAddress() {
+    return this.account?.address
+      ? qtum.address.fromBase58Check(this.account.address).hash.toString('hex')
+      : ''
   }
 
-  get router () {
+  get router() {
     return ROUTER[NETWORK[this.account?.network] ?? NETWORK.MainNet]
   }
 
-  get factory () {
+  get factory() {
     return FACTORY[NETWORK[this.account?.network] ?? NETWORK.MainNet]
   }
 
-  handleMessage (event) {
+  handleMessage(event) {
     const { target, message } = event.data
     if (target !== 'qrypto-inpage') {
       return
@@ -104,7 +104,9 @@ export default class Qrypto extends EventEmmiter {
             break
           case payload.statusChangeReason.includes('Logged In'):
             if (this.#opened) {
-              window.chrome.runtime?.sendMessage(this.extensionId, { type: 'CLOSE' })
+              window.chrome.runtime?.sendMessage(this.extensionId, {
+                type: 'CLOSE'
+              })
             }
             this.emit('login', this.account)
             break
@@ -116,61 +118,75 @@ export default class Qrypto extends EventEmmiter {
     }
   }
 
-  wrapHex (hex) {
+  wrapHex(hex) {
     return '0x' + hex
   }
 
-  unwrapHex (hex) {
+  unwrapHex(hex) {
     return hex?.slice(2)
   }
 
-  getTokenBalance (token, forceUpdate = false) {
+  getTokenBalance(token, forceUpdate = false) {
     if (!this.loggedIn || !token) {
       return BigNumber(0)
     }
-    return useCache(['balanceOf', token, this.hexAddress], () => this.return(token.address, ABI.QRC20, 'balanceOf', [
-      this.wrapHex(this.hexAddress)
-    ]), 600, forceUpdate)
+    return useCache(
+      ['balanceOf', token, this.hexAddress],
+      () =>
+        this.return(token.address, ABI.QRC20, 'balanceOf', [
+          this.wrapHex(this.hexAddress)
+        ]),
+      600,
+      forceUpdate
+    )
   }
 
-  getTotalSupply (token, forceUpdate = false) {
-    return useCache(['totalSupply', token], () => this.return(token.address, ABI.QRC20, 'totalSupply'), 600, forceUpdate)
+  getTotalSupply(token, forceUpdate = false) {
+    return useCache(
+      ['totalSupply', token],
+      () => this.return(token.address, ABI.QRC20, 'totalSupply'),
+      600,
+      forceUpdate
+    )
   }
 
-  swap (method, params, value = 0, {
-    gasLimitPlus = 0
-  } = {}) {
+  swap(method, params, value = 0, { gasLimitPlus = 0 } = {}) {
     return this.safeSendToContract(this.router, ABI.ROUTER, method, params, {
       qtumAmount: value,
       gasLimitPlus
     })
   }
 
-  async getPair (tokenA, tokenB) {
-    [tokenA, tokenB] = sortTokens(tokenA, tokenB)
-    const pair = await usePersist(['getPair', this.factory, tokenA, tokenB], async () => {
-      const pair = this.unwrapHex(await this.return(this.factory, ABI.FACTORY, 'getPair', [
-        this.wrapHex(tokenA.address),
-        this.wrapHex(tokenB.address)
-      ]))
-      return pair === ZERO_ADDRESS ? undefined : pair
-    })
+  async getPair(tokenA, tokenB) {
+    [tokenA, tokenB] = sortTokens(tokenA, tokenB) // eslint-disable-line
+    const pair = await usePersist(
+      ['getPair', this.factory, tokenA, tokenB],
+      async () => {
+        const pair = this.unwrapHex(
+          await this.return(this.factory, ABI.FACTORY, 'getPair', [
+            this.wrapHex(tokenA.address),
+            this.wrapHex(tokenB.address)
+          ])
+        )
+        return pair === ZERO_ADDRESS ? undefined : pair
+      }
+    )
     return pair || ZERO_ADDRESS
   }
 
-  async getAmountsIn (amountOut, [tokenA, tokenB]) {
+  async getAmountsIn(amountOut, [tokenA, tokenB]) {
     const reserves = await this.getReserves(tokenA, tokenB)
     const amountIn = this.getAmountIn(amountOut, reserves[0], reserves[1])
     return [amountIn, amountOut]
   }
 
-  async getAmountsOut (amountIn, [tokenA, tokenB]) {
+  async getAmountsOut(amountIn, [tokenA, tokenB]) {
     const reserves = await this.getReserves(tokenA, tokenB)
     const amountOut = this.getAmountOut(amountIn, reserves[0], reserves[1])
     return [amountIn, amountOut]
   }
 
-  getAmountIn (amountOut, reserveIn, reserveOut) {
+  getAmountIn(amountOut, reserveIn, reserveOut) {
     if (amountOut.eq(0) || reserveIn.eq(0) || reserveOut.eq(0)) {
       return BigNumber(0)
     }
@@ -179,7 +195,7 @@ export default class Qrypto extends EventEmmiter {
     return numerator.div(denominator).plus(1)
   }
 
-  getAmountOut (amountIn, reserveIn, reserveOut) {
+  getAmountOut(amountIn, reserveIn, reserveOut) {
     if (amountIn.eq(0) || reserveIn.eq(0) || reserveOut.eq(0)) {
       return BigNumber(0)
     }
@@ -191,35 +207,42 @@ export default class Qrypto extends EventEmmiter {
     return numerator.idiv(denominator)
   }
 
-  async getReserves (tokenA, tokenB, forceUpdate = false) {
+  async getReserves(tokenA, tokenB, forceUpdate = false) {
     const [token0, token1] = sortTokens(tokenA, tokenB)
     try {
-      const [reserve0, reserve1] = await useCache(['getReserves', tokenA, tokenB], () => {
-        return this.return(this.router, ABI.ROUTER, 'getReserves', [
-          this.wrapHex(this.factory),
-          this.wrapHex(token0.address),
-          this.wrapHex(token1.address)
-        ])
-      }, 600, forceUpdate)
+      const [reserve0, reserve1] = await useCache(
+        ['getReserves', tokenA, tokenB],
+        () => {
+          return this.return(this.router, ABI.ROUTER, 'getReserves', [
+            this.wrapHex(this.factory),
+            this.wrapHex(token0.address),
+            this.wrapHex(token1.address)
+          ])
+        },
+        600,
+        forceUpdate
+      )
       return token0 === tokenA ? [reserve0, reserve1] : [reserve1, reserve0]
     } catch (e) {
       return [BigNumber(0), BigNumber(0)]
     }
   }
 
-  async shouldApprove (token) {
+  async shouldApprove(token) {
     const allowance = await this.allowance(token)
     return BigNumber(allowance).eq(0)
   }
 
-  allowance (token) {
-    return useCache(['allowance', token.address], () => this.return(token.address, ABI.QRC20, 'allowance', [
-      this.wrapHex(this.hexAddress),
-      this.wrapHex(this.router)
-    ]))
+  allowance(token) {
+    return useCache(['allowance', token.address], () =>
+      this.return(token.address, ABI.QRC20, 'allowance', [
+        this.wrapHex(this.hexAddress),
+        this.wrapHex(this.router)
+      ])
+    )
   }
 
-  async tryToApprove (token, amount) {
+  async tryToApprove(token, amount) {
     if (amount.eq(0)) {
       return true
     }
@@ -243,56 +266,70 @@ export default class Qrypto extends EventEmmiter {
     return tx
   }
 
-  approve (token, amount) {
-    return this.sendToContract(token.address, ABI.QRC20, 'approve', [this.wrapHex(this.router), amount])
+  approve(token, amount) {
+    return this.sendToContract(token.address, ABI.QRC20, 'approve', [
+      this.wrapHex(this.router),
+      amount
+    ])
   }
 
-  async rpcCall (method, params = []) {
+  async rpcCall(method, params = []) {
     if (!this.rpcProvider) {
-      throw new Error('RPC Provider doess\'t exists')
+      throw new Error('RPC Provider does not exists')
     }
     return await this.rpcProvider.rawCall(method, params)
   }
 
-  getAbiMethod (abiList, abiName) {
-    abiList = usePersist(['getAbiMethod', abiList], () => Object.fromEntries(abiList.map(abi => [abi.name, abi])))
+  getAbiMethod(abiList, abiName) {
+    abiList = usePersist(['getAbiMethod', abiList], () =>
+      Object.fromEntries(abiList.map(abi => [abi.name, abi]))
+    )
     return abiList[abiName]
   }
 
-  async sendToContract (address, abiList, abiName, params = [], {
-    qtumAmount = 0,
-    gasLimit = 250000,
-    gasPrice = 40
-  } = {}) {
+  async sendToContract(
+    address,
+    abiList,
+    abiName,
+    params = [],
+    { qtumAmount = 0, gasLimit = 250000, gasPrice = 40 } = {}
+  ) {
     const method = this.getAbiMethod(abiList, abiName)
     const data = this.encodeMethod(method, params)
     try {
       this.emit('txWaiting')
-      const { txid } = await this.rpcCall(
-        'sendtocontract',
-        [
-          address,
-          data,
-          qtumAmount,
-          gasLimit,
-          gasPrice
-        ]
-      )
+      const { txid } = await this.rpcCall('sendtocontract', [
+        address,
+        data,
+        qtumAmount,
+        gasLimit,
+        gasPrice
+      ])
       this.emit('txSent')
       return new Transaction(txid, this.account.network)
     } catch (e) {
       this.emit('txCancelled')
-      console.log('sendtocontract error', e)
+      console.log('sendtocontract error', e) // eslint-disable-line
       return null
     }
   }
 
-  async safeSendToContract (address, abiList, abiName, params = [], options = { }) {
+  async safeSendToContract(
+    address,
+    abiList,
+    abiName,
+    params = [],
+    options = {}
+  ) {
     try {
       this.emit('txValidating')
-      const result = await this.callContractWithAmount(address, abiList, abiName, params, {
-        amount: options.qtumAmount
-      })
+      const result = await this.callContractWithAmount(
+        address,
+        abiList,
+        abiName,
+        params,
+        { amount: options.qtumAmount }
+      )
       if (result.executionResult.excepted !== 'None') {
         this.emit('txCancelled')
         throw new CallContractError(result.executionResult.exceptedMessage)
@@ -308,15 +345,18 @@ export default class Qrypto extends EventEmmiter {
     }
   }
 
-  async callContractQtumInfo (address, abiList, abiName, params = []) {
+  async callContractQtumInfo(address, abiList, abiName, params = []) {
     const method = this.getAbiMethod(abiList, abiName)
     const data = this.encodeMethod(method, params)
-    const { data: result } = await axios.get(`https://${DOMAIN[this.account.network || NETWORK.MainNet]}/api/contract/${address}/call`, {
-      params: {
-        data,
-        address: this.hexAddress
+    const { data: result } = await axios.get(
+      `https://${DOMAIN[this.account.network || NETWORK.MainNet]}/api/contract/${address}/call`, // eslint-disable-line
+      {
+        params: {
+          data,
+          address: this.hexAddress
+        }
       }
-    })
+    )
     if (result.executionResult.excepted === 'None') {
       const output = result.executionResult.output
       const decoded = abi.decodeMethod(method, this.wrapHex(output))
@@ -325,39 +365,37 @@ export default class Qrypto extends EventEmmiter {
     throw new CallContractError(result.executionResult.exceptedMessage)
   }
 
-  async callContractWithAmount (address, abiList, abiName, params = [], options = {}) {
+  async callContractWithAmount(
+    address,
+    abiList,
+    abiName,
+    params = [],
+    options = {}
+  ) {
     const method = this.getAbiMethod(abiList, abiName)
     const data = this.encodeMethod(method, params)
-    console.log(JSON.stringify(method), JSON.stringify(params))
     try {
-      const { data: result } = await axios.post(`https://${INSIGHT_DOMAIN[this.account.network || NETWORK.MainNet]}/insight-api/contracts/call`, {
-        data,
-        address,
-        from: this.hexAddress,
-        ...options
-      })
+      const { data: result } = await axios.post(
+        `https://${INSIGHT_DOMAIN[this.account.network || NETWORK.MainNet]}/insight-api/contracts/call`, // eslint-disable-line
+        {
+          data,
+          address,
+          from: this.hexAddress,
+          ...options
+        }
+      )
       return result
     } catch (e) {
-      console.log('callcontract error', {
-        abiName,
-        params,
-        e
-      })
+      console.log('callcontract error', { abiName, params, e }) // eslint-disable-line
       return null
     }
   }
 
-  async callContract (address, abiList, abiName, params = []) {
+  async callContract(address, abiList, abiName, params = []) {
     const method = this.getAbiMethod(abiList, abiName)
     const data = this.encodeMethod(method, params)
     try {
-      const result = await this.rpcCall(
-        'callcontract',
-        [
-          address,
-          data
-        ]
-      )
+      const result = await this.rpcCall('callcontract', [address, data])
       if (result.executionResult.excepted === 'None') {
         const output = result.executionResult.output
         const decoded = abi.decodeMethod(method, this.wrapHex(output))
@@ -365,11 +403,7 @@ export default class Qrypto extends EventEmmiter {
       }
       throw new CallContractError(result.executionResult.exceptedMessage)
     } catch (e) {
-      console.log('callcontract error', {
-        abiName,
-        params,
-        e
-      })
+      console.log('callcontract error', { abiName, params, e }) // eslint-disable-line
       if (e instanceof CallContractError) {
         throw e
       }
@@ -377,8 +411,13 @@ export default class Qrypto extends EventEmmiter {
     }
   }
 
-  async return (address, abiList, abiName, params = []) {
-    const callResults = await this.callContractQtumInfo(address, abiList, abiName, params)
+  async return(address, abiList, abiName, params = []) {
+    const callResults = await this.callContractQtumInfo(
+      address,
+      abiList,
+      abiName,
+      params
+    )
     if (callResults === null) {
       return null
     }
@@ -390,9 +429,13 @@ export default class Qrypto extends EventEmmiter {
     return results.length > 1 ? results : results[0]
   }
 
-  parseData (data) {
+  parseData(data) {
     // use bignumber.js instead of stupid bn.js
-    if (data !== null && typeof data === 'object' && Array.isArray(data.words)) {
+    if (
+      data !== null &&
+      typeof data === 'object' &&
+      Array.isArray(data.words)
+    ) {
       return BigNumber(data)
     }
     if (Array.isArray(data)) {
@@ -401,30 +444,38 @@ export default class Qrypto extends EventEmmiter {
     return data
   }
 
-  encodeMethod (method, params) {
+  encodeMethod(method, params) {
     return abi.encodeMethod(method, params).substr(2)
   }
 
-  login () {
+  login() {
     return new Promise((resolve, reject) => {
       this.once('login', account => resolve(account))
-      window.chrome.runtime?.sendMessage(this.extensionId, { type: 'OPEN' }, res => {
-        this.#opened = !window.chrome.runtime.lastError
-      })
+      window.chrome.runtime?.sendMessage(
+        this.extensionId,
+        { type: 'OPEN' },
+        res => {
+          this.#opened = !window.chrome.runtime.lastError
+        }
+      )
     })
   }
 
-  checkInstalled () {
+  checkInstalled() {
     if (this.extensionInstalled) {
       return true
     }
     return new Promise((resolve, reject) => {
-      window.chrome.runtime?.sendMessage(this.extensionId, { type: 'GET_BALANCE' }, res => {
-        const installed = !window.chrome.runtime.lastError
-        this.emit('installed', installed)
-        this.extensionInstalled = installed
-        resolve(installed)
-      })
+      window.chrome.runtime?.sendMessage(
+        this.extensionId,
+        { type: 'GET_BALANCE' },
+        res => {
+          const installed = !window.chrome.runtime.lastError
+          this.emit('installed', installed)
+          this.extensionInstalled = installed
+          resolve(installed)
+        }
+      )
       setTimeout(() => resolve(false), 1000)
     })
   }

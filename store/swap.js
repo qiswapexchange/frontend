@@ -15,43 +15,50 @@ export const state = () => ({
 })
 
 export const mutations = {
-  setExtensionId (state, extensionId) {
+  setExtensionId(state, extensionId) {
     state.extensionId = extensionId
     store.set('extensionId', extensionId)
   },
-  setExtensionInstalled (state, installed) {
+  setExtensionInstalled(state, installed) {
     state.extensionInstalled = installed
   },
-  setConnected (state, connected) {
+  setConnected(state, connected) {
     state.connected = connected
   },
-  setHeight (state, height) {
+  setHeight(state, height) {
     state.height = height
   },
-  setAccount (state, account) {
+  setAccount(state, account) {
     state.account = account
   },
-  setTolerance (state, tolerance) {
+  setTolerance(state, tolerance) {
     state.tolerance = tolerance
   },
-  setDeadline (state, deadline) {
+  setDeadline(state, deadline) {
     state.deadline = deadline
   },
-  setTokens (state, tokens) {
+  setTokens(state, tokens) {
     state.tokens = tokens
   },
-  updateToken (state, { token, values }) {
-    Object.entries(values).forEach(([key, value]) => token[key] = value)
+  updateToken(state, { token, values }) {
+    Object.entries(values).forEach(([key, value]) => (token[key] = value))
   },
-  importToken (state, token) {
+  importToken(state, token) {
     state.tokens.unshift(token)
   },
-  setTxs (state, txs) {
+  setTxs(state, txs) {
     txs = JSON.parse(JSON.stringify(txs))
-    state.txs = txs.filter(tx => Math.max(tx.raw.confirmations, state.height - (tx.raw.blockHeight ? tx.raw.blockHeight : state.height)) < 1000)
+    state.txs = txs.filter(
+      tx =>
+        Math.max(
+          tx.raw.confirmations,
+          state.height -
+            (tx.raw.blockHeight ? tx.raw.blockHeight : state.height)
+        ) < 1000
+    )
     store.set('txs', state.txs)
   },
-  updateTx (state, { tx, raw }) {
+  updateTx(state, { tx, raw }) {
     state.txs.forEach(t => {
       if (t.raw.txid === tx.raw.txid) {
         t.raw = JSON.parse(JSON.stringify(raw))
@@ -62,51 +69,56 @@ export const mutations = {
 }
 
 export const actions = {
-  addTx ({ state, commit }, tx) {
+  addTx({ state, commit }, tx) {
     if (state.txs.find(t => t.raw.txid === tx.raw.txid)) {
       return
     }
     const txs = [tx, ...state.txs]
     commit('setTxs', txs)
   },
-  confirmTx ({ commit }, payload) {
+  confirmTx({ commit }, payload) {
     commit('updateTx', payload)
   },
-  importToken ({ commit, state }, token) {
+  importToken({ commit, state }, token) {
     commit('importToken', token)
     const importedTokens = state.tokens.filter(token => token.imported)
     store.set('tokens', importedTokens)
   },
-  loadTokens ({ commit, state }) {
+  loadTokens({ commit, state }) {
     const tokens = store.get('tokens') || []
-    commit('setTokens', [
-      ...tokens.map(t => new Token(t)),
-      ...state.tokens
-    ])
+    commit('setTokens', [...tokens.map(t => new Token(t)), ...state.tokens])
   },
-  async loadTxs ({ commit, dispatch }) {
+  async loadTxs({ commit, dispatch }) {
     const storedTxs = store.get('txs') || []
     if (storedTxs.length > 0) {
       const txsMap = {}
-      const txs = await Promise.all(storedTxs.map(async tx => {
-        if (txsMap[tx.raw.txid]) {
-          return
-        }
-        const t = tx.raw = new Transaction(tx.raw.txid, tx.raw.network, tx.raw.confirmations, tx.raw.success, tx.raw.blockHeight)
-        if (t.confirmations > 0 && !t.blockHeight) {
-          await t.updateInfo()
-        }
-        if (!t.confirmed) {
-          t.on('confirmed', () => {
-            dispatch('confirmTx', {
-              tx,
-              raw: t
+      const txs = await Promise.all(
+        storedTxs.map(async tx => {
+          if (txsMap[tx.raw.txid]) {
+            return
+          }
+          const t = (tx.raw = new Transaction(
+            tx.raw.txid,
+            tx.raw.network,
+            tx.raw.confirmations,
+            tx.raw.success,
+            tx.raw.blockHeight
+          ))
+          if (t.confirmations > 0 && !t.blockHeight) {
+            await t.updateInfo()
+          }
+          if (!t.confirmed) {
+            t.on('confirmed', () => {
+              dispatch('confirmTx', {
+                tx,
+                raw: t
+              })
             })
-          })
-        }
-        txsMap[tx.raw.txid] = tx
-        return tx
-      }))
+          }
+          txsMap[tx.raw.txid] = tx
+          return tx
+        })
+      )
       commit('setTxs', txs.filter(Boolean))
     }
   }

@@ -2,7 +2,7 @@ import store from 'store'
 import sha256 from 'crypto-js/sha256'
 
 class Cache extends Map {
-  get (key) {
+  get(key) {
     const data = super.get(key)
     if (!data) {
       return
@@ -14,7 +14,7 @@ class Cache extends Map {
     return value
   }
 
-  set (key, value, ttl = 60) {
+  set(key, value, ttl = 60) {
     const data = {
       value,
       expiredAt: new Date(Date.now() + ttl * 1000)
@@ -25,7 +25,7 @@ class Cache extends Map {
 
 const cache = new Cache()
 
-function generateKey (params) {
+function generateKey(params) {
   return sha256(JSON.stringify(params))
 }
 

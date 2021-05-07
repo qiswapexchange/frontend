@@ -1,5 +1,8 @@
 <template>
-  <div class="spinner" :style="{ width: `${width / 4}rem`, height: `${width / 4}rem` }" />
+  <div
+    class="spinner"
+    :style="{ width: `${width / 4}rem`, height: `${width / 4}rem` }"
+  />
 </template>
 
 <script>
