@@ -10,6 +10,7 @@ export default {
   nav: {
     index: 'Home',
     transaction: 'Launch Swap',
+    stake: 'Stake',
     product: 'Products',
     doc: 'Docs',
     contact: 'Contact',

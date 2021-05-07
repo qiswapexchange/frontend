@@ -10,6 +10,7 @@ export default {
   nav: {
     index: 'Inicio',
     transaction: 'Iniciar la plataforma',
+    stake: 'Stake',
     product: 'Productos',
     doc: 'Docs',
     contact: 'Contacto',

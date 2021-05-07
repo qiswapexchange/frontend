@@ -10,6 +10,7 @@ export default {
   nav: {
     index: '首页',
     transaction: '打开 Swap',
+    stake: 'Stake',
     product: '所有产品',
     doc: '文档',
     contact: '联系我们',

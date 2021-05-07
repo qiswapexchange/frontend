@@ -85,6 +85,14 @@
         >
           {{ $t(`nav.transaction`) }}
         </locale-link>
+        <!-- Stake -->
+        <locale-link
+          to="/swap/exchange"
+          class="text-center leading-8 lg:leading-normal py-4 lg:mx-6 transition-normal"
+          :class="`hover:text-${theme}-assist-200`"
+        >
+          {{ $t(`nav.stake`) }}
+        </locale-link>
         <a
           href="https://learn.qiswap.com"
           class="text-center leading-8 lg:leading-normal py-4 lg:mx-6 transition-normal"
