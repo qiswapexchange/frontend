@@ -1,12 +1,15 @@
 import Cookie from 'cookie';
 import { createLocaleFromRouteGetter } from '~/.nuxt/nuxt-i18n/utils-common';
-import {
+import { options } from '~/.nuxt/nuxt-i18n/options';
+
+const {
   detectBrowserLanguage,
   localeCodes,
   vueI18n,
   routesNameSeparator,
   defaultLocaleRouteNameSuffix,
-} from '~/.nuxt/nuxt-i18n/options';
+} = options;
+
 const getLocaleFromRoute = createLocaleFromRouteGetter(localeCodes, {
   routesNameSeparator,
   defaultLocaleRouteNameSuffix,
