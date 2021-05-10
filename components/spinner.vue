@@ -1,5 +1,8 @@
 <template>
-  <div class="spinner" :style="{ width: `${width / 4}rem`, height: `${width / 4}rem` }" />
+  <div
+    class="spinner"
+    :style="{ width: `${width / 4}rem`, height: `${width / 4}rem` }"
+  />
 </template>
 
 <script>
@@ -7,10 +10,10 @@ export default {
   props: {
     width: {
       type: Number,
-      default: 4
-    }
-  }
-}
+      default: 4,
+    },
+  },
+};
 </script>
 
 <style lang="less" scoped>

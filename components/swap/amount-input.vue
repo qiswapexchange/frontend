@@ -11,7 +11,7 @@
       :disabled="!tokenAmount.selected"
       @focus="tokenAmount.inputing = true"
       @blur="tokenAmount.inputing = false"
-    >
+    />
     <div
       v-if="tokenAmount.selected && showMax"
       class="py-1 px-2 mr-2 text-xs cursor-pointer hover:opacity-75 rounded"
@@ -28,26 +28,26 @@ export default {
   props: {
     tokenAmount: {
       type: Object,
-      default () {
-        return {}
-      }
+      default() {
+        return {};
+      },
     },
     showMax: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
   computed: {
-    theme () {
-      return this.$store.state.theme
-    }
+    theme() {
+      return this.$store.state.theme;
+    },
   },
   methods: {
-    setMax (e) {
-      e.preventDefault()
-      this.$refs.input.focus()
-      this.tokenAmount.input = this.tokenAmount.balance
-    }
-  }
-}
+    setMax(e) {
+      e.preventDefault();
+      this.$refs.input.focus();
+      this.tokenAmount.input = this.tokenAmount.balance;
+    },
+  },
+};
 </script>

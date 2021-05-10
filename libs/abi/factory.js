@@ -7,12 +7,12 @@ export default [
       {
         name: '_feeToSetter',
         type: 'address',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     outputs: null,
     constant: false,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'PairCreated',
@@ -22,27 +22,27 @@ export default [
       {
         name: 'token0',
         type: 'address',
-        indexed: true
+        indexed: true,
       },
       {
         name: 'token1',
         type: 'address',
-        indexed: true
+        indexed: true,
       },
       {
         name: 'pair',
         type: 'address',
-        indexed: false
+        indexed: false,
       },
       {
         name: '',
         type: 'uint256',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     outputs: null,
     constant: false,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'allPairs',
@@ -52,18 +52,18 @@ export default [
       {
         name: '',
         type: 'uint256',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'address',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     constant: true,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'allPairsLength',
@@ -74,11 +74,11 @@ export default [
       {
         name: '',
         type: 'uint256',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     constant: true,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'createPair',
@@ -88,23 +88,23 @@ export default [
       {
         name: 'tokenA',
         type: 'address',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'tokenB',
         type: 'address',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     outputs: [
       {
         name: 'pair',
         type: 'address',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     constant: false,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'feeTo',
@@ -115,11 +115,11 @@ export default [
       {
         name: '',
         type: 'address',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     constant: true,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'feeToSetter',
@@ -130,11 +130,11 @@ export default [
       {
         name: '',
         type: 'address',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     constant: true,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'getPair',
@@ -144,23 +144,23 @@ export default [
       {
         name: '',
         type: 'address',
-        indexed: false
+        indexed: false,
       },
       {
         name: '',
         type: 'address',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'address',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     constant: true,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'setFeeTo',
@@ -170,12 +170,12 @@ export default [
       {
         name: '_feeTo',
         type: 'address',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     outputs: [],
     constant: false,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'setFeeToSetter',
@@ -185,11 +185,11 @@ export default [
       {
         name: '_feeToSetter',
         type: 'address',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     outputs: [],
     constant: false,
-    anonymous: false
-  }
-]
+    anonymous: false,
+  },
+];

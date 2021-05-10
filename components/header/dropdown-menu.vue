@@ -1,7 +1,17 @@
 <template>
-  <section :class="{ 'md:px-2': !absolute, 'px-2': absolute }" class="relative py-2" @mouseenter="toggle(true)" @mouseleave="toggle(false)">
+  <section
+    :class="{ 'md:px-2': !absolute, 'px-2': absolute }"
+    class="relative py-2"
+    @mouseenter="toggle(true)"
+    @mouseleave="toggle(false)"
+  >
     <!-- 下拉菜单 label -->
-    <div class="cursor-pointer hover:opacity-75" @touchstart="onTouchStart" @touchend="onTouchEnd" @click.stop="toggle(!show)">
+    <div
+      class="cursor-pointer hover:opacity-75"
+      @touchstart="onTouchStart"
+      @touchend="onTouchEnd"
+      @click.stop="toggle(!show)"
+    >
       <slot name="label">
         <div class="flex items-center">
           {{ label }}
@@ -17,39 +27,39 @@
 </template>
 
 <script>
-import debounce from 'debounce'
+import debounce from 'debounce';
 
 export default {
   props: {
     label: {
       type: String,
-      default: ''
+      default: '',
     },
     triangle: {
       type: Boolean,
-      default: true
+      default: true,
     },
     absolute: {
       type: Boolean,
-      default: false
+      default: false,
     },
     position: {
       type: String,
-      default: 'right'
+      default: 'right',
     },
     direction: {
       type: String,
-      default: 'down'
-    }
+      default: 'down',
+    },
   },
-  data () {
+  data() {
     return {
-      show: false
-    }
+      show: false,
+    };
   },
   computed: {
-    dropdownClass () {
-      const down = this.direction === 'down'
+    dropdownClass() {
+      const down = this.direction === 'down';
       return {
         hidden: !this.show,
         block: this.show,
@@ -58,52 +68,53 @@ export default {
         'top-8': down,
         'left-full top-0': !down,
         'border shadow-md rounded absolute pb-2': this.absolute,
-        'md:bg-gray-900 md:border md:shadow-md md:rounded md:absolute': !this.absolute
-      }
+        'md:bg-gray-900 md:border md:shadow-md md:rounded md:absolute':
+          !this.absolute,
+      };
     },
-    triangleClass () {
-      const down = this.direction === 'down'
+    triangleClass() {
+      const down = this.direction === 'down';
       return {
         'c-triangle-down': !this.show,
         'c-triangle-up': this.show,
-        'md:c-triangle-right': !down
-      }
-    }
+        'md:c-triangle-right': !down,
+      };
+    },
   },
   watch: {
-    show (show) {
+    show(show) {
       if (show) {
-        this.$emit('show')
+        this.$emit('show');
       } else {
-        this.$emit('hide')
+        this.$emit('hide');
       }
-    }
+    },
   },
-  mounted () {
-    this.toggle = debounce(this.toggle.bind(this), 200, true)
-    this.hide = this.hide.bind(this)
-    document.body.addEventListener('click', this.hide, false)
-    this.$router.afterEach(this.hide)
+  mounted() {
+    this.toggle = debounce(this.toggle.bind(this), 200, true);
+    this.hide = this.hide.bind(this);
+    document.body.addEventListener('click', this.hide, false);
+    this.$router.afterEach(this.hide);
   },
-  destroyed () {
-    document.body.removeEventListener('click', this.hide, false)
+  destroyed() {
+    document.body.removeEventListener('click', this.hide, false);
   },
   methods: {
-    onTouchStart () {
-      this.lastTouch = Date.now()
+    onTouchStart() {
+      this.lastTouch = Date.now();
     },
-    onTouchEnd (e) {
+    onTouchEnd(e) {
       if (this.lastTouch && Date.now() - this.lastTouch) {
-        this.toggle(!this.show)
-        e.preventDefault()
+        this.toggle(!this.show);
+        e.preventDefault();
       }
     },
-    hide () {
-      this.toggle(false)
+    hide() {
+      this.toggle(false);
     },
-    toggle (show) {
-      this.show = show
-    }
-  }
-}
+    toggle(show) {
+      this.show = show;
+    },
+  },
+};
 </script>

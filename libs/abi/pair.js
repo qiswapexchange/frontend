@@ -6,7 +6,7 @@ export default [
     inputs: [],
     outputs: null,
     constant: false,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'Approval',
@@ -16,22 +16,22 @@ export default [
       {
         name: 'owner',
         type: 'address',
-        indexed: true
+        indexed: true,
       },
       {
         name: 'spender',
         type: 'address',
-        indexed: true
+        indexed: true,
       },
       {
         name: 'value',
         type: 'uint256',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     outputs: null,
     constant: false,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'Burn',
@@ -41,27 +41,27 @@ export default [
       {
         name: 'sender',
         type: 'address',
-        indexed: true
+        indexed: true,
       },
       {
         name: 'amount0',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'amount1',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'to',
         type: 'address',
-        indexed: true
-      }
+        indexed: true,
+      },
     ],
     outputs: null,
     constant: false,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'Mint',
@@ -71,22 +71,22 @@ export default [
       {
         name: 'sender',
         type: 'address',
-        indexed: true
+        indexed: true,
       },
       {
         name: 'amount0',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'amount1',
         type: 'uint256',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     outputs: null,
     constant: false,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'Swap',
@@ -96,37 +96,37 @@ export default [
       {
         name: 'sender',
         type: 'address',
-        indexed: true
+        indexed: true,
       },
       {
         name: 'amount0In',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'amount1In',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'amount0Out',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'amount1Out',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'to',
         type: 'address',
-        indexed: true
-      }
+        indexed: true,
+      },
     ],
     outputs: null,
     constant: false,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'Sync',
@@ -136,17 +136,17 @@ export default [
       {
         name: 'reserve0',
         type: 'uint112',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'reserve1',
         type: 'uint112',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     outputs: null,
     constant: false,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'Transfer',
@@ -156,22 +156,22 @@ export default [
       {
         name: 'from',
         type: 'address',
-        indexed: true
+        indexed: true,
       },
       {
         name: 'to',
         type: 'address',
-        indexed: true
+        indexed: true,
       },
       {
         name: 'value',
         type: 'uint256',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     outputs: null,
     constant: false,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'DOMAIN_SEPARATOR',
@@ -182,11 +182,11 @@ export default [
       {
         name: '',
         type: 'bytes32',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     constant: true,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'MINIMUM_LIQUIDITY',
@@ -197,11 +197,11 @@ export default [
       {
         name: '',
         type: 'uint256',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     constant: true,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'PERMIT_TYPEHASH',
@@ -212,11 +212,11 @@ export default [
       {
         name: '',
         type: 'bytes32',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     constant: true,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'allowance',
@@ -226,23 +226,23 @@ export default [
       {
         name: '',
         type: 'address',
-        indexed: false
+        indexed: false,
       },
       {
         name: '',
         type: 'address',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'uint256',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     constant: true,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'approve',
@@ -252,23 +252,23 @@ export default [
       {
         name: 'spender',
         type: 'address',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'value',
         type: 'uint256',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'bool',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     constant: false,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'balanceOf',
@@ -278,18 +278,18 @@ export default [
       {
         name: '',
         type: 'address',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'uint256',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     constant: true,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'burn',
@@ -299,23 +299,23 @@ export default [
       {
         name: 'to',
         type: 'address',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     outputs: [
       {
         name: 'amount0',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'amount1',
         type: 'uint256',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     constant: false,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'decimals',
@@ -326,11 +326,11 @@ export default [
       {
         name: '',
         type: 'uint8',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     constant: true,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'factory',
@@ -341,11 +341,11 @@ export default [
       {
         name: '',
         type: 'address',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     constant: true,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'getReserves',
@@ -356,21 +356,21 @@ export default [
       {
         name: '_reserve0',
         type: 'uint112',
-        indexed: false
+        indexed: false,
       },
       {
         name: '_reserve1',
         type: 'uint112',
-        indexed: false
+        indexed: false,
       },
       {
         name: '_blockTimestampLast',
         type: 'uint32',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     constant: true,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'initialize',
@@ -380,17 +380,17 @@ export default [
       {
         name: '_token0',
         type: 'address',
-        indexed: false
+        indexed: false,
       },
       {
         name: '_token1',
         type: 'address',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     outputs: [],
     constant: false,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'kLast',
@@ -401,11 +401,11 @@ export default [
       {
         name: '',
         type: 'uint256',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     constant: true,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'mint',
@@ -415,18 +415,18 @@ export default [
       {
         name: 'to',
         type: 'address',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     outputs: [
       {
         name: 'liquidity',
         type: 'uint256',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     constant: false,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'name',
@@ -437,11 +437,11 @@ export default [
       {
         name: '',
         type: 'string',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     constant: true,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'nonces',
@@ -451,18 +451,18 @@ export default [
       {
         name: '',
         type: 'address',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'uint256',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     constant: true,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'permit',
@@ -472,42 +472,42 @@ export default [
       {
         name: 'owner',
         type: 'address',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'spender',
         type: 'address',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'value',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'deadline',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'v',
         type: 'uint8',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'r',
         type: 'bytes32',
-        indexed: false
+        indexed: false,
       },
       {
         name: 's',
         type: 'bytes32',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     outputs: [],
     constant: false,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'price0CumulativeLast',
@@ -518,11 +518,11 @@ export default [
       {
         name: '',
         type: 'uint256',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     constant: true,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'price1CumulativeLast',
@@ -533,11 +533,11 @@ export default [
       {
         name: '',
         type: 'uint256',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     constant: true,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'skim',
@@ -547,12 +547,12 @@ export default [
       {
         name: 'to',
         type: 'address',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     outputs: [],
     constant: false,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'swap',
@@ -562,27 +562,27 @@ export default [
       {
         name: 'amount0Out',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'amount1Out',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'to',
         type: 'address',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'data',
         type: 'bytes',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     outputs: [],
     constant: false,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'symbol',
@@ -593,11 +593,11 @@ export default [
       {
         name: '',
         type: 'string',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     constant: true,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'sync',
@@ -606,7 +606,7 @@ export default [
     inputs: [],
     outputs: [],
     constant: false,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'token0',
@@ -617,11 +617,11 @@ export default [
       {
         name: '',
         type: 'address',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     constant: true,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'token1',
@@ -632,11 +632,11 @@ export default [
       {
         name: '',
         type: 'address',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     constant: true,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'totalSupply',
@@ -647,11 +647,11 @@ export default [
       {
         name: '',
         type: 'uint256',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     constant: true,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'transfer',
@@ -661,23 +661,23 @@ export default [
       {
         name: 'to',
         type: 'address',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'value',
         type: 'uint256',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'bool',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     constant: false,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'transferFrom',
@@ -687,27 +687,27 @@ export default [
       {
         name: 'from',
         type: 'address',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'to',
         type: 'address',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'value',
         type: 'uint256',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'bool',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     constant: false,
-    anonymous: false
-  }
-]
+    anonymous: false,
+  },
+];
