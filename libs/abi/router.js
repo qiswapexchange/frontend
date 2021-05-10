@@ -7,17 +7,17 @@ export default [
       {
         name: '_factory',
         type: 'address',
-        indexed: false
+        indexed: false,
       },
       {
         name: '_WETH',
         type: 'address',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     outputs: null,
     constant: false,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'WETH',
@@ -28,11 +28,11 @@ export default [
       {
         name: '',
         type: 'address',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     constant: false,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'addLiquidity',
@@ -42,63 +42,63 @@ export default [
       {
         name: 'tokenA',
         type: 'address',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'tokenB',
         type: 'address',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'amountADesired',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'amountBDesired',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'amountAMin',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'amountBMin',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'to',
         type: 'address',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'deadline',
         type: 'uint256',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     outputs: [
       {
         name: 'amountA',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'amountB',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'liquidity',
         type: 'uint256',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     constant: false,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'addLiquidityETH',
@@ -108,53 +108,53 @@ export default [
       {
         name: 'token',
         type: 'address',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'amountTokenDesired',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'amountTokenMin',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'amountETHMin',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'to',
         type: 'address',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'deadline',
         type: 'uint256',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     outputs: [
       {
         name: 'amountToken',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'amountETH',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'liquidity',
         type: 'uint256',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     constant: false,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'factory',
@@ -165,11 +165,11 @@ export default [
       {
         name: '',
         type: 'address',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     constant: false,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'getAmountIn',
@@ -179,28 +179,28 @@ export default [
       {
         name: 'amountOut',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'reserveIn',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'reserveOut',
         type: 'uint256',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     outputs: [
       {
         name: 'amountIn',
         type: 'uint256',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     constant: false,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'getAmountOut',
@@ -210,28 +210,28 @@ export default [
       {
         name: 'amountIn',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'reserveIn',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'reserveOut',
         type: 'uint256',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     outputs: [
       {
         name: 'amountOut',
         type: 'uint256',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     constant: false,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'getAmountsIn',
@@ -241,23 +241,23 @@ export default [
       {
         name: 'amountOut',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'path',
         type: 'address[]',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     outputs: [
       {
         name: 'amounts',
         type: 'uint256[]',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     constant: false,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'getAmountsOut',
@@ -267,23 +267,23 @@ export default [
       {
         name: 'amountIn',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'path',
         type: 'address[]',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     outputs: [
       {
         name: 'amounts',
         type: 'uint256[]',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     constant: false,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'getReserves',
@@ -293,33 +293,33 @@ export default [
       {
         name: 'factory',
         type: 'address',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'tokenA',
         type: 'address',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'tokenB',
         type: 'address',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     outputs: [
       {
         name: 'reserveA',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'reserveB',
         type: 'uint256',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     constant: false,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'quote',
@@ -329,28 +329,28 @@ export default [
       {
         name: 'amountA',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'reserveA',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'reserveB',
         type: 'uint256',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     outputs: [
       {
         name: 'amountB',
         type: 'uint256',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     constant: false,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'removeLiquidity',
@@ -360,53 +360,53 @@ export default [
       {
         name: 'tokenA',
         type: 'address',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'tokenB',
         type: 'address',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'liquidity',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'amountAMin',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'amountBMin',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'to',
         type: 'address',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'deadline',
         type: 'uint256',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     outputs: [
       {
         name: 'amountA',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'amountB',
         type: 'uint256',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     constant: false,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'removeLiquidityETH',
@@ -416,48 +416,48 @@ export default [
       {
         name: 'token',
         type: 'address',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'liquidity',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'amountTokenMin',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'amountETHMin',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'to',
         type: 'address',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'deadline',
         type: 'uint256',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     outputs: [
       {
         name: 'amountToken',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'amountETH',
         type: 'uint256',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     constant: false,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'removeLiquidityETHSupportingFeeOnTransferTokens',
@@ -467,43 +467,43 @@ export default [
       {
         name: 'token',
         type: 'address',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'liquidity',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'amountTokenMin',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'amountETHMin',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'to',
         type: 'address',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'deadline',
         type: 'uint256',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     outputs: [
       {
         name: 'amountETH',
         type: 'uint256',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     constant: false,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'removeLiquidityETHWithPermit',
@@ -513,68 +513,68 @@ export default [
       {
         name: 'token',
         type: 'address',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'liquidity',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'amountTokenMin',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'amountETHMin',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'to',
         type: 'address',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'deadline',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'approveMax',
         type: 'bool',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'v',
         type: 'uint8',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'r',
         type: 'bytes32',
-        indexed: false
+        indexed: false,
       },
       {
         name: 's',
         type: 'bytes32',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     outputs: [
       {
         name: 'amountToken',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'amountETH',
         type: 'uint256',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     constant: false,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'removeLiquidityETHWithPermitSupportingFeeOnTransferTokens',
@@ -584,63 +584,63 @@ export default [
       {
         name: 'token',
         type: 'address',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'liquidity',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'amountTokenMin',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'amountETHMin',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'to',
         type: 'address',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'deadline',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'approveMax',
         type: 'bool',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'v',
         type: 'uint8',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'r',
         type: 'bytes32',
-        indexed: false
+        indexed: false,
       },
       {
         name: 's',
         type: 'bytes32',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     outputs: [
       {
         name: 'amountETH',
         type: 'uint256',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     constant: false,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'removeLiquidityWithPermit',
@@ -650,73 +650,73 @@ export default [
       {
         name: 'tokenA',
         type: 'address',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'tokenB',
         type: 'address',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'liquidity',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'amountAMin',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'amountBMin',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'to',
         type: 'address',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'deadline',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'approveMax',
         type: 'bool',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'v',
         type: 'uint8',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'r',
         type: 'bytes32',
-        indexed: false
+        indexed: false,
       },
       {
         name: 's',
         type: 'bytes32',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     outputs: [
       {
         name: 'amountA',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'amountB',
         type: 'uint256',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     constant: false,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'swapETHForExactTokens',
@@ -726,33 +726,33 @@ export default [
       {
         name: 'amountOut',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'path',
         type: 'address[]',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'to',
         type: 'address',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'deadline',
         type: 'uint256',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     outputs: [
       {
         name: 'amounts',
         type: 'uint256[]',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     constant: false,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'swapExactETHForTokens',
@@ -762,33 +762,33 @@ export default [
       {
         name: 'amountOutMin',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'path',
         type: 'address[]',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'to',
         type: 'address',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'deadline',
         type: 'uint256',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     outputs: [
       {
         name: 'amounts',
         type: 'uint256[]',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     constant: false,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'swapExactETHForTokensSupportingFeeOnTransferTokens',
@@ -798,27 +798,27 @@ export default [
       {
         name: 'amountOutMin',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'path',
         type: 'address[]',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'to',
         type: 'address',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'deadline',
         type: 'uint256',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     outputs: [],
     constant: false,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'swapExactTokensForETH',
@@ -828,38 +828,38 @@ export default [
       {
         name: 'amountIn',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'amountOutMin',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'path',
         type: 'address[]',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'to',
         type: 'address',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'deadline',
         type: 'uint256',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     outputs: [
       {
         name: 'amounts',
         type: 'uint256[]',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     constant: false,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'swapExactTokensForETHSupportingFeeOnTransferTokens',
@@ -869,32 +869,32 @@ export default [
       {
         name: 'amountIn',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'amountOutMin',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'path',
         type: 'address[]',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'to',
         type: 'address',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'deadline',
         type: 'uint256',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     outputs: [],
     constant: false,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'swapExactTokensForTokens',
@@ -904,38 +904,38 @@ export default [
       {
         name: 'amountIn',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'amountOutMin',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'path',
         type: 'address[]',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'to',
         type: 'address',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'deadline',
         type: 'uint256',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     outputs: [
       {
         name: 'amounts',
         type: 'uint256[]',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     constant: false,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'swapExactTokensForTokensSupportingFeeOnTransferTokens',
@@ -945,32 +945,32 @@ export default [
       {
         name: 'amountIn',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'amountOutMin',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'path',
         type: 'address[]',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'to',
         type: 'address',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'deadline',
         type: 'uint256',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     outputs: [],
     constant: false,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'swapTokensForExactETH',
@@ -980,38 +980,38 @@ export default [
       {
         name: 'amountOut',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'amountInMax',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'path',
         type: 'address[]',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'to',
         type: 'address',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'deadline',
         type: 'uint256',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     outputs: [
       {
         name: 'amounts',
         type: 'uint256[]',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     constant: false,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'swapTokensForExactTokens',
@@ -1021,38 +1021,38 @@ export default [
       {
         name: 'amountOut',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'amountInMax',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'path',
         type: 'address[]',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'to',
         type: 'address',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'deadline',
         type: 'uint256',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     outputs: [
       {
         name: 'amounts',
         type: 'uint256[]',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     constant: false,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: '',
@@ -1061,6 +1061,6 @@ export default [
     inputs: null,
     outputs: null,
     constant: false,
-    anonymous: false
-  }
-]
+    anonymous: false,
+  },
+];

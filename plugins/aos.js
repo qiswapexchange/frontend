@@ -1,6 +1,6 @@
-import AOS from 'aos'
+import AOS from 'aos';
 
 AOS.init({
   once: true,
-  offset: 60
-})
+  offset: 60,
+});

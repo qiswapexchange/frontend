@@ -47,11 +47,14 @@
     "@nuxtjs/tailwindcss": "^2.1.0",
     "babel-eslint": "^10.1.0",
     "debounce": "^1.2.0",
-    "eslint": "^7.10.0",
+    "eslint": "^7.26.0",
+    "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-nuxt": "^1.0.0",
+    "eslint-plugin-prettier": "^3.4.0",
     "less": "^3.12.2",
     "less-loader": "^7.0.1",
     "nuxt-i18n": "^6.15.1",
+    "prettier": "^2.3.0",
     "vue-particles": "^1.0.9"
   }
 }

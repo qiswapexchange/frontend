@@ -1,9 +1,9 @@
 export const state = () => ({
-  theme: 'dark'
-})
+  theme: 'dark',
+});
 
 export const mutations = {
-  setTheme (state, theme) {
-    state.theme = theme
-  }
-}
+  setTheme(state, theme) {
+    state.theme = theme;
+  },
+};
