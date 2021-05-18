@@ -94,7 +94,7 @@ export default {
     this.toggle = debounce(this.toggle.bind(this), 200, true);
     this.hide = this.hide.bind(this);
     document.body.addEventListener('click', this.hide, false);
-    this.$router.afterEach(this.hide);
+    this.$router?.afterEach(this.hide);
   },
   destroyed() {
     document.body.removeEventListener('click', this.hide, false);

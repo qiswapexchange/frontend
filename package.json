@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.12.2",
-    "@nuxtjs/composition-api": "^0.12.5",
+    "@nuxtjs/composition-api": "^0.23.4",
     "@nuxtjs/proxy": "^2.0.1",
     "animate.css": "^4.1.1",
     "aos": "^2.3.4",

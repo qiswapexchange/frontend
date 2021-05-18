@@ -270,7 +270,7 @@ export class Swap {
   }
 
   updateToken(token, values) {
-    this.vm.$store.commit('swap/updateToken', { token, values });
+    this.vm.proxy.$store.commit('swap/updateToken', { token, values });
   }
 
   updateTokens() {
@@ -471,7 +471,7 @@ class Exchange extends Swap {
       async (height) => {
         if (height > 0) {
           try {
-            const { hashStateRoot } = await this.vm.$axios.$get(
+            const { hashStateRoot } = await this.vm.proxy.$axios.$get(
               `https://${DOMAIN[this.account?.network]}/api/block/${height}`
             );
             if (this.hashStateRoot !== hashStateRoot) {
