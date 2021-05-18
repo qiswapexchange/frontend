@@ -44,7 +44,9 @@
         </h3>
         <p
           class="text-sm tracking-wider font-thin"
-          :class="`text-${theme}-inverse-200 text-${align}`"
+          :class="`text-${theme}-inverse-200 text-${align} ${
+            item.action ? 'mb-6' : ''
+          }`"
         >
           {{ item.content }}
         </p>
@@ -55,7 +57,7 @@
             rounded-full
             text-sm
             font-thin
-            mt-6
+            mt-auto
             py-1
             px-5
             transition-normal
