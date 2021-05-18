@@ -74,7 +74,15 @@
               href="https://chrome.google.com/webstore/detail/qiwallet/cjfeohjffkdehdblcolicjhhnbphcmna"
               target="_blank"
               :class="`bg-transparent md:bg-${theme}-assist-100`"
-              class="py-3 px-8 rounded mr-4 hover:opacity-75 transition-normal"
+              class="
+                py-3
+                px-8
+                rounded
+                mr-4
+                hover:opacity-75
+                transition-normal
+                main-action
+              "
             >
               <span>
                 {{ $t('nav.install') }}
@@ -84,7 +92,15 @@
               v-if="extensionInstalled"
               to="/swap/exchange"
               :class="`bg-${theme}-assist-100`"
-              class="py-3 px-8 rounded mr-4 hover:opacity-75 transition-normal"
+              class="
+                py-3
+                px-8
+                rounded
+                mr-4
+                hover:opacity-75
+                transition-normal
+                main-action
+              "
             >
               {{ $t('index.banner.open') }}
             </locale-link>
@@ -98,6 +114,7 @@
                 rounded
                 hover:opacity-75
                 transition-normal
+                main-action
               "
               target="_blank"
             >
@@ -202,6 +219,10 @@ export default {
     margin-left: -300px;
     margin-top: -300px;
   }
+}
+.main-action {
+  width: 13rem;
+  text-align: center;
 }
 .more-content {
   animation: shaking 1s ease infinite;
