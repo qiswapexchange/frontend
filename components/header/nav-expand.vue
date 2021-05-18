@@ -160,7 +160,14 @@
         <!-- Stake -->
         <locale-link
           to="/swap/exchange"
-          class="text-center leading-8 lg:leading-normal py-4 lg:mx-6 transition-normal"
+          class="
+            text-center
+            leading-8
+            lg:leading-normal
+            py-4
+            lg:mx-6
+            transition-normal
+          "
           :class="`hover:text-${theme}-assist-200`"
         >
           {{ $t(`nav.stake`) }}
