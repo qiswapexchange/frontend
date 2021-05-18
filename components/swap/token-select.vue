@@ -154,6 +154,22 @@ import { DOMAIN, NETWORK } from '~/libs/constants';
 import { Token } from '~/libs/swap';
 
 export default defineComponent({
+  props: {
+    tokenAmount0: Object,
+    tokenAmount1: Object,
+    icon: {
+      type: String,
+      default: 'swap',
+    },
+    iconSize: {
+      type: String,
+      default: 'w-6',
+    },
+    switchable: {
+      type: Boolean,
+      default: false,
+    },
+  },
   setup(props, ctx) {
     const {
       store: { state, dispatch },
@@ -258,22 +274,6 @@ export default defineComponent({
       selectToken,
       importToken,
     };
-  },
-  props: {
-    tokenAmount0: Object,
-    tokenAmount1: Object,
-    icon: {
-      type: String,
-      default: 'swap',
-    },
-    iconSize: {
-      type: String,
-      default: 'w-6',
-    },
-    switchable: {
-      type: Boolean,
-      default: false,
-    },
   },
 });
 </script>
