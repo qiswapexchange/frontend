@@ -1,5 +1,8 @@
 <template>
-  <div :class="`bg-${theme}-main-100 text-${theme}-inverse-100`" class="min-h-screen flex flex-col justify-between items-stretch">
+  <div
+    :class="`bg-${theme}-main-100 text-${theme}-inverse-100`"
+    class="min-h-screen flex flex-col justify-between items-stretch"
+  >
     <HeaderNavMerge />
     <Nuxt />
     <Footer />
@@ -7,12 +10,10 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState } from 'vuex';
 export default {
   computed: {
-    ...mapState([
-      'theme'
-    ])
-  }
-}
+    ...mapState(['theme']),
+  },
+};
 </script>

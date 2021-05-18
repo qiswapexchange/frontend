@@ -7,12 +7,12 @@ export default [
       {
         name: '_totalSupply',
         type: 'uint256',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     outputs: null,
     constant: false,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'Approval',
@@ -22,22 +22,22 @@ export default [
       {
         name: 'owner',
         type: 'address',
-        indexed: true
+        indexed: true,
       },
       {
         name: 'spender',
         type: 'address',
-        indexed: true
+        indexed: true,
       },
       {
         name: 'value',
         type: 'uint256',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     outputs: null,
     constant: false,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'Transfer',
@@ -47,22 +47,22 @@ export default [
       {
         name: 'from',
         type: 'address',
-        indexed: true
+        indexed: true,
       },
       {
         name: 'to',
         type: 'address',
-        indexed: true
+        indexed: true,
       },
       {
         name: 'value',
         type: 'uint256',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     outputs: null,
     constant: false,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'DOMAIN_SEPARATOR',
@@ -73,11 +73,11 @@ export default [
       {
         name: '',
         type: 'bytes32',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     constant: true,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'PERMIT_TYPEHASH',
@@ -88,11 +88,11 @@ export default [
       {
         name: '',
         type: 'bytes32',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     constant: true,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'allowance',
@@ -102,23 +102,23 @@ export default [
       {
         name: '',
         type: 'address',
-        indexed: false
+        indexed: false,
       },
       {
         name: '',
         type: 'address',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'uint256',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     constant: true,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'approve',
@@ -128,23 +128,23 @@ export default [
       {
         name: 'spender',
         type: 'address',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'value',
         type: 'uint256',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'bool',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     constant: false,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'balanceOf',
@@ -154,18 +154,18 @@ export default [
       {
         name: '',
         type: 'address',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'uint256',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     constant: true,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'decimals',
@@ -176,11 +176,11 @@ export default [
       {
         name: '',
         type: 'uint8',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     constant: true,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'name',
@@ -191,11 +191,11 @@ export default [
       {
         name: '',
         type: 'string',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     constant: true,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'nonces',
@@ -205,18 +205,18 @@ export default [
       {
         name: '',
         type: 'address',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'uint256',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     constant: true,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'permit',
@@ -226,42 +226,42 @@ export default [
       {
         name: 'owner',
         type: 'address',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'spender',
         type: 'address',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'value',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'deadline',
         type: 'uint256',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'v',
         type: 'uint8',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'r',
         type: 'bytes32',
-        indexed: false
+        indexed: false,
       },
       {
         name: 's',
         type: 'bytes32',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     outputs: [],
     constant: false,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'symbol',
@@ -272,11 +272,11 @@ export default [
       {
         name: '',
         type: 'string',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     constant: true,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'totalSupply',
@@ -287,11 +287,11 @@ export default [
       {
         name: '',
         type: 'uint256',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     constant: true,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'transfer',
@@ -301,23 +301,23 @@ export default [
       {
         name: 'to',
         type: 'address',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'value',
         type: 'uint256',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'bool',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     constant: false,
-    anonymous: false
+    anonymous: false,
   },
   {
     name: 'transferFrom',
@@ -327,27 +327,27 @@ export default [
       {
         name: 'from',
         type: 'address',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'to',
         type: 'address',
-        indexed: false
+        indexed: false,
       },
       {
         name: 'value',
         type: 'uint256',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'bool',
-        indexed: false
-      }
+        indexed: false,
+      },
     ],
     constant: false,
-    anonymous: false
-  }
-]
+    anonymous: false,
+  },
+];

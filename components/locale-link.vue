@@ -7,7 +7,7 @@
 <script>
 export default {
   props: {
-    to: { type: [String, Object], default: '/' }
-  }
-}
+    to: { type: [String, Object], default: '/' },
+  },
+};
 </script>

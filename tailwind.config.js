@@ -1,10 +1,10 @@
 /*
-** TailwindCSS Configuration File
-**
-** Docs: https://tailwindcss.com/docs/configuration
-** Default: https://github.com/tailwindcss/tailwindcss/blob/master/stubs/defaultConfig.stub.js
-*/
-const { maxWidth } = require('tailwindcss/defaultTheme')
+ ** TailwindCSS Configuration File
+ **
+ ** Docs: https://tailwindcss.com/docs/configuration
+ ** Default: https://github.com/tailwindcss/tailwindcss/blob/master/stubs/defaultConfig.stub.js
+ */
+const { maxWidth } = require('tailwindcss/defaultTheme');
 /**
  * 颜色配置说明
  * main：主色
@@ -16,7 +16,7 @@ module.exports = {
     extend: {
       spacing: {
         72: '18rem',
-        80: '20rem'
+        80: '20rem',
       },
       colors: {
         dark: {
@@ -34,21 +34,21 @@ module.exports = {
           'inverse-200': '#ccc',
           'inverse-300': '#aaa',
           'inverse-400': '#999',
-          'inverse-500': '#686868'
+          'inverse-500': '#686868',
         },
-        light: {}
+        light: {},
       },
       height: {
-        xl: '90vh'
+        xl: '90vh',
       },
       maxHeight: maxWidth,
-      minHeight: maxWidth
-    }
+      minHeight: maxWidth,
+    },
   },
   variants: {
     rotate: ['responsive', 'hover', 'group-hover'],
     margin: ['responsive', 'hover', 'focus', 'first', 'last'],
-    backgroundColor: ['responsive', 'hover', 'focus', 'active', 'group-hover']
+    backgroundColor: ['responsive', 'hover', 'focus', 'active', 'group-hover'],
   },
   plugins: [],
   purge: {
@@ -59,10 +59,10 @@ module.exports = {
       'layouts/**/*.vue',
       'pages/**/*.vue',
       'plugins/**/*.js',
-      'nuxt.config.js'
+      'nuxt.config.js',
     ],
     options: {
-      whitelistPatterns: [/dark/, /light/]
-    }
-  }
-}
+      whitelistPatterns: [/dark/, /light/],
+    },
+  },
+};
