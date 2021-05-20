@@ -9,7 +9,7 @@
       class="appearance-none bg-transparent focus:outline-none pl-6 w-full"
       placeholder="0.0"
       :disabled="!tokenAmount.selected"
-      @focus="tokenAmount.inputing = true"
+      @input="tokenAmount.inputing = true"
       @blur="tokenAmount.inputing = false"
     />
     <div
@@ -46,6 +46,7 @@ export default {
     setMax(e) {
       e.preventDefault();
       this.$refs.input.focus();
+      this.tokenAmount.inputing = true;
       this.tokenAmount.input = this.tokenAmount.balance;
     },
   },
