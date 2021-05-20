@@ -69,7 +69,19 @@
             data-aos="fade-up"
             data-aos-delay="450"
           >
+            <a
+              v-if="!extensionInstalled"
+              href="https://chrome.google.com/webstore/detail/qiwallet/cjfeohjffkdehdblcolicjhhnbphcmna"
+              target="_blank"
+              :class="`bg-transparent md:bg-${theme}-assist-100`"
+              class="py-3 px-8 rounded mr-4 hover:opacity-75 transition-normal"
+            >
+              <span>
+                {{ $t('nav.install') }}
+              </span>
+            </a>
             <locale-link
+              v-if="extensionInstalled"
               to="/swap/exchange"
               :class="`bg-${theme}-assist-100`"
               class="py-3 px-8 rounded mr-4 hover:opacity-75 transition-normal"
@@ -92,7 +104,7 @@
               {{ $t('index.banner.doc') }}
             </a>
           </section>
-          <p class="mt-4 text-center md:px-6">
+          <p v-if="!extensionInstalled" class="mt-4 text-center md:px-6">
             {{ $t('index.banner.qiswap') }}
           </p>
         </div>
@@ -127,6 +139,7 @@ export default {
   data() {
     return {
       ...this.$t('index.plates'),
+      extensionInstalled: false,
     };
   },
   computed: {
@@ -138,6 +151,27 @@ export default {
     //   this.$nuxt.$loading.start()
     //   setTimeout(() => this.$nuxt.$loading.finish(), 100000)
     // })
+  },
+  beforeMount() {
+    window.postMessage(
+      { message: { type: 'VALIDATE_EXTENSION_INSTALLED' } },
+      '*'
+    );
+    window.addEventListener('message', this.setExtensionInstalled, false);
+  },
+  beforeDestroy() {
+    window.removeEventListener('message', this.setExtensionInstalled);
+  },
+  methods: {
+    setExtensionInstalled(event) {
+      const type = event?.data?.message?.type ?? '';
+      if (type === 'QRYPTO_INSTALLED_OR_UPDATED') {
+        window.location.reload();
+      } else if (type === 'EXTENSION_INSTALLED') {
+        this.extensionInstalled = true;
+        this.$store.commit('swap/setExtensionInstalled', true);
+      }
+    },
   },
 };
 </script>
