@@ -6,7 +6,14 @@
     <input
       ref="input"
       v-model.number="tokenAmount.input"
-      class="appearance-none bg-transparent focus:outline-none pl-6 w-full"
+      class="
+        appearance-none
+        bg-transparent
+        focus:outline-none
+        pl-6
+        w-full
+        text-sm
+      "
       placeholder="0.0"
       :disabled="!tokenAmount.selected"
       @focus="tokenAmount.inputing = true"
@@ -14,8 +21,16 @@
     />
     <div
       v-if="tokenAmount.selected && showMax"
-      class="py-1 px-2 mr-2 text-xs cursor-pointer hover:opacity-75 rounded"
-      :class="`bg-${theme}-assist-300`"
+      class="
+        py-1
+        px-2
+        mr-2
+        text-sm
+        cursor-pointer
+        hover:opacity-75
+        absolute
+        max-input
+      "
       @click="setMax"
     >
       Max
@@ -51,3 +66,9 @@ export default {
   },
 };
 </script>
+<style>
+.max-input {
+  color: #2e62f6;
+  top: -1.7rem;
+}
+</style>

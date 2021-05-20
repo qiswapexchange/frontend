@@ -14,7 +14,7 @@
     </div>
     <!-- 代币选择 -->
     <div
-      class="flex items-center justify-between mb-4 py-3 px-6 rounded-lg"
+      class="flex items-center justify-between mb-8 py-3 px-6 rounded-lg"
       :class="`bg-${theme}-main-400`"
     >
       <div
@@ -79,10 +79,10 @@
     </div>
     <!-- 输入框 -->
     <div class="flex">
-      <SwapAmountInput :token-amount="tokenAmount0" class="mr-1" />
+      <SwapAmountInput :token-amount="tokenAmount0" class="mr-1 relative" />
       <SwapAmountInput
         :token-amount="tokenAmount1"
-        class="ml-1"
+        class="ml-1 relative"
         :show-max="!switchable"
       />
     </div>

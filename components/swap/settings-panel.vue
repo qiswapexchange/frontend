@@ -1,7 +1,7 @@
 <template>
   <!-- 设置面板 -->
   <section
-    class="max-w-md w-full mx-auto rounded-lg flow-root mt-8"
+    class="max-w-xl w-full mx-auto rounded-lg flow-root mt-8"
     :class="`bg-${theme}-main-300`"
   >
     <!-- 顶部按钮 -->
