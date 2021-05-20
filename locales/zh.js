@@ -123,6 +123,8 @@ export default {
     setting: '设置',
     exchange: '兑换',
     pool: '资金池',
+    stake: 'Stake QI',
+    unstake: 'Unstake',
     balance: '余额:',
     input: '请输入 QTUM',
     modal: {

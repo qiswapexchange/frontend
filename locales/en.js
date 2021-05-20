@@ -120,6 +120,8 @@ export default {
     setting: 'Settings',
     exchange: 'Swap',
     pool: 'Pool',
+    stake: 'Stake QI',
+    unstake: 'Unstake',
     balance: 'Balance:',
     input: 'Please input QTUM',
     modal: {

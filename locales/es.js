@@ -123,6 +123,8 @@ export default {
     exchange: 'Swap',
     pool: 'Pool',
     balance: 'Balance:',
+    stake: 'Stake QI',
+    unstake: 'Unstake',
     input: 'Por favor ingrese QTUM',
     modal: {
       settings: 'Configuracion de Transaccion',

@@ -159,7 +159,7 @@
         </locale-link>
         <!-- Stake -->
         <locale-link
-          to="/swap/exchange"
+          to="/stake/stake"
           class="
             text-center
             leading-8
