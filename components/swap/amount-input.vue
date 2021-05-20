@@ -17,7 +17,7 @@
       "
       placeholder="0.0"
       :disabled="!tokenAmount.selected"
-      @focus="tokenAmount.inputing = true"
+      @input="tokenAmount.inputing = true"
       @blur="tokenAmount.inputing = false"
     />
     <div
@@ -62,7 +62,7 @@ export default {
     setMax(e) {
       e.preventDefault();
       this.$refs.input.focus();
-      // eslint-disable-next-line vue/no-mutating-props
+      this.tokenAmount.inputing = true;
       this.tokenAmount.input = this.tokenAmount.balance;
     },
   },
