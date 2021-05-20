@@ -1,3 +1,4 @@
+<!--eslint-disable vue/no-mutating-props-->
 <template>
   <div
     class="flex items-center rounded-lg mb-4 py-3 flex-1"
@@ -6,16 +7,31 @@
     <input
       ref="input"
       v-model.number="tokenAmount.input"
-      class="appearance-none bg-transparent focus:outline-none pl-6 w-full"
+      class="
+        appearance-none
+        bg-transparent
+        focus:outline-none
+        pl-6
+        w-full
+        text-sm
+      "
       placeholder="0.0"
       :disabled="!tokenAmount.selected"
-      @focus="tokenAmount.inputing = true"
+      @input="tokenAmount.inputing = true"
       @blur="tokenAmount.inputing = false"
     />
     <div
       v-if="tokenAmount.selected && showMax"
-      class="py-1 px-2 mr-2 text-xs cursor-pointer hover:opacity-75 rounded"
-      :class="`bg-${theme}-assist-300`"
+      class="
+        py-1
+        px-2
+        mr-2
+        text-sm
+        cursor-pointer
+        hover:opacity-75
+        absolute
+        max-input
+      "
       @click="setMax"
     >
       Max
@@ -46,8 +62,15 @@ export default {
     setMax(e) {
       e.preventDefault();
       this.$refs.input.focus();
+      this.tokenAmount.inputing = true;
       this.tokenAmount.input = this.tokenAmount.balance;
     },
   },
 };
 </script>
+<style>
+.max-input {
+  color: #2e62f6;
+  top: -1.7rem;
+}
+</style>

@@ -2,7 +2,7 @@
   <div class="px-4 flex-grow">
     <SwapSettingsPanel>
       <!-- 选择部分 -->
-      <div class="flex rounded-lg overflow-hidden">
+      <div class="flex rounded-lg overflow-hidden mb-4">
         <swap-link
           to="/swap/exchange"
           :label="$t('swap.exchange')"

@@ -122,6 +122,7 @@
         </section>
 
         <a
+          v-if="!extensionInstalled"
           href="https://chrome.google.com/webstore/detail/qiwallet/cjfeohjffkdehdblcolicjhhnbphcmna"
           target="_blank"
           :class="`bg-transparent md:bg-${theme}-assist-100`"
@@ -144,6 +145,7 @@
         </a>
         <!-- 打开 swap -->
         <locale-link
+          v-if="extensionInstalled"
           to="/swap/exchange"
           class="
             text-center
@@ -183,6 +185,7 @@
             transition-normal
           "
           :class="`hover:text-${theme}-assist-200`"
+          target="_blank"
         >
           {{ $t(`nav.doc`) }}
         </a>
@@ -216,46 +219,56 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
-export default {
-  data() {
-    return {
-      showMenu: false,
-      navList: [
-        // { name: 'index', target: '/' },
-        // { name: 'transaction', target: '/swap/exchange' }
-        // { name: 'product', target: '/' },
-        { name: 'contact', target: '#contact' },
-        { name: 'faq', target: '#faq' },
-      ],
+import {
+  defineComponent,
+  ref,
+  computed,
+  useContext,
+  onMounted,
+  getCurrentInstance,
+} from '@nuxtjs/composition-api';
+export default defineComponent({
+  setup() {
+    const {
+      store: { state },
+    } = useContext();
+    const theme = computed(() => state.theme);
+    const extensionInstalled = computed(() => state.swap.extensionInstalled);
+    const showMenu = ref(false);
+    const toggleMenu = () => {
+      showMenu.value = !showMenu.value;
     };
-  },
-  computed: {
-    ...mapState(['theme']),
-  },
-  mounted() {
-    document.body.addEventListener(
-      'click',
-      () => {
-        this.showMenu = false;
-      },
-      false
-    );
-    this.$router.afterEach(() => {
-      this.showMenu = false;
-    });
-  },
-  methods: {
-    toggleMenu() {
-      this.showMenu = !this.showMenu;
-    },
-    hideOtherDropdown(name) {
+    function hideOtherDropdown(name) {
       for (const n in this.$refs) {
         if (name !== n && this.$refs[n].hide) {
           this.$refs[n].hide();
         }
       }
-    },
+    }
+    const navList = [
+      { name: 'contact', target: '#contact' },
+      { name: 'faq', target: '#faq' },
+    ];
+    onMounted(() => {
+      document.body.addEventListener(
+        'click',
+        () => {
+          showMenu.value = false;
+        },
+        false
+      );
+      getCurrentInstance()?.$router?.afterEach(() => {
+        showMenu.value = false;
+      });
+    });
+    return {
+      theme,
+      extensionInstalled,
+      showMenu,
+      toggleMenu,
+      hideOtherDropdown,
+      navList,
+    };
   },
-};
+});
 </script>
