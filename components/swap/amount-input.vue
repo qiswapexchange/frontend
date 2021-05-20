@@ -1,3 +1,4 @@
+<!--eslint-disable vue/no-mutating-props-->
 <template>
   <div
     class="flex items-center rounded-lg mb-4 py-3 flex-1"
@@ -61,6 +62,7 @@ export default {
     setMax(e) {
       e.preventDefault();
       this.$refs.input.focus();
+      // eslint-disable-next-line vue/no-mutating-props
       this.tokenAmount.input = this.tokenAmount.balance;
     },
   },

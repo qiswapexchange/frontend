@@ -139,6 +139,11 @@ import { useExchange } from '~/libs/swap';
 import { SWAP_EXACT_INPUT, TYPE_SWAP } from '~/libs/constants';
 
 export default defineComponent({
+  transition: {
+    duration: 600,
+    enterActiveClass: 'animate__animated animate__fadeIn',
+    leaveActiveClass: 'animate__animated animate__fadeOut',
+  },
   setup() {
     const {
       store: { state },
@@ -166,11 +171,6 @@ export default defineComponent({
       swapTokens: swap.swapTokens.bind(swap),
       approve: swap.approve.bind(swap),
     };
-  },
-  transition: {
-    duration: 600,
-    enterActiveClass: 'animate__animated animate__fadeIn',
-    leaveActiveClass: 'animate__animated animate__fadeOut',
   },
 });
 </script>
