@@ -48,6 +48,10 @@ import { computed, defineComponent, useContext } from '@nuxtjs/composition-api';
 import Fraction from '~/libs/fraction';
 
 export default defineComponent({
+  props: {
+    liquidity: Object,
+    swap: Object,
+  },
   setup(props) {
     const {
       store: { state },
@@ -60,6 +64,7 @@ export default defineComponent({
         return props.liquidity.percent.times(100).quotient.dp(0).toNumber();
       },
       set(percent) {
+        // eslint-disable-next-line vue/no-mutating-props
         props.liquidity.percent = new Fraction(percent, 100);
       },
     });
@@ -78,10 +83,6 @@ export default defineComponent({
         props.liquidity.remove(state.swap.tolerance, state.swap.deadline);
       },
     };
-  },
-  props: {
-    liquidity: Object,
-    swap: Object,
   },
 });
 </script>

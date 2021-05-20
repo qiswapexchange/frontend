@@ -389,7 +389,7 @@ export default defineComponent({
         },
         false
       );
-      getCurrentInstance().$router.afterEach(() => {
+      getCurrentInstance()?.$router?.afterEach(() => {
         showMenu.value = false;
       });
     });
