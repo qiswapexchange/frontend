@@ -170,6 +170,7 @@
             transition-normal
           "
           :class="`hover:text-${theme}-assist-200`"
+          target="_blank"
         >
           {{ $t(`nav.doc`) }}
         </a>
