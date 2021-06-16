@@ -51,11 +51,11 @@ export const WQTUM = [
 export const QI = [
   {
     chainId: NETWORK.MainNet,
-    address: 'e7e5caae57b34b93c57af9478a5130f62e3d2827',
+    address: 'd705f22089e634a5ca7d7c7a64e8e5abe1698faf', // it should be replaced when deploying
   },
   {
     chainId: NETWORK.TestNet,
-    address: 'f17277ffd027e75ec3f9e6db0e6fd1fd395e2cc0',
+    address: 'd705f22089e634a5ca7d7c7a64e8e5abe1698faf',
   },
 ];
 export const ROUTER = {
@@ -67,6 +67,6 @@ export const FACTORY = {
   [NETWORK.TestNet]: '086edcf3fc8a042c1b174e941187369d2919e06b',
 };
 export const QIBAR = {
-  [NETWORK.MainNet]: '284937a9f5a1d28268d4e48d5eda03b04a7a1786',
-  [NETWORK.TestNet]: '086edcf3fc8a042c1b174e941187369d2919e06b',
+  [NETWORK.MainNet]: '284937a9f5a1d28268d4e48d5eda03b04a7a1786', // it should be replaced when deploying
+  [NETWORK.TestNet]: 'f10091ab90ed9a75d5a8415993ba12dd1a031bc2',
 };

@@ -16,16 +16,6 @@
 import { defineComponent, computed, useContext } from '@nuxtjs/composition-api';
 
 export default defineComponent({
-  setup() {
-    const {
-      store: { state },
-    } = useContext();
-    // const network = computed(() => state.swap.account?.network);
-
-    return {
-      theme: computed(() => state.theme),
-    };
-  },
   props: {
     tokenAmount0: Object,
     tokenAmount1: Object,
@@ -41,6 +31,16 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+  },
+  setup() {
+    const {
+      store: { state },
+    } = useContext();
+    // const network = computed(() => state.swap.account?.network);
+
+    return {
+      theme: computed(() => state.theme),
+    };
   },
 });
 </script>

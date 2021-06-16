@@ -406,9 +406,12 @@ export default class Qrypto extends EventEmmiter {
 
   async callContract(address, abiList, abiName, params = []) {
     const method = this.getAbiMethod(abiList, abiName);
+    console.log('[method]', abiList, abiName);
     const data = this.encodeMethod(method, params);
+    console.log('[data]', data);
     try {
       const result = await this.rpcCall('callcontract', [address, data]);
+      console.log('[result]', result);
       if (result.executionResult.excepted === 'None') {
         const output = result.executionResult.output;
         const decoded = abi.decodeMethod(method, this.wrapHex(output));

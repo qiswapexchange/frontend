@@ -81,6 +81,11 @@ import { TYPE_ADD_LIQUIDITY } from '~/libs/constants';
 import { usePool } from '~/libs/swap';
 
 export default defineComponent({
+  transition: {
+    duration: 300,
+    enterActiveClass: 'animate__animated animate__fadeIn',
+    leaveActiveClass: 'animate__animated animate__fadeOut',
+  },
   setup() {
     const {
       store: { state },
@@ -104,11 +109,6 @@ export default defineComponent({
       changeToken: swap.changeToken.bind(swap),
       approve: swap.approve.bind(swap),
     };
-  },
-  transition: {
-    duration: 300,
-    enterActiveClass: 'animate__animated animate__fadeIn',
-    leaveActiveClass: 'animate__animated animate__fadeOut',
   },
 });
 </script>
