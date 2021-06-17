@@ -1,34 +1,35 @@
 <template>
   <div class="">
-    <p>
-      <strong>This is test phrase {{ xQiPrice }}</strong>
-    </p>
-    <!-- 币种选择 -->
-    <StakeTokenSelect
-      switchable
-      :token-amount0="tokenAmount0"
-      :token-amount1="tokenAmount1"
-      @change="changeToken"
-      @switch="switchTokens"
-    />
+    <p>Qi balance: {{ qiTokenAmount.balance }}</p>
+    <p>xQi balance: {{ xQiTokenAmount.balance }}</p>
+    <div>
+      <!-- 余额 -->
+      <div class="flex justify-between text-sm my-2 px-2">
+        <div>Stake</div>
+        <div :class="`bg-${theme}-main-400`">1 xQI = {{ xQiPrice }} QI</div>
+      </div>
+      <!-- 输入框 -->
+      <div class="flex">
+        <StakeAmountInput :token-amount="qiTokenAmount" class="mr-1" />
+      </div>
+    </div>
     <!-- 按钮 -->
     <StakeProcessButtons
       :type="TYPE_SWAP"
-      :token-amount0="tokenAmount0"
-      :token-amount1="tokenAmount1"
+      :token-amount0="qiTokenAmount"
       :token-amount0-exceeded="
-        swap.maximumAmountIn.gt(tokenAmount0.balanceSatoshi)
+        swap.maximumAmountIn.gt(qiTokenAmount.balanceSatoshi)
       "
       :approve="approve"
       :can-process="swap.canProcess"
-      :process="swapTokens"
+      :process="enterStake"
       :processing="swap.processing"
-      :texts="[$t('swap.status.swap'), $t('swap.status.swaping')]"
     />
   </div>
 </template>
 
 <script>
+/* eslint-disable */
 import {
   defineComponent,
   ref,
@@ -50,7 +51,11 @@ export default defineComponent({
       store: { state },
     } = useContext();
     const swap = useExchange();
-    const stake = useStake(); // eslint-disable-line
+    const stake = useStake();
+
+    const qiTokenAmount = computed(() => stake.qiTokenAmount);
+    const xQiTokenAmount = computed(() => stake.xQiTokenAmount);
+
     const tokenAmount0 = computed(() => swap.tokenAmount0);
     const tokenAmount1 = computed(() => swap.tokenAmount1);
     const route = computed(() => swap.route);
@@ -63,6 +68,8 @@ export default defineComponent({
     return {
       TYPE_SWAP,
       swap,
+      qiTokenAmount,
+      xQiTokenAmount,
       tokenAmount0,
       tokenAmount1,
       route,
@@ -71,6 +78,8 @@ export default defineComponent({
       SWAP_EXACT_INPUT,
       xQiPrice,
       // method
+      enterStake: stake.enterStake.bind(stake),
+
       changeToken: swap.changeToken.bind(swap),
       switchTokens: swap.switchTokens.bind(swap),
       swapTokens: swap.swapTokens.bind(swap),

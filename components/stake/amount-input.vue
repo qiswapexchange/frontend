@@ -13,7 +13,6 @@
       @blur="tokenAmount.inputing = false"
     />
     <div
-      v-if="tokenAmount.selected && showMax"
       class="py-1 px-2 mr-2 text-xs cursor-pointer hover:opacity-75 rounded"
       :class="`bg-${theme}-assist-300`"
       @click="setMax"

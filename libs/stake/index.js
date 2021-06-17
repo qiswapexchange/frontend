@@ -1,3 +1,4 @@
+/* eslint-disable */
 import {
   reactive,
   computed,
@@ -9,7 +10,9 @@ import {
 import BigNumber from 'bignumber.js'; // eslint-disable-line
 import { useQrypto } from '../qrypto'; // eslint-disable-line
 
-import { ABI } from '../constants';
+import { Token, TokenAmount } from '../swap';
+
+import { ABI, QI, QIBAR } from '../constants';
 
 export class Stake {
   constructor() {
@@ -29,6 +32,33 @@ export class Stake {
       }
       return this.totalShares / this.totalQi;
     });
+
+    // this.vm.proxy.$axios.$get('/tokens.json').then((tokens) => {
+    //   // tokens.filter((token) =>)
+    //   // this.qiToken = new Token();
+    // });
+    // this.qiToken = new Token({
+    //   name: "tQi",
+    //   symbol: "TQI",
+    //   icon: "/icons/tqi.svg",
+    //   decimals: 8,
+    //   chainId: 1,
+    //   address: "0b3efd69c64a6d66dc0f1dd41adae48d23090c2f"
+    // });
+    // this.xQiToken = new Token({
+    //   name: "TQiBar",
+    //   symbol: "xTQi",
+    //   icon: "/icons/tqi.svg",
+    //   decimals: 18,
+    //   chainId: 1,
+    //   address: "f10091ab90ed9a75d5a8415993ba12dd1a031bc2"
+    // });
+
+    this.qiToken = new Token(QI['MainNet']);
+    this.xQiToken = new Token(QIBAR['TestNet']);
+
+    this.qiTokenAmount = new TokenAmount(this.qiToken);
+    this.xQiTokenAmount = new TokenAmount(this.xQiTokenAmount);
   }
 
   watchAll() {
@@ -46,35 +76,36 @@ export class Stake {
       () => this.account,
       async (account) => {
         if (account?.loggedIn) {
-          // TODO - account was changed, please update QI and xQI amount
-          console.log('[account is logged in]'); // eslint-disable-line
-          const totalShares = await useQrypto().callContract(
-            'f10091ab90ed9a75d5a8415993ba12dd1a031bc2',
-            ABI.QIBAR,
-            'totalSupply'
-          );
-
-          // this.totalShares = totalShares
-
-          console.log('[totalShare]', totalShares);
-
-          const totalQi = await useQrypto().callContract(
-            'd705f22089e634a5ca7d7c7a64e8e5abe1698faf',
-            ABI.QRC20,
-            'balanceOf',
-            ['f10091ab90ed9a75d5a8415993ba12dd1a031bc2']
-          );
-          console.log('[totalQi]', totalQi);
+          const network =  useQrypto().account? useQrypto().account?.network : 'MainNet';
+          this.qiToken = new Token(QI[network]);
+          const balance0 = await this.qiToken.getBalance(false);
+          this.qiToken.balanceSatoshi = balance0;
+          this.qiTokenAmount = new TokenAmount(this.qiToken, balance0);
+          this.xQiToken = new Token(QIBAR[network]);
+          const balance1 = await this.xQiToken.getBalance(false);
+          this.xQiToken.balanceSatoshi = balance1;
+          this.xQiTokenAmount = new TokenAmount(this.xQiToken, balance1);
         } else {
           // TODO - account is logout now, so please set QI and xQI value as 0
-          console.log('[account was logged out]'); // eslint-disable-line
+          this.qiTokenAmount.amountSatoshi = BigNumber(0);
+          this.xQiTokenAmount.amountSatoshi = BigNumber(0);
         }
-      }
+      },
+      { immediate: true }
     );
+  }
+
+  enterStake() {
+    console.log('[]', this.qiTokenAmount.input);
+  }
+  
+  leaveStake() {
+    
   }
 }
 
 export const useStake = () => {
+  console.log('[useStake]');
   const stake = reactive(new Stake());
   stake.watchAll();
   return stake;

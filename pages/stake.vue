@@ -1,26 +1,28 @@
 <template>
   <div class="px-4 flex-grow">
-    <SwapSettingsPanel>
-      <!-- 选择部分 -->
-      <div class="flex rounded-lg overflow-hidden">
-        <swap-link
-          to="/stake/stake"
-          :label="$t('swap.stake')"
-          :theme="theme"
-          :active="activeNav === 'stake'"
-          right
-        />
-        <swap-link
-          to="/stake/unstake"
-          :label="$t('swap.unstake')"
-          :theme="theme"
-          :active="activeNav === 'unstake'"
-        />
+    <section
+      class="max-w-xl w-full mx-auto rounded-lg flow-root mt-8"
+      :class="`bg-${theme}-main-300`"
+    >
+      <div class="px-4 pt-4">
+        <div class="flex rounded-lg overflow-hidden pb-4">
+          <swap-link
+            to="/stake/stake"
+            :label="$t('swap.stake')"
+            :theme="theme"
+            :active="activeNav === 'stake'"
+            right
+          />
+          <swap-link
+            to="/stake/unstake"
+            :label="$t('swap.unstake')"
+            :theme="theme"
+            :active="activeNav === 'unstake'"
+          />
+        </div>
+        <nuxt-child />
       </div>
-
-      <!-- 展示部分 -->
-      <nuxt-child />
-    </SwapSettingsPanel>
+    </section>
 
     <!-- 模态框 -->
     <Modal v-model="waitingValidating" :can-close="false">
@@ -64,7 +66,6 @@ export default defineComponent({
       return route.value.path?.match(/stake\/(.+?)(\/|$)/)?.[1] || 'stake';
     });
 
-    dispatch('swap/loadTxs');
     const installed = computed(() => state.swap.extensionInstalled);
     qrypto.on('account', (account) => {
       commit('swap/setAccount', account);
@@ -80,7 +81,6 @@ export default defineComponent({
       commit('swap/setExtensionInstalled', installed)
     );
     qrypto.on('connected', () => {
-      // console.log('connected');
       commit('swap/setConnected', true);
     });
     qrypto.on('txValidating', () => {

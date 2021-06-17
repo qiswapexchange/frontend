@@ -48,16 +48,6 @@ export const WQTUM = [
     address: 'f17277ffd027e75ec3f9e6db0e6fd1fd395e2cc0',
   },
 ];
-export const QI = [
-  {
-    chainId: NETWORK.MainNet,
-    address: 'd705f22089e634a5ca7d7c7a64e8e5abe1698faf', // it should be replaced when deploying
-  },
-  {
-    chainId: NETWORK.TestNet,
-    address: 'd705f22089e634a5ca7d7c7a64e8e5abe1698faf',
-  },
-];
 export const ROUTER = {
   [NETWORK.MainNet]: 'd4915308a9c4c40f57b0eccc63ee70616982842b',
   [NETWORK.TestNet]: '115931c3529e469d9240b90eb2f4965a61b1375e',
@@ -66,7 +56,40 @@ export const FACTORY = {
   [NETWORK.MainNet]: '284937a9f5a1d28268d4e48d5eda03b04a7a1786',
   [NETWORK.TestNet]: '086edcf3fc8a042c1b174e941187369d2919e06b',
 };
+export const QI = {
+  MainNet: {
+    name: 'QI',
+    symbol: 'QI',
+    icon: '/icons/qi.svg',
+    decimals: 18,
+    chainId: 0,
+    address: '54fefdb5b31164f66ddb68becd7bdd864cacd65b',
+  },
+  TestNet: {
+    name: 'tQi',
+    symbol: 'TQI',
+    icon: '/icons/tqi.svg',
+    decimals: 8,
+    chainId: 1,
+    address: '0b3efd69c64a6d66dc0f1dd41adae48d23090c2f',
+  },
+};
+
 export const QIBAR = {
-  [NETWORK.MainNet]: '284937a9f5a1d28268d4e48d5eda03b04a7a1786', // it should be replaced when deploying
-  [NETWORK.TestNet]: 'f10091ab90ed9a75d5a8415993ba12dd1a031bc2',
+  MainNet: {
+    name: 'QiBar',
+    symbol: 'xQi',
+    icon: '/icons/tqi.svg',
+    decimals: 18,
+    chainId: 1,
+    address: 'd2e67dd16aaaff05c3f00c2e26ea21cff05ed346',
+  },
+  TestNet: {
+    name: 'TQiBar',
+    symbol: 'xTQi',
+    icon: '/icons/tqi.svg',
+    decimals: 18,
+    chainId: 1,
+    address: 'd2e67dd16aaaff05c3f00c2e26ea21cff05ed346',
+  },
 };

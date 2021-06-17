@@ -184,6 +184,12 @@ export default {
     waitingValidating: 'Transaction is being validated.',
     confirmTransaction: 'Please confirm the transaction on QiWallet.',
   },
+  stake: {
+    status: {
+      enter: "Enter Amount",
+      insufficient: 'Insufficient Balance'
+    }
+  },
   transaction: {
     swap: 'Swap {token0} for {token1}',
     add: 'Add {token0} and {token1}',

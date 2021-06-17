@@ -81,7 +81,6 @@ export default defineComponent({
       commit('swap/setExtensionInstalled', installed)
     );
     qrypto.on('connected', () => {
-      // console.log('connected');
       commit('swap/setConnected', true);
     });
     qrypto.on('txValidating', () => {
