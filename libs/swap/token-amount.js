@@ -25,6 +25,8 @@ export default class TokenAmount {
   }
 
   get amountExceeded() {
+    if (this.token.symbol === 'QTUM')
+      return this.amountSatoshi.gt(this.balanceSatoshi - 20000000);
     return this.amountSatoshi.gt(this.balanceSatoshi);
   }
 

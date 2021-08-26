@@ -1,7 +1,14 @@
 <template>
   <div class="flex">
     <button
-      v-if="shouldApprove[0] && !tokenAmount0.amountExceeded"
+      v-if="insufficientQtum"
+      class="process-button cursor-not-allowed"
+      :class="`bg-${theme}-inverse-300`"
+    >
+      {{ $t('swap.status.insufficientQtumBalance') }}
+    </button>
+    <button
+      v-else-if="shouldApprove[0] && !tokenAmount0.amountExceeded"
       class="process-button"
       :class="{
         [`bg-${theme}-assist-200 hover:bg-${theme}-assist-100`]:
@@ -17,7 +24,7 @@
       }}
     </button>
     <button
-      v-if="shouldApprove[1] && !tokenAmount1.amountExceeded && !isSwap"
+      v-else-if="shouldApprove[1] && !tokenAmount1.amountExceeded && !isSwap"
       class="process-button"
       :class="{
         [`bg-${theme}-assist-200 hover:bg-${theme}-assist-100`]:
@@ -33,7 +40,9 @@
       }}
     </button>
     <button
-      v-if="!tokenAmount0.selected || !tokenAmount1.selected"
+      v-else-if="
+        !insufficientQtum && (!tokenAmount0.selected || !tokenAmount1.selected)
+      "
       class="process-button cursor-not-allowed"
       :class="`bg-${theme}-inverse-300`"
     >
@@ -47,7 +56,10 @@
       {{ $t('swap.status.insufficient') }}
     </button>
     <button
-      v-else-if="tokenAmount0.amount.eq(0) || tokenAmount1.amount.eq(0)"
+      v-else-if="
+        !insufficientQtum &&
+        (tokenAmount0.amount.eq(0) || tokenAmount1.amount.eq(0))
+      "
       class="process-button cursor-not-allowed"
       :class="`bg-${theme}-inverse-300`"
     >
@@ -122,6 +134,9 @@ export default {
     },
     isSwap() {
       return this.type === TYPE_SWAP;
+    },
+    insufficientQtum() {
+      return this.$store.state.swap.account?.balance < 0.2;
     },
   },
 };

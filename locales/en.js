@@ -168,6 +168,7 @@ export default {
       insufficient: 'Insufficient liquidity for this trade.',
       input: 'Input Amount',
       balance: 'Insufficient {tokenName} Balance',
+      insufficientQtumBalance: 'Insufficient QTUM Balance',
       swap: 'Swap',
       swaping: 'Swaping...',
       approve: 'Approve {tokenName}',

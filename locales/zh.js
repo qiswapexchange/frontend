@@ -171,6 +171,7 @@ export default {
       insufficient: '此交易对流动性不足',
       input: '输入金额',
       balance: '{tokenName} 余额不足',
+      insufficientQtumBalance: 'QTUM 余额不足',
       swap: '兑换',
       swaping: '兑换中...',
       approve: '授权 {tokenName}',
