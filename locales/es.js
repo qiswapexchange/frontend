@@ -172,6 +172,7 @@ export default {
       insufficient: 'Cantidad insuficiente para esta transaccion.',
       input: 'Ingrese cantidad',
       balance: 'Balance insuficiente de {tokenName}',
+      insufficientQtumBalance: 'Balance insuficiente de QTUM',
       swap: 'Swap',
       swaping: 'Swaping...',
       approve: 'Aprobar {tokenName}',
