@@ -149,7 +149,7 @@ import {
   useContext,
   watch,
 } from '@nuxtjs/composition-api';
-import { isSameToken } from '~/libs/utils';
+import { isSameToken, isQI } from '~/libs/utils';
 import { DOMAIN, NETWORK } from '~/libs/constants';
 import { Token } from '~/libs/swap';
 
@@ -195,11 +195,12 @@ export default defineComponent({
             token.address.includes(keyword)
         )
         .sort((a, b) => {
-          if (a.isQTUM) {
-            return -1;
-          }
-          if (b.isQTUM) {
-            return 1;
+          if (a.isQTUM) return -1;
+          if (b.isQTUM) return 1;
+          if (a.balance.isZero() && b.balance.isZero()) {
+            if (isQI(a)) return -1;
+            if (isQI(b)) return 1;
+            return 0;
           }
           return a.balance.gt(b.balance) ? -1 : 1;
         });

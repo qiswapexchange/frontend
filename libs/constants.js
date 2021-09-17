@@ -1,5 +1,6 @@
 import BigNumber from 'bignumber.js';
 
+export const QI_ADDRESS = '54fefdb5b31164f66ddb68becd7bdd864cacd65b';
 export const TYPE_SWAP = 'swap';
 export const TYPE_ADD_LIQUIDITY = 'addLiquidity';
 export const TYPE_REMOVE_LIQUIDITY = 'removeLiquidity';
