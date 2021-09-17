@@ -86,6 +86,7 @@ export default class Qrypto extends EventEmmiter {
     const { payload, type } = message || {};
     if (payload.error) {
       this.emit('error', payload.error);
+      this.emit('txCancelled');
       return;
     }
     // this.extensionInstalled = true
