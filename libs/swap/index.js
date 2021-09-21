@@ -7,7 +7,7 @@ import {
   getCurrentInstance,
 } from '@nuxtjs/composition-api';
 import BigNumber from 'bignumber.js';
-import { getDeadline, slippageAmounts } from '../utils';
+import { getDeadline, slippageAmounts, useNetwork } from '../utils';
 import {
   TYPE_SWAP,
   TYPE_ADD_LIQUIDITY,
@@ -15,7 +15,6 @@ import {
   SWAP_EXACT_OUTPUT,
   MINIMUM_LIQUIDITY,
   BASE_FEE,
-  NETWORK,
   TYPE_APPROVE,
   DOMAIN,
 } from '../constants';
@@ -54,7 +53,7 @@ export class Swap {
     this.tokens = computed(() =>
       state.swap.tokens.filter(
         (token) =>
-          token.isQTUM || token.chainId === NETWORK[this.account?.network]
+          token.isQTUM || token.chainId === useNetwork(this.account?.network)
       )
     );
     this.txs = computed(() =>
@@ -174,6 +173,7 @@ export class Swap {
 
   watchToken() {
     // update each token if it changes
+    if (!this.account?.network) return;
     this.tokenAmounts.forEach((tokenAmount) => {
       watch(
         () => tokenAmount.token,
@@ -472,7 +472,9 @@ class Exchange extends Swap {
         if (height > 0) {
           try {
             const { hashStateRoot } = await this.vm.proxy.$axios.$get(
-              `https://${DOMAIN[this.account?.network]}/api/block/${height}`
+              `https://${
+                DOMAIN[useNetwork(this.account?.network)]
+              }/api/block/${height}`
             );
             if (this.hashStateRoot !== hashStateRoot) {
               this.hashStateRoot = hashStateRoot;

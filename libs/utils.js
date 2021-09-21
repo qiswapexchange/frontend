@@ -1,6 +1,11 @@
 import BigNumber from 'bignumber.js';
 
-import { QI_ADDRESS } from './constants';
+import { NETWORK, QI_ADDRESS } from './constants';
+
+export const useNetwork = (network) => {
+  if (!network) return NETWORK.MainNet;
+  return NETWORK[network];
+};
 
 export const isQI = (token) => token.address === QI_ADDRESS;
 
