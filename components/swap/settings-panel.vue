@@ -1,10 +1,10 @@
 <template>
-  <!-- 设置面板 -->
+  <!-- Settings panel -->
   <section
     class="max-w-xl w-full mx-auto rounded-lg flow-root mt-8"
     :class="`bg-${theme}-main-300`"
   >
-    <!-- 顶部按钮 -->
+    <!-- Top button -->
     <div class="p-4 mb-2 text-sm flex justify-end">
       <div
         class="cursor-pointer flex items-center hover:opacity-75"
@@ -15,15 +15,15 @@
       </div>
     </div>
 
-    <!-- 内容部分 -->
+    <!-- Content part -->
     <div class="px-4">
       <slot />
     </div>
 
-    <!-- 模态框 -->
+    <!-- Modal box -->
     <Modal v-model="modalShow" :title="$t('swap.modal.settings')">
       <template>
-        <!-- 比例选择 -->
+        <!-- Proportion selection -->
         <div class="text-sm font-thin mb-10">
           <span>{{ $t('swap.modal.tolerance') }}</span>
           <div class="flex justify-between mt-4">
@@ -73,7 +73,7 @@
             </div>
           </div>
         </div>
-        <!-- 分钟 -->
+        <!-- Minute -->
         <div class="text-sm font-thin mb-10">
           <span class="">{{ $t('swap.modal.deadline') }}</span>
           <div class="flex items-center mt-4">

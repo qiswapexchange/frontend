@@ -108,11 +108,6 @@ export default {
         iso: 'es-ES',
         name: 'Spanish',
       },
-      {
-        code: 'zh',
-        iso: 'zh-CN',
-        name: '中文',
-      },
     ],
     defaultLocale: 'en',
     strategy: 'prefix',

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <!-- 余额 -->
+    <!-- Balance -->
     <div
       class="flex justify-between text-sm my-2 px-2"
       :class="`text-${theme}-inverse-400`"
@@ -12,7 +12,7 @@
         {{ tokenAmount1.balance }}
       </div>
     </div>
-    <!-- 代币选择 -->
+    <!-- Token selection -->
     <div
       class="flex items-center justify-between mb-8 py-3 px-6 rounded-lg"
       :class="`bg-${theme}-main-400`"
@@ -77,7 +77,7 @@
         <img src="@/assets/icons/triangle.svg" />
       </div>
     </div>
-    <!-- 输入框 -->
+    <!-- Input box -->
     <div class="flex">
       <SwapAmountInput :token-amount="tokenAmount0" class="mr-1 relative" />
       <SwapAmountInput
@@ -86,7 +86,7 @@
         :show-max="!switchable"
       />
     </div>
-    <!-- 选择列表 -->
+    <!-- Select list -->
     <Modal v-model="modalShow" :title="$t('swap.modal.token.select')">
       <template>
         <input

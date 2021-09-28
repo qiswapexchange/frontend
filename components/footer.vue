@@ -15,13 +15,13 @@
     "
     :class="`text-${theme}-inverse-100`"
   >
-    <!-- 左侧内容 -->
+    <!-- Content on the left -->
     <section class="w-5/6 sm:w-1/3 flex flex-col mr-0 mb-10 sm:mr-64 sm:mb-0">
       <img src="@/assets/icons/logo-full.svg" alt="" class="w-24" />
       <span class="my-4 text-xs">{{ $t('footer.intro') }}</span>
       <span>QiSwap &copy; 2021 All rights reserved.</span>
     </section>
-    <!-- 右侧内容 -->
+    <!-- Content on the right -->
     <section class="w-5/6 sm:w-1/4 flex flex-col font-bold">
       <span>{{ $t('footer.contact') }}</span>
       <span class="my-3">contact@qiswap.com</span>

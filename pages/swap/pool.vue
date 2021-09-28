@@ -1,6 +1,6 @@
 <template>
   <div class="">
-    <!-- 币种选择 -->
+    <!-- Currency selection -->
     <SwapTokenSelect
       icon="plus"
       icon-size="w-4"
@@ -21,7 +21,7 @@
         {{ $t('swap.poolInfo.click') }}
       </p>
     </div>
-    <!-- 信息部分 -->
+    <!-- Information part -->
     <div
       v-if="tokenAmount0.selected && tokenAmount1.selected && !swap.ratio.eq(0)"
       class="rounded-lg mb-6 px-6 py-4 text-sm"
@@ -43,7 +43,7 @@
         }}%
       </div>
     </div>
-    <!-- 按钮 -->
+    <!-- Button -->
     <SwapProcessButtons
       :type="TYPE_ADD_LIQUIDITY"
       :token-amount0="tokenAmount0"
@@ -54,7 +54,7 @@
       :processing="swap.processing"
       :texts="[$t('swap.status.add'), $t('swap.status.adding')]"
     />
-    <!-- 矿池选择 -->
+    <!-- Mining pool selection -->
     <div
       class="flex items-center justify-center my-6 cursor-pointer"
       @click="poolModal = true"
@@ -63,7 +63,7 @@
       <span class="text-lg font-thin">{{ $t('swap.poolInfo.my') }}</span>
     </div>
 
-    <!-- 模态框 -->
+    <!-- Modal box -->
     <Modal v-model="poolModal" :title="$t('swap.poolInfo.my')">
       <SwapMyLiquidity v-if="poolModal" :swap="swap" />
     </Modal>

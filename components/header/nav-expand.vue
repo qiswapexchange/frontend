@@ -3,11 +3,11 @@
     class="w-full flex items-center justify-between mx-auto py-4 px-2 md:px-24"
     @click.stop
   >
-    <!-- logo 部分 -->
+    <!-- logo part -->
     <HeaderLogoSvg />
-    <!-- 语言设置 / 拓展菜单 -->
+    <!-- Language settings / Expand the menu -->
     <div class="flex items-center lg:order-last">
-      <!-- 语言设置 -->
+      <!-- Language settings -->
       <HeaderDropdownMenu ref="lang" absolute @show="hideOtherDropdown('lang')">
         <template #label>
           <div
@@ -41,7 +41,7 @@
             />
           </div>
         </template>
-        <!-- 语言选项 -->
+        <!-- Language options -->
         <section class="flex flex-col">
           <nuxt-link
             v-for="{ code, name } in $i18n.locales"
@@ -53,7 +53,7 @@
           </nuxt-link>
         </section>
       </HeaderDropdownMenu>
-      <!-- 汉堡菜单 -->
+      <!-- Hamburger menu -->
       <div class="block lg:hidden">
         <button
           class="flex items-center px-3 py-2 border rounded"
@@ -71,7 +71,7 @@
         </button>
       </div>
     </div>
-    <!-- 导航栏内容 -->
+    <!-- Navigation bar content -->
     <div
       :class="
         showMenu ? `m-0 bg-${theme}-main-200` : `-mr-64 bg-${theme}-main-200`
@@ -96,7 +96,7 @@
       "
     >
       <div class="flex flex-col lg:flex-row justify-end items-center text-sm">
-        <!-- 关闭按钮 -->
+        <!-- Close button -->
         <section
           class="flex justify-between lg:hidden m-4 pb-2 text-right border-b"
           :class="`border-${theme}-mainBd`"
@@ -143,7 +143,7 @@
         >
           {{ $t('nav.install') }}
         </a>
-        <!-- 打开 swap -->
+        <!-- Open swap -->
         <locale-link
           v-if="extensionInstalled"
           to="/swap/exchange"
@@ -175,7 +175,7 @@
           {{ $t(`nav.doc`) }}
         </a>
 
-        <!-- 联系我们 -->
+        <!-- Contact us -->
         <section
           v-for="(item, index) in navList"
           :key="index"

@@ -1,7 +1,7 @@
 <template>
-  <!-- 首页 板块 -->
+  <!-- Front page plate -->
   <section class="container mx-auto pt-24">
-    <!-- 标题部分 -->
+    <!-- Title section -->
     <section
       v-if="title"
       data-aos="fade-up"
@@ -13,7 +13,7 @@
       <img src="@/assets/icons/home/arrow.svg" alt="" />
     </section>
 
-    <!-- 内容部分 -->
+    <!-- Content part -->
     <section class="flex flex-col sm:flex-row justify-center items-stretch">
       <section
         v-for="(item, index) in content"
@@ -99,12 +99,12 @@ export default {
     contentStyle() {
       const result = [];
 
-      // 判断背景色
+      // Determine background color
       this.outstand
         ? result.push(`bg-${this.theme}-assist-100`)
         : result.push(`bg-${this.theme}-main-300`);
 
-      // 判断对齐方式
+      // Judging alignment
       switch (this.align) {
         case 'left':
           result.push('items-start');
