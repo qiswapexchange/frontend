@@ -1,6 +1,6 @@
 <template>
   <div class="">
-    <!-- 币种选择 -->
+    <!-- Currency selection -->
     <SwapTokenSelect
       switchable
       :token-amount0="tokenAmount0"
@@ -8,7 +8,7 @@
       @change="changeToken"
       @switch="switchTokens"
     />
-    <!-- 转换率 -->
+    <!-- Conversion rate -->
     <div
       v-if="!swap.ratio.eq(0)"
       class="text-2xl text-center py-4 mb-4"
@@ -32,7 +32,7 @@
         </div>
       </div>
     </div>
-    <!-- 信息部分 -->
+    <!-- Information part -->
     <div
       v-if="
         !swap.ratio.eq(0) &&
@@ -111,7 +111,7 @@
         >
       </div>
     </div>
-    <!-- 按钮 -->
+    <!-- Button -->
     <SwapProcessButtons
       :type="TYPE_SWAP"
       :token-amount0="tokenAmount0"

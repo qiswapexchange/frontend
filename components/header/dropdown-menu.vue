@@ -5,7 +5,7 @@
     @mouseenter="toggle(true)"
     @mouseleave="toggle(false)"
   >
-    <!-- 下拉菜单 label -->
+    <!-- Dropdown menu label -->
     <div
       class="cursor-pointer hover:opacity-75"
       @touchstart="onTouchStart"
@@ -19,7 +19,7 @@
         </div>
       </slot>
     </div>
-    <!-- 下拉菜单 content -->
+    <!-- Dropdown menu content -->
     <div :class="dropdownClass" class="z-40 p-1 md:p-2">
       <slot />
     </div>

@@ -6,10 +6,10 @@
  */
 const { maxWidth } = require('tailwindcss/defaultTheme');
 /**
- * 颜色配置说明
- * main：主色
- * inverse：反色
- * assist：辅助色
+ * Color configuration instructions
+ * main：Main color
+ * inverse：Reverse color
+ * assist：Auxiliary color
  */
 module.exports = {
   theme: {

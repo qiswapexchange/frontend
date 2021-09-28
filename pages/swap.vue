@@ -1,7 +1,7 @@
 <template>
   <div class="px-4 flex-grow">
     <SwapSettingsPanel>
-      <!-- 选择部分 -->
+      <!--  Select part -->
       <div class="flex rounded-lg overflow-hidden mb-4">
         <swap-link
           to="/swap/exchange"
@@ -18,11 +18,11 @@
         />
       </div>
 
-      <!-- 展示部分 -->
+      <!-- Display part -->
       <nuxt-child />
     </SwapSettingsPanel>
 
-    <!-- 模态框 -->
+    <!-- Modal box -->
     <Modal v-model="waitingValidating" :can-close="false">
       <div class="h-full flex flex-col items-center justify-center">
         <Spinner class="my-3" :class="`text-${theme}-assist-300`" :width="20" />
@@ -30,7 +30,7 @@
       </div>
     </Modal>
 
-    <!-- 模态框 -->
+    <!-- Modal box -->
     <Modal v-model="waitingConfirmation">
       <div class="h-full flex flex-col items-center justify-center">
         <Spinner class="my-3" :class="`text-${theme}-assist-300`" :width="20" />

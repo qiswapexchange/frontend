@@ -1,11 +1,11 @@
 import BigNumber from 'bignumber.js';
 import Vue from 'vue';
-// 粒子效果插件
+// Particle effects plugin
 import VueParticles from 'vue-particles';
 import VueFeather from 'vue-feather';
-// 滚动插件
+// Scroll plugin
 import VueScrollTo from 'vue-scrollto';
-// 提示工具插件
+// Tooltip plugin
 import Tooltip from 'vue-directive-tooltip';
 import VueClipboard from 'vue-clipboard2';
 
