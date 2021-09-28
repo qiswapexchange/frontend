@@ -1,5 +1,9 @@
 import BigNumber from 'bignumber.js';
 
+import { QI_ADDRESS } from './constants';
+
+export const isQI = (token) => token.address === QI_ADDRESS;
+
 export function isSameToken(token0, token1) {
   return token0?.address === token1?.address;
 }
