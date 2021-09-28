@@ -149,8 +149,8 @@ import {
   useContext,
   watch,
 } from '@nuxtjs/composition-api';
-import { isSameToken, isQI } from '~/libs/utils';
-import { DOMAIN, NETWORK } from '~/libs/constants';
+import { useNetwork, isSameToken, isQI } from '~/libs/utils';
+import { DOMAIN } from '~/libs/constants';
 import { Token } from '~/libs/swap';
 
 export default defineComponent({
@@ -187,7 +187,8 @@ export default defineComponent({
       const keyword = search.value.toLowerCase();
       return state.swap.tokens
         .filter(
-          (token) => token.isQTUM || token.chainId === NETWORK[network.value]
+          (token) =>
+            token.isQTUM || token.chainId === useNetwork(network?.value)
         )
         .filter(
           (token) =>
@@ -243,13 +244,13 @@ export default defineComponent({
         }
         const token = await $axios.$get(
           `https://${
-            DOMAIN[network.value]
+            DOMAIN[useNetwork(network?.value)]
           }/api/qrc20/${search.value.toLowerCase()}`
         );
         searchedToken.value = new Token({
           ...token,
           imported: true,
-          chainId: NETWORK[network.value],
+          chainId: useNetwork(network?.value),
         });
       } catch (e) {
         searchedToken.value = null;

@@ -4,7 +4,7 @@ import qtum from 'qtumjs-lib';
 import abi from 'ethjs-abi';
 import BigNumber from 'bignumber.js';
 import axios from 'axios';
-import { sortTokens } from './utils';
+import { sortTokens, useNetwork } from './utils';
 import { useCache, usePersist } from './cache';
 import Transaction from './transaction';
 import {
@@ -15,7 +15,6 @@ import {
   ZERO_ADDRESS,
   TYPE_APPROVE,
   DOMAIN,
-  NETWORK,
   INSIGHT_DOMAIN,
 } from './constants';
 
@@ -72,11 +71,11 @@ export default class Qrypto extends EventEmmiter {
   }
 
   get router() {
-    return ROUTER[NETWORK[this.account?.network] ?? NETWORK.MainNet];
+    return ROUTER[useNetwork(this.account?.network)];
   }
 
   get factory() {
-    return FACTORY[NETWORK[this.account?.network] ?? NETWORK.MainNet];
+    return FACTORY[useNetwork(this.account?.network)];
   }
 
   handleMessage(event) {
@@ -353,7 +352,7 @@ export default class Qrypto extends EventEmmiter {
     const data = this.encodeMethod(method, params);
     const { data: result } = await axios.get(
       `https://${
-        DOMAIN[this.account.network || NETWORK.MainNet]
+        DOMAIN[useNetwork(this.account?.network)]
       }/api/contract/${address}/call`,
       {
         params: {
@@ -379,11 +378,10 @@ export default class Qrypto extends EventEmmiter {
   ) {
     const method = this.getAbiMethod(abiList, abiName);
     const data = this.encodeMethod(method, params);
-    // console.log(JSON.stringify(method), JSON.stringify(params));
     try {
       const { data: result } = await axios.post(
         `https://${
-          INSIGHT_DOMAIN[this.account.network || NETWORK.MainNet]
+          INSIGHT_DOMAIN[useNetwork(this.account?.network)]
         }/insight-api/contracts/call`,
         {
           data,

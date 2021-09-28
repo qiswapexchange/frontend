@@ -1,6 +1,7 @@
 import BigNumber from 'bignumber.js';
 import { useQrypto } from '../qrypto';
-import { NETWORK, WQTUM, ZERO_ADDRESS } from '../constants';
+import { WQTUM, ZERO_ADDRESS } from '../constants';
+import { useNetwork } from '../utils';
 
 export function isSameToken(token0, token1) {
   return token0?.address === token1?.address;
@@ -75,7 +76,7 @@ export default class Token {
   }
 
   static wrapToken(token) {
-    const chainId = NETWORK[useQrypto().account?.network];
+    const chainId = useNetwork(useQrypto().account?.network);
     return token instanceof Token
       ? token.isQTUM
         ? Token.WQTUM[chainId]
