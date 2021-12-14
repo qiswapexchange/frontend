@@ -86,58 +86,6 @@
         :show-max="!switchable"
       />
     </div>
-    <!-- Select list -->
-    <Modal v-model="modalShow" :title="$t('swap.modal.token.select')">
-      <template>
-        <input
-          v-model.trim="search"
-          class="w-full py-3 px-6 mb-4 rounded-lg"
-          :class="`bg-${theme}-main-200`"
-          :placeholder="$t('swap.modal.token.search')"
-        />
-        <div>
-          <span class="font-thin">{{ $t('swap.modal.token.name') }}</span>
-          <div
-            class="mt-2 flow-root rounded-lg"
-            :class="`bg-${theme}-main-200`"
-          >
-            <Spinner v-if="searching" />
-            <div
-              v-if="searchedToken"
-              class="flex py-2 px-6 my-1 cursor-pointer"
-              :class="`hover:bg-${theme}-main-100`"
-              @click="importToken(searchedToken)"
-            >
-              <img
-                v-if="searchedToken.icon"
-                :src="searchedToken.icon"
-                alt=""
-                class="w-5 mr-4"
-              />
-              <span>{{ searchedToken.symbol }}</span>
-            </div>
-            <div
-              v-for="item in filteredTokens"
-              :key="item.symbol"
-              class="flex justify-between py-2 px-6 my-1 cursor-pointer"
-              :class="`hover:bg-${theme}-main-100`"
-              @click="selectToken(item)"
-            >
-              <div class="flex items-center">
-                <img
-                  v-if="item.icon"
-                  :src="item.icon"
-                  alt=""
-                  class="w-5 mr-4"
-                />
-                <span>{{ item.symbol }}</span>
-              </div>
-              {{ item.balance.gt(0) ? item.balance : '' }}
-            </div>
-          </div>
-        </div>
-      </template>
-    </Modal>
   </div>
 </template>
 
@@ -175,40 +123,12 @@ export default defineComponent({
       store: { state, dispatch },
       $axios,
     } = useContext();
-    const modalShow = ref(false);
     const switched = ref(false);
-    const search = ref('');
-    const searchedToken = ref(null);
-    const searching = ref(false);
     const tokenIndex = ref(0);
     const anotherTokenIndex = computed(() => 1 - tokenIndex.value);
     const network = computed(() => state.swap.account?.network);
-    const filteredTokens = computed(() => {
-      const keyword = search.value.toLowerCase();
-      return state.swap.tokens
-        .filter(
-          (token) =>
-            token.isQTUM || token.chainId === useNetwork(network?.value)
-        )
-        .filter(
-          (token) =>
-            token.name.toLowerCase().includes(keyword) ||
-            token.address.includes(keyword)
-        )
-        .sort((a, b) => {
-          if (a.isQTUM) return -1;
-          if (b.isQTUM) return 1;
-          if (a.balance.isZero() && b.balance.isZero()) {
-            if (isQI(a)) return -1;
-            if (isQI(b)) return 1;
-            return 0;
-          }
-          return a.balance.gt(b.balance) ? -1 : 1;
-        });
-    });
     const preChangeToken = (t) => {
       tokenIndex.value = t;
-      modalShow.value = true;
     };
     const selectToken = (token) => {
       ctx.emit('change', tokenIndex.value, token);
@@ -224,47 +144,14 @@ export default defineComponent({
           }
         }
       }
-      search.value = '';
-      modalShow.value = false;
     };
     const importToken = (token) => {
       dispatch('swap/importToken', token);
       selectToken(token);
-      searchedToken.value = null;
     };
-    watch(search, async () => {
-      const regex = /^[0-9a-f]{40}$/i;
-      searching.value = true;
-      try {
-        if (!regex.test(search.value.toLowerCase())) {
-          throw new Error('Invalid search');
-        }
-        if (filteredTokens.value.length > 0) {
-          throw new Error('Already Imported');
-        }
-        const token = await $axios.$get(
-          `https://${
-            DOMAIN[useNetwork(network?.value)]
-          }/api/qrc20/${search.value.toLowerCase()}`
-        );
-        searchedToken.value = new Token({
-          ...token,
-          imported: true,
-          chainId: useNetwork(network?.value),
-        });
-      } catch (e) {
-        searchedToken.value = null;
-      } finally {
-        searching.value = false;
-      }
-    });
+
     return {
-      modalShow,
       switched,
-      search,
-      searching,
-      filteredTokens,
-      searchedToken,
       theme: computed(() => state.theme),
       switchTokens() {
         if (props.switchable) {

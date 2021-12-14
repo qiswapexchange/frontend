@@ -13,12 +13,6 @@
       <div class="text-6xl text-center mb-3">{{ percent }}%</div>
       <input v-model="percent" class="w-full" type="range" min="1" max="100" />
     </div>
-    <!-- <div>
-      <div class="p-2">
-        {{ tokenAmount0.token.symbol }}-{{ tokenAmount1.token.symbol }}: {{ liquidity.balance }}
-      </div>
-      <SwapAmountInput :token-amount="liquidity" />
-    </div> -->
     <div>
       <div class="p-2">
         {{ tokenAmount0.token.symbol }}: {{ liquidity.amount0 }}

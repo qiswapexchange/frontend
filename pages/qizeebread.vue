@@ -1,26 +1,26 @@
 <template>
   <div class="px-4 flex-grow">
-    <StakeSettingsPanel>
+    <QizeebreadSettingsPanel>
       <!--  Select part -->
       <div class="flex rounded-lg overflow-hidden mb-4">
-        <stake-link
-          to="/stake/exchange"
-          :label="$t('qiZeeBread.stake')"
+        <qizeebread-link
+          to="/qizeebread/stake"
+          :label="$t('qizeebread.stake')"
           :theme="theme"
-          :active="activeNav === 'exchange'"
+          :active="activeNav === 'stake'"
           right
         />
-        <stake-link
-          to="/stake/pool"
-          :label="$t('qiZeeBread.unstake')"
+        <qizeebread-Link
+          to="/qizeebread/unstake"
+          :label="$t('qizeebread.unstake')"
           :theme="theme"
-          :active="activeNav === 'pool'"
+          :active="activeNav === 'unstake'"
         />
       </div>
 
       <!-- Display part -->
       <nuxt-child />
-    </StakeSettingsPanel>
+    </QizeebreadSettingsPanel>
 
     <!-- Modal box -->
     <Modal v-model="waitingValidating" :can-close="false">
@@ -62,7 +62,9 @@ export default defineComponent({
     const waitingConfirmation = ref(false);
     const theme = computed(() => state.theme);
     const activeNav = computed(() => {
-      return route.value.path?.match(/stake\/(.+?)(\/|$)/)?.[1] || 'exchange';
+      return (
+        route.value.path?.match(/qizeebread\/(.+?)(\/|$)/)?.[1] || 'exchange'
+      );
     });
 
     dispatch('swap/loadTxs');

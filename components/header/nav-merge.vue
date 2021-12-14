@@ -229,7 +229,7 @@
             {{ $t('nav.swap') }}
           </locale-link>
           <locale-link
-            to="/stake/exchange"
+            to="/qizeebread/stake"
             class="
               text-center
               leading-8
@@ -239,7 +239,7 @@
               transition-normal
             "
           >
-            {{ $t('nav.qiZeeBread') }}
+            {{ $t('nav.qizeebread') }}
           </locale-link>
           <a
             :href="`https://${domain}`"

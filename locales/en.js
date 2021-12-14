@@ -13,7 +13,7 @@ export default {
     index: 'Home',
     transaction: 'Launch Swap',
     swap: 'Swap',
-    qiZeeBread: 'QiZeeBread',
+    qizeebread: 'QiZeeBread',
     product: 'Products',
     doc: 'Docs',
     contact: 'Contact',
@@ -184,9 +184,9 @@ export default {
     waitingValidating: 'Transaction is being validated.',
     confirmTransaction: 'Please confirm the transaction on QiWallet.',
   },
-  qiZeeBread: {
+  qizeebread: {
     stake: 'Stake',
-    unstake: 'Unstake'
+    unstake: 'Unstake',
   },
   transaction: {
     swap: 'Swap {token0} for {token1}',

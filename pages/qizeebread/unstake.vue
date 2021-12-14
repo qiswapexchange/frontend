@@ -1,13 +1,5 @@
 <template>
   <div class="">
-    <!-- Currency selection -->
-    <SwapTokenSelect
-      icon="plus"
-      icon-size="w-4"
-      :token-amount0="tokenAmount0"
-      :token-amount1="tokenAmount1"
-      @change="changeToken"
-    />
     <div
       v-if="swap.selected && !swap.pair.exists"
       class="rounded-lg mb-6 px-6 py-4 text-sm"
