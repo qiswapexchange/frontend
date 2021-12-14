@@ -215,6 +215,32 @@
               </div>
             </div>
           </div>
+          <locale-link
+            to="/swap/exchange"
+            class="
+              text-center
+              leading-8
+              md:leading-normal
+              py-4
+              md:mx-6
+              transition-normal
+            "
+          >
+            {{ $t('nav.swap') }}
+          </locale-link>
+          <locale-link
+            to="/stake/exchange"
+            class="
+              text-center
+              leading-8
+              md:leading-normal
+              py-4
+              md:mx-6
+              transition-normal
+            "
+          >
+            {{ $t('nav.qiZeeBread') }}
+          </locale-link>
           <a
             :href="`https://${domain}`"
             target="_blank"
