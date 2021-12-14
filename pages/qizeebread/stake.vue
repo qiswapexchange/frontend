@@ -1,8 +1,11 @@
 <template>
   <div class="">
-    <SwapAmountInput :token-amount="tokenAmount0" class="mr-1 mt-2 relative" />
+    <QizeebreadAmountInput
+      :token-amount="tokenAmount0"
+      class="mr-1 mt-2 relative"
+    />
     <!-- Button -->
-    <SwapProcessButtons
+    <QizeebreadProcessButtons
       :type="TYPE_SWAP"
       :token-amount0="tokenAmount0"
       :token-amount1="tokenAmount1"
