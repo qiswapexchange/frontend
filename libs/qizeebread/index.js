@@ -1,3 +1,4 @@
+/* eslint-disable */
 import {
   reactive,
   computed,
@@ -38,6 +39,7 @@ export class Qizeebread {
     this.vm = vm;
 
     this.type = type;
+    this.qiAmount = new TokenAmount(Token.QI);
     this.tokenAmount0 = new TokenAmount(Token.QTUM);
     this.tokenAmount1 = new TokenAmount(null);
     this.independentTokenAmount = this.tokenAmount0;
@@ -202,36 +204,38 @@ export class Qizeebread {
   }
 
   async approve(tokenAmount) {
-    const token = tokenAmount.token;
-    this.updateToken(token, {
-      approving: true,
-    });
+    // console.log('tokenAmount', tokenAmount);
+    // const token = tokenAmount.token;
+    // this.updateToken(token, {
+    //   approving: true,
+    // });
+    // try {
+    //   const tx = await useQrypto().tryToApprove(token, tokenAmount.amount);
+    //   if (tx === true) {
+    //     this.updateToken(token, {
+    //       shouldApprove: false,
+    //       approving: false,
+    //     });
+    //   } else if (tx instanceof Transaction) {
+    //     tx.on('confirmed', () => {
+    //       this.updateToken(token, {
+    //         shouldApprove: false,
+    //         approving: false,
+    //       });
+    //     });
+    //   }
+    // } catch (e) {
+    //   // eslint-disable-next-line no-console
+    //   console.warn('approve failed', e);
+    // }
+    const token = 'eef715b7bb22a7be5ef67052d91bf724aa210b24';
     try {
-      const tx = await useQrypto().tryToApprove(token, tokenAmount.amount);
-      if (tx === true) {
-        this.updateToken(token, {
-          shouldApprove: false,
-          approving: false,
-        });
-      } else if (tx instanceof Transaction) {
-        tx.on('confirmed', () => {
-          this.updateToken(token, {
-            shouldApprove: false,
-            approving: false,
-          });
-        });
-      }
+      const tx = await useQrypto().tryToApproveQizeebread(token, 0);
+      console.log('tryToApproveQizeebread', tx);
     } catch (e) {
       // eslint-disable-next-line no-console
       console.warn('approve failed', e);
     }
-  }
-
-  switchTokens() {
-    [this.tokenAmount1, this.tokenAmount0] = [
-      this.tokenAmount0,
-      this.tokenAmount1,
-    ];
   }
 
   changeToken(index, token) {
@@ -249,7 +253,7 @@ export class Qizeebread {
     let shouldApprove = false;
     let approving = false;
     if (token.isQTUM) {
-      shouldApprove = false;
+      shouldApprove = false; 
     } else {
       const tx = this.txs.find(
         (tx) => tx.type === TYPE_APPROVE && tx.token.address === token.address
@@ -507,158 +511,8 @@ class Exchange extends Qizeebread {
   }
 }
 
-class Pool extends Qizeebread {
-  constructor() {
-    super(TYPE_ADD_LIQUIDITY);
-    this.allPairs = computed(() => [
-      ...this.commonPairs,
-      ...this.customTokens
-        .map((token) => this.commonTokens.map((t) => Pair.from(token, t)))
-        .reduce((customPairs, pairs) => [...customPairs, ...pairs], []),
-    ]);
-    this.pair = computed(() => {
-      if (this.selected) {
-        return Pair.from(this.token0, this.token1);
-      }
-      return reactive(Pair.NULL);
-    });
-    this.shareOfPool = computed(() => {
-      if (!this.pair.exists) {
-        return new Fraction(
-          this.tokenAmount0.amount.gt(0) && this.tokenAmount1.amount.gt(0)
-            ? 100
-            : 0
-        );
-      }
-      // share of pool
-      let minted;
-      if (this.pair.totalSupply.eq(0)) {
-        minted =
-          this.tokenAmount0.amount.times(this.tokenAmount1.amount).sqrt() -
-          MINIMUM_LIQUIDITY;
-      } else {
-        const amount0 = this.tokenAmount0.amount
-          .times(this.pair.totalSupply)
-          .div(this.pair.reserve0);
-        const amount1 = this.tokenAmount1.amount
-          .times(this.pair.totalSupply)
-          .div(this.pair.reserve1);
-        minted = amount0.lt(amount1) ? amount0 : amount1;
-      }
-      return new Fraction(
-        minted,
-        this.pair.totalSupply.div(10 ** 8).plus(minted)
-      ).times(100);
-    });
-    this.ratio = computed(() => {
-      if (this.pair.exists) {
-        return this.pair.priceOf(this.token0);
-      } else {
-        const amount0 = this.tokenAmount0.amount;
-        const amount1 = this.tokenAmount1.amount;
-        return amount0.gt(0) && amount1.gt(0)
-          ? new Fraction(amount1, amount0)
-          : new Fraction(0);
-      }
-    });
-  }
-
-  get canProcess() {
-    return true;
-  }
-
-  async addLiquidity() {
-    const qrypto = useQrypto();
-    try {
-      const tokenAmount0 = this.tokenAmount0;
-      const tokenAmount1 = this.tokenAmount1;
-      const isQTUM0 = tokenAmount0.token.isQTUM;
-      const isQTUM1 = tokenAmount1.token.isQTUM;
-      const amount0 = tokenAmount0.amountSatoshi;
-      const amount1 = tokenAmount1.amountSatoshi;
-      // use the min value
-      const minAmount0 = this.slippageAmounts(amount0)[0];
-      const minAmount1 = this.slippageAmounts(amount1)[0];
-      let method;
-      let params;
-      let value = 0;
-      if (isQTUM0) {
-        method = 'addLiquidityETH';
-        params = [
-          qrypto.wrapHex(tokenAmount1.address),
-          amount1,
-          minAmount1,
-          minAmount0,
-          qrypto.wrapHex(qrypto.hexAddress),
-          getDeadline(this.deadline),
-        ];
-        value = tokenAmount0.amount.toString();
-      } else if (isQTUM1) {
-        method = 'addLiquidityETH';
-        params = [
-          qrypto.wrapHex(tokenAmount0.address),
-          amount0,
-          minAmount0,
-          minAmount1,
-          qrypto.wrapHex(qrypto.hexAddress),
-          getDeadline(this.deadline),
-        ];
-        value = tokenAmount1.amount.toString();
-      } else {
-        method = 'addLiquidity';
-        params = [
-          qrypto.wrapHex(tokenAmount0.address),
-          qrypto.wrapHex(tokenAmount1.address),
-          amount0,
-          amount1,
-          minAmount0,
-          minAmount1,
-          qrypto.wrapHex(qrypto.hexAddress),
-          getDeadline(this.deadline),
-        ];
-      }
-      // if pair doesn't exists, it will cost around 2655000 gas
-      const tx = await qrypto.swap(method, params, value, {
-        gasLimitPlus: 50000,
-      });
-      if (tx instanceof Transaction) {
-        qrypto.emit('tx', {
-          type: TYPE_ADD_LIQUIDITY,
-          raw: tx,
-          tokenAmount0,
-          tokenAmount1,
-        });
-      }
-    } catch (e) {
-      // eslint-disable-next-line no-console
-      console.warn('add error', e);
-    }
-  }
-
-  updateDependentTokenAmount() {
-    if (!this.pair.exists) {
-      return;
-    }
-    const ratio =
-      this.independentTokenAmount === this.tokenAmount0
-        ? this.ratio
-        : this.ratio.invert();
-    const amount = ratio.times(this.independentTokenAmount.amount).quotient;
-    this.dependentTokenAmount.amount = amount.isNaN() ? BigNumber(0) : amount;
-    this.dependentTokenAmount.input = this.dependentTokenAmount.amount.eq(0)
-      ? ''
-      : this.dependentTokenAmount.amount.toString();
-  }
-}
-
 export const useExchange = () => {
   const exchange = reactive(new Exchange());
   exchange.watchAll();
   return exchange;
-};
-
-export const usePool = () => {
-  const pool = reactive(new Pool());
-  pool.watchAll();
-  return pool;
 };

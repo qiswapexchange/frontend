@@ -18,6 +18,8 @@
       :processing="swap.processing"
       :texts="[$t('swap.status.swap'), $t('swap.status.swaping')]"
     />
+    <button @click="approve">Approve</button>
+    <button @click="swapTokens">Stake</button>
   </div>
 </template>
 
@@ -28,7 +30,7 @@ import {
   computed,
   useContext,
 } from '@nuxtjs/composition-api';
-import { useExchange } from '~/libs/swap';
+import { useExchange } from '~/libs/qizeebread';
 import { SWAP_EXACT_INPUT, TYPE_SWAP } from '~/libs/constants';
 
 export default defineComponent({
@@ -60,8 +62,7 @@ export default defineComponent({
       SWAP_EXACT_INPUT,
       // method
       changeToken: swap.changeToken.bind(swap),
-      switchTokens: swap.switchTokens.bind(swap),
-      swapTokens: swap.swapTokens.bind(swap),
+      swapTokens: swap.stake.bind(swap),
       approve: swap.approve.bind(swap),
     };
   },

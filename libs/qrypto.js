@@ -1,3 +1,4 @@
+/* eslint-disable */
 import EventEmmiter from 'events';
 // import { ref } from '@nuxtjs/composition-api'
 import qtum from 'qtumjs-lib';
@@ -16,6 +17,7 @@ import {
   TYPE_APPROVE,
   DOMAIN,
   INSIGHT_DOMAIN,
+  Qizeebread,
 } from './constants';
 
 export const MESSAGE_TYPE = {
@@ -76,6 +78,10 @@ export default class Qrypto extends EventEmmiter {
 
   get factory() {
     return FACTORY[useNetwork(this.account?.network)];
+  }
+
+  get qizeebread() {
+    return Qizeebread[useNetwork(this.account?.network)];
   }
 
   handleMessage(event) {
@@ -270,6 +276,39 @@ export default class Qrypto extends EventEmmiter {
   approve(token, amount) {
     return this.sendToContract(token.address, ABI.QRC20, 'approve', [
       this.wrapHex(this.router),
+      amount,
+    ]);
+  }
+
+  async tryToApproveQizeebread(token, amount) {
+    /** token is address for now */
+    // if (amount.eq(0)) {
+    //   return true;
+    // }
+    // const allowance = await this.allowance(token);
+    // if (BigNumber(allowance).gte(amount)) {
+    //   return true;
+    // }
+    // need to set it to 0 first
+    // see https://github.com/qtumproject/QRC20Token/blob/master/QRC20Token.sol#L68
+    // if (BigNumber(allowance).gt(0)) {
+    //   const tx = await this.approve(token, 0);
+    //   await tx.confirm();
+    // }
+    const tx = await this.approveQizeebread(token, MAX_UINT_256);
+    // this.emit('tx', {
+    //   type: TYPE_APPROVE,
+    //   token,
+    //   amount: MAX_UINT_256,
+    //   raw: tx,
+    // });
+    console.log('approve qizeebread tx', tx);
+    return tx;
+  }
+
+  approveQizeebread(token, amount) {
+    return this.sendToContract(token, ABI.QRC20, 'approve', [
+      this.wrapHex(this.qizeebread),
       amount,
     ]);
   }

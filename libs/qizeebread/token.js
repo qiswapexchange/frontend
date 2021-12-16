@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 import { useQrypto } from '../qrypto';
-import { WQTUM, ZERO_ADDRESS } from '../constants';
+import { WQTUM, QI, ZERO_ADDRESS } from '../constants';
 import { useNetwork } from '../utils';
 
 export function isSameToken(token0, token1) {
@@ -103,6 +103,19 @@ Token.WQTUM = Object.fromEntries(
       decimals: 8,
       icon: '/icons/qtum.svg',
       ...wQtum,
+    }),
+  ])
+);
+
+Token.QI = Object.fromEntries(
+  QI.map((qi) => [
+    qi.chainId,
+    new Token({
+      name: 'QI',
+      symbol: 'QI',
+      decimals: 18,
+      icon: '/icons/qi.svg',
+      ...qi,
     }),
   ])
 );
