@@ -16,18 +16,10 @@
         text-sm
       "
       placeholder="0.0"
-      :disabled="!tokenAmount.selected"
       @input="tokenAmount.inputing = true"
       @blur="tokenAmount.inputing = false"
     />
     <div
-      v-if="
-        tokenAmount.selected &&
-        showMax &&
-        (!tokenAmount.token.isQTUM ||
-          (tokenAmount.token.isQTUM &&
-            tokenAmount.token.balance.minus(0.2).gt(0)))
-      "
       class="
         py-1
         px-2
@@ -46,6 +38,7 @@
 </template>
 
 <script>
+/* eslint-disable  */
 import { BigNumber } from 'bignumber.js';
 export default {
   props: {
@@ -69,11 +62,8 @@ export default {
     setMax(e) {
       e.preventDefault();
       this.$refs.input.focus();
-      /* eslint-disable  */
       this.tokenAmount.inputing = true;
-      this.tokenAmount.input = this.tokenAmount.token.isQTUM
-        ? this.tokenAmount.balance.minus(new BigNumber(0.2))
-        : this.tokenAmount.balance;
+      this.tokenAmount.input = this.tokenAmount.balance;
     },
   },
 };

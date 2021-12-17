@@ -1,7 +1,7 @@
 <template>
   <div class="">
     <QizeebreadAmountInput
-      :token-amount="tokenAmount0"
+      :token-amount="qiAmount"
       class="mr-1 mt-2 relative"
     />
     <!-- Button -->
@@ -10,16 +10,16 @@
       :token-amount0="tokenAmount0"
       :token-amount1="tokenAmount1"
       :token-amount0-exceeded="
-        swap.maximumAmountIn.gt(tokenAmount0.balanceSatoshi)
+        qizeebread.maximumAmountIn.gt(tokenAmount0.balanceSatoshi)
       "
       :approve="approve"
-      :can-process="swap.canProcess"
-      :process="swapTokens"
-      :processing="swap.processing"
+      :can-process="qizeebread.canProcess"
+      :process="stake"
+      :processing="qizeebread.processing"
       :texts="[$t('swap.status.swap'), $t('swap.status.swaping')]"
     />
     <button @click="approve">Approve</button>
-    <button @click="swapTokens">Stake</button>
+    <button @click="stake">Stake</button>
   </div>
 </template>
 
@@ -43,27 +43,27 @@ export default defineComponent({
     const {
       store: { state },
     } = useContext();
-    const swap = useExchange();
-    const tokenAmount0 = computed(() => swap.tokenAmount0);
-    const tokenAmount1 = computed(() => swap.tokenAmount1);
-    const route = computed(() => swap.route);
+    const qizeebread = useExchange();
+    const qiAmount = computed(() => qizeebread.qiAmount);
+    const tokenAmount0 = computed(() => qizeebread.tokenAmount0);
+    const tokenAmount1 = computed(() => qizeebread.tokenAmount1);
 
     const theme = computed(() => state.theme);
     const poolModal = ref(false);
 
     return {
       TYPE_SWAP,
-      swap,
+      qizeebread,
+      qiAmount,
       tokenAmount0,
       tokenAmount1,
-      route,
       poolModal,
       theme,
       SWAP_EXACT_INPUT,
       // method
-      changeToken: swap.changeToken.bind(swap),
-      swapTokens: swap.stake.bind(swap),
-      approve: swap.approve.bind(swap),
+      changeToken: qizeebread.changeToken.bind(qizeebread),
+      stake: qizeebread.stake.bind(qizeebread),
+      approve: qizeebread.approve.bind(qizeebread),
     };
   },
 });

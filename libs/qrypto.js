@@ -280,6 +280,14 @@ export default class Qrypto extends EventEmmiter {
     ]);
   }
 
+  qizeebreadStake(method, params, value = 0, { gasLimitPlus = 0 } = {}) {
+    console.log('qizeebreadStake', method, params);
+    return this.safeSendToContract(this.qizeebread, ABI.QIZEEBREAD, method, params, {
+      qtumAmount: value,
+      gasLimitPlus,
+    });
+  }
+
   async tryToApproveQizeebread(token, amount) {
     /** token is address for now */
     // if (amount.eq(0)) {
@@ -383,6 +391,7 @@ export default class Qrypto extends EventEmmiter {
       });
       return tx;
     } catch (e) {
+      console.log('error', e);
       alert(e.message);
     }
   }
