@@ -78,7 +78,7 @@ export default {
   },
 };
 </script>
-<style>
+<style scoped>
 .max-input {
   color: #2e62f6;
   top: -1.7rem;
