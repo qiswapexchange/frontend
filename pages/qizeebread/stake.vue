@@ -7,7 +7,6 @@
     <!-- Button -->
     <QizeebreadProcessButtons
       :type="TYPE_SWAP"
-      :qi-amount="qiAmount"
       :wanted-amount="qiAmount"
       :token-amount0="tokenAmount0"
       :token-amount1="tokenAmount1"
@@ -18,9 +17,8 @@
       :can-process="qizeebread.canProcess"
       :process="stake"
       :processing="qizeebread.processing"
-      :texts="[$t('swap.status.swap'), $t('swap.status.swaping')]"
+      :texts="[$t('qizeebread.stake'), $t('qizeebread.staking')]"
     />
-    <button @click="approve">Approve</button>
   </div>
 </template>
 

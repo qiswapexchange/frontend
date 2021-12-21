@@ -186,7 +186,9 @@ export default {
   },
   qizeebread: {
     stake: 'Stake',
+    staking: 'Staking...',
     unstake: 'Unstake',
+    unstaking: 'Unstaking...',
     input: 'Input Amount',
     approve: 'Approve QI',
     insufficientQiBalance: 'Insufficient QI Balance'

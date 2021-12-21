@@ -47,6 +47,7 @@ export class Qizeebread {
     );
     this.qiToken = Token.QI[useNetwork(this.account?.network)];
     this.qiAmount = new TokenAmount(this.qiToken);
+    this.stakedAmount = new TokenAmount(this.qiToken);
   
     this.txs = computed(() =>
       state.swap.txs.filter((tx) => tx.address === this.account?.address)
@@ -91,9 +92,7 @@ export class Qizeebread {
     onMounted(() => {
       this.qiToken = Token.QI[useNetwork(this.account?.network)];
       this.qiAmount = new TokenAmount(this.qiToken);
-      // console.log('onMounted', Token.QI);
-      // console.log('onMounted', this.qiAmount);
-      // this.updateBalance(Token.QI);
+      this.stakedAmount = new TokenAmount({ ...this.qiToken });
       this.updateBalance(this.qiToken, true);
     });
   }
@@ -119,6 +118,13 @@ export class Qizeebread {
       (input) => {
         const amount = BigNumber(input || 0);
         this.qiAmount.amount = amount;
+      }
+    );
+    watch(
+      () => this.stakedAmount.input,
+      (input) => {
+        const amount = BigNumber(input || 0);
+        this.stakedAmount.amount = amount;
       }
     );
   }
@@ -224,6 +230,10 @@ export class Qizeebread {
       balanceSatoshi: balance,
     });
   }
+
+  async updateStakedBalance(token) {
+    
+  }
 }
 
 class Exchange extends Qizeebread {
@@ -283,6 +293,8 @@ class Exchange extends Qizeebread {
       console.warn('deposit error', e);
     }
   }
+
+  async unstake() {}
 
   watchAll() {
     super.watchAll();

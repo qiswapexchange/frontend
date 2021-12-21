@@ -55,15 +55,6 @@ export default {
         };
       },
     },
-    unstakeAmount: {
-      type: Object,
-      default() {
-        return {
-          amountExceeded: false,
-          amount: BigNumber(1),
-        };
-      },
-    },
     tokenAmount0: Object,
     tokenAmount1: {
       type: Object,
