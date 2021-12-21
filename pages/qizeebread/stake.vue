@@ -7,6 +7,8 @@
     <!-- Button -->
     <QizeebreadProcessButtons
       :type="TYPE_SWAP"
+      :qi-amount="qiAmount"
+      :wanted-amount="qiAmount"
       :token-amount0="tokenAmount0"
       :token-amount1="tokenAmount1"
       :token-amount0-exceeded="
@@ -19,7 +21,6 @@
       :texts="[$t('swap.status.swap'), $t('swap.status.swaping')]"
     />
     <button @click="approve">Approve</button>
-    <button @click="stake">Stake</button>
   </div>
 </template>
 
@@ -61,7 +62,6 @@ export default defineComponent({
       theme,
       SWAP_EXACT_INPUT,
       // method
-      changeToken: qizeebread.changeToken.bind(qizeebread),
       stake: qizeebread.stake.bind(qizeebread),
       approve: qizeebread.approve.bind(qizeebread),
     };

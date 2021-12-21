@@ -11,23 +11,17 @@ import BigNumber from 'bignumber.js';
 import { useNetwork } from '../utils';
 import {
   TYPE_SWAP,
-  TYPE_ADD_LIQUIDITY,
   SWAP_EXACT_INPUT,
   SWAP_EXACT_OUTPUT,
-  MINIMUM_LIQUIDITY,
-  BASE_FEE,
   TYPE_APPROVE,
   DOMAIN,
+  TYPE_QIZEEBREAD_STAKE,
 } from '../constants';
-import Transaction from '../transaction';
-import Fraction from '../fraction';
 import { useQrypto } from '../qrypto';
 import Token from './token';
 import TokenAmount from './token-amount';
-import Pair from './pair';
-import LiquidityToken from './liquidity-token';
 
-export { Token, TokenAmount, Pair, LiquidityToken };
+export { Token, TokenAmount };
 
 export class Qizeebread {
   constructor(type) {
@@ -38,7 +32,7 @@ export class Qizeebread {
     this.vm = vm;
 
     this.type = type;
-    this.qiAmount = new TokenAmount(Token.QI);
+
     this.tokenAmount0 = new TokenAmount(Token.QTUM);
     this.tokenAmount1 = new TokenAmount(null);
     this.hashStateRoot = '';
@@ -51,6 +45,9 @@ export class Qizeebread {
           token.isQTUM || token.chainId === useNetwork(this.account?.network)
       )
     );
+    this.qiToken = Token.QI[useNetwork(this.account?.network)];
+    this.qiAmount = new TokenAmount(this.qiToken);
+  
     this.txs = computed(() =>
       state.swap.txs.filter((tx) => tx.address === this.account?.address)
     );
@@ -58,7 +55,6 @@ export class Qizeebread {
     this.connected = computed(() => state.swap.connected);
     this.height = computed(() => state.swap.height);
 
-    // pairs from predefined
     this.commonTokens = computed(() => {
       return this.tokens.filter((token) => !token.imported);
     });
@@ -89,11 +85,16 @@ export class Qizeebread {
 
   watchAll() {
     this.watchInput();
-    this.watchToken();
+    // this.watchToken();
     this.watchAccount();
 
     onMounted(() => {
-      this.updateBalance(Token.QTUM);
+      this.qiToken = Token.QI[useNetwork(this.account?.network)];
+      this.qiAmount = new TokenAmount(this.qiToken);
+      // console.log('onMounted', Token.QI);
+      // console.log('onMounted', this.qiAmount);
+      // this.updateBalance(Token.QI);
+      this.updateBalance(this.qiToken, true);
     });
   }
 
@@ -103,10 +104,9 @@ export class Qizeebread {
       () => this.account,
       (account) => {
         if (account?.loggedIn) {
-          this.updateTokens();
+          this.updateBalance(this.qiToken, true);
         } else {
-          this.tokenAmount0.amountSatoshi = BigNumber(0);
-          this.tokenAmount1.amountSatoshi = BigNumber(0);
+          this.qiAmount.amountSatoshi = BigNumber(0);
         }
       }
     );
@@ -123,26 +123,26 @@ export class Qizeebread {
     );
   }
 
-  watchToken() {
-    // update each token if it changes
-    if (!this.account?.network) return;
-    this.tokenAmounts.forEach((tokenAmount) => {
-      watch(
-        () => tokenAmount.token,
-        (token) => {
-          // tokenAmount.input = ''
-          this.updateBalance(token);
-          this.updateShouldApprove(token);
-        }
-      );
-    });
-    watch(
-      () => this.tokens,
-      () => {
-        this.updateTokens();
-      }
-    );
-  }
+  // watchToken() {
+  //   // update each token if it changes
+  //   if (!this.account?.network) return;
+  //   this.tokenAmounts.forEach((tokenAmount) => {
+  //     watch(
+  //       () => tokenAmount.token,
+  //       (token) => {
+  //         // tokenAmount.input = ''
+  //         this.updateBalance(token);
+  //         this.updateShouldApprove(token);
+  //       }
+  //     );
+  //   });
+  //   watch(
+  //     () => this.tokens,
+  //     () => {
+  //       this.updateTokens();
+  //     }
+  //   );
+  // }
 
   async approve(tokenAmount) {
     // console.log('tokenAmount', tokenAmount);
@@ -177,17 +177,6 @@ export class Qizeebread {
       // eslint-disable-next-line no-console
       console.warn('approve failed', e);
     }
-  }
-
-  changeToken(index, token) {
-    this[`tokenAmount${index}`].token = token;
-  }
-
-  getReserves() {
-    return useQrypto().getReserves(
-      this.tokenAmount0.wrappedToken,
-      this.tokenAmount1.wrappedToken
-    );
   }
 
   async updateShouldApprove(token) {
@@ -230,6 +219,7 @@ export class Qizeebread {
       return;
     }
     const balance = await token.getBalance(forceUpdate);
+
     this.updateToken(token, {
       balanceSatoshi: balance,
     });
@@ -269,27 +259,23 @@ class Exchange extends Qizeebread {
   }
 
   async stake() {
-    console.log('this.qiAmount', this.qiAmount);
-    console.log('this.qiAmount', this.qiAmount.amountSatoshi.toString());
     const qrypto = useQrypto();
     try {
       const qiAmount = this.qiAmount;
 
-      const amountIn = this.maximumAmountIn;
-      const amountOut = this.minimumAmountOut;
-
       const to = qrypto.wrapHex(qrypto.hexAddress);
       const method = 'deposit';
-      let value = BigNumber(0);
       let params = [0, qiAmount.amountSatoshi.toString(), to]; // pid, amount, to
 
       const tx = await qrypto.qizeebreadStake(method, params);
+      const emptyObject = {};
       if (tx instanceof Transaction) {
+        console.log('tx instanceof Transaction');
         qrypto.emit('tx', {
-          type: TYPE_SWAP,
+          type: TYPE_QIZEEBREAD_STAKE,
           raw: tx,
-          tokenAmount0,
-          tokenAmount1,
+          emptyObject,
+          emptyObject
         });
       }
     } catch (e) {

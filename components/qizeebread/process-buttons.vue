@@ -1,33 +1,69 @@
 <template>
   <div class="flex">
     <button
-      class="process-button"
-      :class="{
-        [`bg-${theme}-assist-200 hover:bg-${theme}-assist-100`]: true,
-      }"
-      @click="process"
+      v-if="wantedAmount.amount.eq(0)"
+      class="process-button cursor-not-allowed"
+      :class="`bg-${theme}-inverse-300`"
     >
-      Stake
+      {{ $t('qizeebread.input') }}
     </button>
     <button
+      v-else-if="shouldApprove === true && isStake()"
+      class="process-button"
+      :class="{
+        [`bg-${theme}-assist-200 hover:bg-${theme}-assist-100`]: true,
+      }"
+      @click="approve(wantedAmount)"
+    >
+      {{ $t('qizeebread.approve') }}
+    </button>
+    <button
+      v-else-if="wantedAmount.amountExceeded"
+      class="process-button cursor-not-allowed"
+      :class="`bg-${theme}-inverse-300`"
+    >
+      {{ $t('qizeebread.insufficientQiBalance') }}
+    </button>
+    <button
+      v-else-if="wantedAmount.amount.gt(0) && !wantedAmount.shouldApprove"
       class="process-button"
       :class="{
         [`bg-${theme}-assist-200 hover:bg-${theme}-assist-100`]: true,
       }"
       @click="process"
     >
-      Unstake
+      {{ $t('qizeebread.stake') }}
     </button>
   </div>
 </template>
 
 <script>
+/* eslint-disable */
 import BigNumber from 'bignumber.js';
-import { TYPE_SWAP } from '~/libs/constants';
+import { TYPE_SWAP, TYPE_QIZEEBREAD_STAKE, TYPE_QIZEEBREAD_UNSTAKE } from '~/libs/constants';
 
 export default {
   props: {
     type: String,
+    wantedAmount: {
+      type: Object,
+      default() {
+        return {
+          amountExceeded: false,
+          amount: BigNumber(0),
+          shouldApprove: false
+        };
+      },
+    },
+    unstakeAmount: {
+      type: Object,
+      default() {
+        return {
+          amountExceeded: false,
+          amount: BigNumber(1),
+        };
+      },
+    },
     tokenAmount0: Object,
     tokenAmount1: {
       type: Object,
@@ -51,13 +87,16 @@ export default {
       return this.$store.state.theme;
     },
     shouldApprove() {
-      return [
-        this.tokenAmount0?.shouldApprove && this.tokenAmount0.amount.gt(0),
-        this.tokenAmount1?.shouldApprove && this.tokenAmount1.amount.gt(0),
-      ];
+      return this.wantedAmount?.shouldApprove && this.wantedAmount.amount.gt(0);
     },
     isSwap() {
       return this.type === TYPE_SWAP;
+    },
+    isStake() {
+      return this.type === TYPE_QIZEEBREAD_STAKE;
+    },
+    isUnStake() {
+      return this.type === TYPE_QIZEEBREAD_UNSTAKE;
     },
     insufficientQtum() {
       return this.$store.state.swap.account?.balance < 0.2;

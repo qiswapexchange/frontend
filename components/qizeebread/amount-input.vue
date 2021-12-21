@@ -63,7 +63,7 @@ export default {
       e.preventDefault();
       this.$refs.input.focus();
       this.tokenAmount.inputing = true;
-      this.tokenAmount.input = this.tokenAmount.balance;
+      this.tokenAmount.input = this.tokenAmount.balance.toString();
     },
   },
 };

@@ -58,6 +58,7 @@ export const FACTORY = {
   [NETWORK.TestNet]: '086edcf3fc8a042c1b174e941187369d2919e06b',
 };
 
+// QiZeeBread constants
 export const Qizeebread = {
   [NETWORK.MainNet]: '',
   [NETWORK.TestNet]: '65cf57c4cc78eddc037edca4634ca1914e8fe8f7',
@@ -73,3 +74,6 @@ export const QI = [
     address: 'eef715b7bb22a7be5ef67052d91bf724aa210b24',
   },
 ];
+
+export const TYPE_QIZEEBREAD_STAKE = 'qizeebread_stake';
+export const TYPE_QIZEEBREAD_UNSTAKE = 'qizeebread_unstake';

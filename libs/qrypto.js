@@ -281,7 +281,6 @@ export default class Qrypto extends EventEmmiter {
   }
 
   qizeebreadStake(method, params, value = 0, { gasLimitPlus = 0 } = {}) {
-    console.log('qizeebreadStake', method, params);
     return this.safeSendToContract(this.qizeebread, ABI.QIZEEBREAD, method, params, {
       qtumAmount: value,
       gasLimitPlus,

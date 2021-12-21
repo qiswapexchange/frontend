@@ -187,6 +187,9 @@ export default {
   qizeebread: {
     stake: 'Stake',
     unstake: 'Unstake',
+    input: 'Input Amount',
+    approve: 'Approve QI',
+    insufficientQiBalance: 'Insufficient QI Balance'
   },
   transaction: {
     swap: 'Swap {token0} for {token1}',
