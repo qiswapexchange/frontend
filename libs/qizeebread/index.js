@@ -16,12 +16,15 @@ import {
   TYPE_APPROVE,
   DOMAIN,
   TYPE_QIZEEBREAD_STAKE,
+  TYPE_QIZEEBREAD_UNSTAKE,
 } from '../constants';
 import { useQrypto } from '../qrypto';
 import Token from './token';
 import TokenAmount from './token-amount';
 
 export { Token, TokenAmount };
+
+const QI_STAKING_POOL_ID = 0;
 
 export class Qizeebread {
   constructor(type) {
@@ -47,7 +50,7 @@ export class Qizeebread {
     );
     this.qiToken = Token.QI[useNetwork(this.account?.network)];
     this.qiAmount = new TokenAmount(this.qiToken);
-    this.stakedAmount = new TokenAmount(this.qiToken);
+    this.stakeAmount = new TokenAmount(this.qiToken);
   
     this.txs = computed(() =>
       state.swap.txs.filter((tx) => tx.address === this.account?.address)
@@ -92,7 +95,7 @@ export class Qizeebread {
     onMounted(() => {
       this.qiToken = Token.QI[useNetwork(this.account?.network)];
       this.qiAmount = new TokenAmount(this.qiToken);
-      this.stakedAmount = new TokenAmount({ ...this.qiToken });
+      this.stakeAmount = new TokenAmount({ ...this.qiToken });
       this.updateBalance(this.qiToken, true);
     });
   }
@@ -121,10 +124,11 @@ export class Qizeebread {
       }
     );
     watch(
-      () => this.stakedAmount.input,
+      () => this.stakeAmount.input,
       (input) => {
+        console.log('watch stake amount');
         const amount = BigNumber(input || 0);
-        this.stakedAmount.amount = amount;
+        this.stakeAmount.amount = amount;
       }
     );
   }
@@ -275,7 +279,7 @@ class Exchange extends Qizeebread {
 
       const to = qrypto.wrapHex(qrypto.hexAddress);
       const method = 'deposit';
-      let params = [0, qiAmount.amountSatoshi.toString(), to]; // pid, amount, to
+      let params = [QI_STAKING_POOL_ID, qiAmount.amountSatoshi.toString(), to]; // pid, amount, to
 
       const tx = await qrypto.qizeebreadStake(method, params);
       const emptyObject = {};
@@ -294,7 +298,28 @@ class Exchange extends Qizeebread {
     }
   }
 
-  async unstake() {}
+  async unstake() {
+    const qrypto = useQrypto();
+    try {
+      const stakeAmount = this.stakeAmount;
+      const method = 'withdraw';
+      let params = [QI_STAKING_POOL_ID, stakeAmount.amountSatoshi.toString()];
+      
+      const tx = await qrypto.qizeebreadStake(method, params);
+      const emptyObject = {};
+      if (tx instanceof Transaction) {
+        console.log('tx instanceof Transaction');
+        qrypto.emit('tx', {
+          type: TYPE_QIZEEBREAD_UNSTAKE,
+          raw: tx,
+          emptyObject,
+          emptyObject
+        });
+      }
+    } catch (e) {
+      console.log('Unstake error', e);
+    }
+  }
 
   watchAll() {
     super.watchAll();

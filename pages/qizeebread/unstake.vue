@@ -1,24 +1,24 @@
 <template>
   <div class="">
     <QizeebreadAmountInput
-      :token-amount="tokenAmount0"
+      :token-amount="stakeAmount"
       class="mr-1 mt-2 relative"
     />
     <!-- Button -->
     <QizeebreadProcessButtons
       :type="TYPE_ADD_LIQUIDITY"
-      :wanted-amount="stakedAmount"
+      :wanted-amount="stakeAmount"
       :token-amount0="tokenAmount0"
       :token-amount1="tokenAmount1"
       :token-amount0-exceeded="
         qizeebread.maximumAmountIn.gt(tokenAmount0.balanceSatoshi)
       "
-      :approve="approve"
       :can-process="qizeebread.canProcess"
-      :process="stake"
+      :process="unstake"
       :processing="qizeebread.processing"
       :texts="[$t('qizeebread.unstake'), $t('qizeebread.unstaking')]"
     />
+    <button @click="unstake">unstake</button>
   </div>
 </template>
 
@@ -44,21 +44,18 @@ export default defineComponent({
     const theme = computed(() => state.theme);
     const tokenAmount0 = computed(() => swap.tokenAmount0);
     const tokenAmount1 = computed(() => swap.tokenAmount1);
-    const stakedAmount = computed(() => qizeebread.stakedAmount);
+    const stakeAmount = computed(() => qizeebread.stakeAmount);
 
     return {
       TYPE_ADD_LIQUIDITY,
       qizeebread,
-      stakedAmount,
+      stakeAmount,
       swap,
       tokenAmount0,
       tokenAmount1,
       theme,
       // method
       unstake: qizeebread.unstake.bind(qizeebread),
-      addLiquidity: swap.addLiquidity.bind(swap),
-      changeToken: swap.changeToken.bind(swap),
-      approve: swap.approve.bind(swap),
     };
   },
 });

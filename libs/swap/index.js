@@ -159,7 +159,6 @@ export class Swap {
       () => this.independentTokenAmount.input,
       (input) => {
         const amount = BigNumber(input || 0);
-        console.log('watch amount', amount);
         // change the amount in Satoshi
         this.independentTokenAmount.amount = amount;
         // if it's not the current input, don't change anything
