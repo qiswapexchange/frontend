@@ -191,7 +191,8 @@ export default {
     unstaking: 'Unstaking...',
     input: 'Input Amount',
     approve: 'Approve QI',
-    insufficientQiBalance: 'Insufficient QI Balance'
+    insufficientQiBalance: 'Insufficient QI Balance',
+    exceededStakedAmount: 'Exceeded staked amount'
   },
   transaction: {
     swap: 'Swap {token0} for {token1}',

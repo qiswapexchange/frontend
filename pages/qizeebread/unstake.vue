@@ -18,7 +18,6 @@
       :processing="qizeebread.processing"
       :texts="[$t('qizeebread.unstake'), $t('qizeebread.unstaking')]"
     />
-    <button @click="unstake">unstake</button>
   </div>
 </template>
 

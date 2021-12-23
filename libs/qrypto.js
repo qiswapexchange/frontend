@@ -280,6 +280,22 @@ export default class Qrypto extends EventEmmiter {
     ]);
   }
 
+  getUserInfo(pid, forceUpdate = false) {
+    if (!this.loggedIn) {
+      return BigNumber(0);
+    }
+    return useCache(
+      ['userInfo', pid, this.hexAddress],
+      () =>
+        this.return(this.qizeebread, ABI.QIZEEBREAD, 'userInfo', [
+          pid,
+          this.wrapHex(this.hexAddress),
+        ]),
+      600,
+      forceUpdate
+    );
+  }
+
   qizeebreadStake(method, params, value = 0, { gasLimitPlus = 0 } = {}) {
     return this.safeSendToContract(this.qizeebread, ABI.QIZEEBREAD, method, params, {
       qtumAmount: value,

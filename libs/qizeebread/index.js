@@ -49,8 +49,9 @@ export class Qizeebread {
       )
     );
     this.qiToken = Token.QI[useNetwork(this.account?.network)];
+    this.xQiToken = Token.xQI[useNetwork(this.account?.network)];
     this.qiAmount = new TokenAmount(this.qiToken);
-    this.stakeAmount = new TokenAmount(this.qiToken);
+    this.stakeAmount = new TokenAmount(this.xQiToken);
   
     this.txs = computed(() =>
       state.swap.txs.filter((tx) => tx.address === this.account?.address)
@@ -95,8 +96,9 @@ export class Qizeebread {
     onMounted(() => {
       this.qiToken = Token.QI[useNetwork(this.account?.network)];
       this.qiAmount = new TokenAmount(this.qiToken);
-      this.stakeAmount = new TokenAmount({ ...this.qiToken });
+      this.stakeAmount = new TokenAmount(this.xQiToken);
       this.updateBalance(this.qiToken, true);
+      this.updateStakedBalance(this.xQiToken);
     });
   }
 
@@ -107,6 +109,7 @@ export class Qizeebread {
       (account) => {
         if (account?.loggedIn) {
           this.updateBalance(this.qiToken, true);
+          this.updateStakedBalance(this.xQiToken);
         } else {
           this.qiAmount.amountSatoshi = BigNumber(0);
         }
@@ -217,13 +220,6 @@ export class Qizeebread {
     this.vm.proxy.$store.commit('swap/updateToken', { token, values });
   }
 
-  updateTokens() {
-    this.tokens.forEach((token) => {
-      this.updateBalance(token);
-      this.updateShouldApprove(token);
-    });
-  }
-
   async updateBalance(token, forceUpdate = false) {
     if (!token) {
       return;
@@ -236,7 +232,14 @@ export class Qizeebread {
   }
 
   async updateStakedBalance(token) {
-    
+    const userInfo = await useQrypto().getUserInfo(QI_STAKING_POOL_ID);
+    // this.stakeAmount.balance = userInfo[0];
+    const balance = userInfo[0];
+
+    console.log('token', token);
+    this.updateToken(token, {
+      balanceSatoshi: balance,
+    });
   }
 }
 
@@ -284,7 +287,6 @@ class Exchange extends Qizeebread {
       const tx = await qrypto.qizeebreadStake(method, params);
       const emptyObject = {};
       if (tx instanceof Transaction) {
-        console.log('tx instanceof Transaction');
         qrypto.emit('tx', {
           type: TYPE_QIZEEBREAD_STAKE,
           raw: tx,
@@ -308,7 +310,6 @@ class Exchange extends Qizeebread {
       const tx = await qrypto.qizeebreadStake(method, params);
       const emptyObject = {};
       if (tx instanceof Transaction) {
-        console.log('tx instanceof Transaction');
         qrypto.emit('tx', {
           type: TYPE_QIZEEBREAD_UNSTAKE,
           raw: tx,
@@ -334,10 +335,6 @@ class Exchange extends Qizeebread {
                 DOMAIN[useNetwork(this.account?.network)]
               }/api/block/${height}`
             );
-            if (this.hashStateRoot !== hashStateRoot) {
-              this.hashStateRoot = hashStateRoot;
-              this.updateTokens();
-            }
           } catch (e) {
             // eslint-disable-next-line no-console
             console.warn(e);

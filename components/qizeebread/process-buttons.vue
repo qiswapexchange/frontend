@@ -22,7 +22,11 @@
       class="process-button cursor-not-allowed"
       :class="`bg-${theme}-inverse-300`"
     >
-      {{ $t('qizeebread.insufficientQiBalance') }}
+      {{
+        isStake === true
+          ? $t('qizeebread.insufficientQiBalance')
+          : $t('qizeebread.exceededStakedAmount')
+      }}
     </button>
     <button
       v-else-if="wantedAmount.amount.gt(0) && !wantedAmount.shouldApprove"
@@ -32,7 +36,7 @@
       }"
       @click="process"
     >
-      {{ $t('qizeebread.stake') }}
+      {{ texts[0] }}
     </button>
   </div>
 </template>
@@ -79,9 +83,6 @@ export default {
     },
     shouldApprove() {
       return this.wantedAmount?.shouldApprove && this.wantedAmount.amount.gt(0);
-    },
-    isSwap() {
-      return this.type === TYPE_SWAP;
     },
     isStake() {
       return this.type === TYPE_QIZEEBREAD_STAKE;

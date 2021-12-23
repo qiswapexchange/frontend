@@ -119,3 +119,15 @@ Token.QI = Object.fromEntries(
     }),
   ])
 );
+
+Token.xQI = Object.fromEntries(
+  QI.map((qi) => [
+    qi.chainId,
+    new Token({
+      name: 'xQI',
+      symbol: 'xQI',
+      decimals: 18,
+      icon: '/icons/qi.svg',
+    }),
+  ])
+);

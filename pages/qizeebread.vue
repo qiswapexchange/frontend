@@ -2,6 +2,12 @@
   <div class="px-4 flex-grow">
     <QizeebreadSettingsPanel>
       <!--  Select part -->
+      <p>APR</p>
+      <div>Claim button</div>
+      <div class="flex rounded-lg overflow-hidden mb-4"></div>
+    </QizeebreadSettingsPanel>
+    <QizeebreadSettingsPanel>
+      <!--  Select part -->
       <div class="flex rounded-lg overflow-hidden mb-4">
         <qizeebread-link
           to="/qizeebread/stake"
