@@ -2,9 +2,23 @@
   <div class="px-4 flex-grow">
     <QizeebreadSettingsPanel>
       <!--  Select part -->
-      <p>APR</p>
-      <div>Claim button</div>
-      <div class="flex rounded-lg overflow-hidden mb-4"></div>
+      <div class="flex justify-between overflow-hidden py-1">
+        <span>APR</span>
+        <span>88%</span>
+      </div>
+      <div class="flex justify-between overflow-hidden py-1">
+        <span>Rewards</span>
+        <span>12.445 QI</span>
+      </div>
+      <div class="flex justify-between overflow-hidden py-1 pb-4">
+        <span></span>
+        <button
+          :class="`bg-${theme}-assist-100`"
+          class="py-1 px-4 rounded hover:opacity-75 transition-normal"
+        >
+          Claim
+        </button>
+      </div>
     </QizeebreadSettingsPanel>
     <QizeebreadSettingsPanel>
       <!--  Select part -->
