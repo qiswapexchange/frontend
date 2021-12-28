@@ -148,6 +148,22 @@ export default class Qrypto extends EventEmmiter {
     );
   }
 
+  getQRC20Balance(token, owner, forceUpdate = false) {
+    console.log('token', token, owner);
+    if (!this.loggedIn || !token) {
+      return BigNumber(0);
+    }
+    return useCache(
+      ['balanceOf', token, owner],
+      () =>
+        this.return(token.address, ABI.QRC20, 'balanceOf', [
+          this.wrapHex(owner),
+        ]),
+      600,
+      forceUpdate
+    );
+  }
+
   getTotalSupply(token, forceUpdate = false) {
     return useCache(
       ['totalSupply', token],
@@ -280,7 +296,7 @@ export default class Qrypto extends EventEmmiter {
     ]);
   }
 
-  getUserInfo(pid, forceUpdate = false) {
+  getQizeebreadUserInfo(pid, forceUpdate = false) {
     if (!this.loggedIn) {
       return BigNumber(0);
     }
@@ -288,6 +304,23 @@ export default class Qrypto extends EventEmmiter {
       ['userInfo', pid, this.hexAddress],
       () =>
         this.return(this.qizeebread, ABI.QIZEEBREAD, 'userInfo', [
+          pid,
+          this.wrapHex(this.hexAddress),
+        ]),
+      600,
+      forceUpdate
+    );
+  }
+
+  
+  getQizeebreadPendingQi(pid, forceUpdate = false) {
+    if (!this.loggedIn) {
+      return BigNumber(0);
+    }
+    return useCache(
+      ['pendingQi', pid, this.hexAddress],
+      () =>
+        this.return(this.qizeebread, ABI.QIZEEBREAD, 'pendingQi', [
           pid,
           this.wrapHex(this.hexAddress),
         ]),

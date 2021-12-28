@@ -4,17 +4,18 @@
       <!--  Select part -->
       <div class="flex justify-between overflow-hidden py-1">
         <span>APR</span>
-        <span>88%</span>
+        <span>{{ apr.toString() }} %</span>
       </div>
       <div class="flex justify-between overflow-hidden py-1">
         <span>Rewards</span>
-        <span>12.445 QI</span>
+        <span>{{ pendingRewards.toString() }} QI</span>
       </div>
       <div class="flex justify-between overflow-hidden py-1 pb-4">
         <span></span>
         <button
           :class="`bg-${theme}-assist-100`"
           class="py-1 px-4 rounded hover:opacity-75 transition-normal"
+          @click="harvest"
         >
           Claim
         </button>
@@ -70,6 +71,7 @@ import {
 import { NETWORK } from '~/libs/constants';
 import { useQrypto } from '~/libs/qrypto';
 import { Token } from '~/libs/swap';
+import { useExchange } from '~/libs/qizeebread';
 import { useWs } from '~/libs/ws';
 
 export default defineComponent({
@@ -77,6 +79,7 @@ export default defineComponent({
     const { store, route, $axios } = useContext();
     const { state, commit, dispatch } = store;
     const qrypto = useQrypto(state.swap.extensionId);
+    const qizeebread = useExchange();
 
     const waitingValidating = ref(false);
     const waitingConfirmation = ref(false);
@@ -86,6 +89,7 @@ export default defineComponent({
         route.value.path?.match(/qizeebread\/(.+?)(\/|$)/)?.[1] || 'exchange'
       );
     });
+    const apr = computed(() => qizeebread.apr);
 
     const installed = computed(() => state.swap.extensionInstalled);
     qrypto.on('account', (account) => {
@@ -137,12 +141,18 @@ export default defineComponent({
         commit('swap/setTokens', tokens);
         dispatch('swap/loadTokens');
       });
+
+    const pendingRewards = computed(() => qizeebread.pendingQI);
+
     return {
       waitingValidating,
       waitingConfirmation,
       theme,
       activeNav,
       installed,
+      apr,
+      pendingRewards,
+      harvest: qizeebread.harvest.bind(qizeebread),
     };
   },
 });

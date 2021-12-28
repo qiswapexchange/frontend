@@ -17,6 +17,9 @@ import {
   DOMAIN,
   TYPE_QIZEEBREAD_STAKE,
   TYPE_QIZEEBREAD_UNSTAKE,
+  QIZEEBREAD_QI_PER_BLOCK,
+  QTUM_SECONDS_ONE_BLOCK,
+  TYPE_QIZEEBREAD_HARVEST,
 } from '../constants';
 import { useQrypto } from '../qrypto';
 import Token from './token';
@@ -52,6 +55,8 @@ export class Qizeebread {
     this.xQiToken = Token.xQI[useNetwork(this.account?.network)];
     this.qiAmount = new TokenAmount(this.qiToken);
     this.stakeAmount = new TokenAmount(this.xQiToken);
+    this.pendingQI = BigNumber(0);
+    this.apr = BigNumber(0);
   
     this.txs = computed(() =>
       state.swap.txs.filter((tx) => tx.address === this.account?.address)
@@ -99,6 +104,8 @@ export class Qizeebread {
       this.stakeAmount = new TokenAmount(this.xQiToken);
       this.updateBalance(this.qiToken, true);
       this.updateStakedBalance(this.xQiToken);
+      this.updatePendingQI();
+      this.updateAPR();
     });
   }
 
@@ -110,6 +117,8 @@ export class Qizeebread {
         if (account?.loggedIn) {
           this.updateBalance(this.qiToken, true);
           this.updateStakedBalance(this.xQiToken);
+          this.updatePendingQI();
+          this.updateAPR();
         } else {
           this.qiAmount.amountSatoshi = BigNumber(0);
         }
@@ -135,27 +144,6 @@ export class Qizeebread {
       }
     );
   }
-
-  // watchToken() {
-  //   // update each token if it changes
-  //   if (!this.account?.network) return;
-  //   this.tokenAmounts.forEach((tokenAmount) => {
-  //     watch(
-  //       () => tokenAmount.token,
-  //       (token) => {
-  //         // tokenAmount.input = ''
-  //         this.updateBalance(token);
-  //         this.updateShouldApprove(token);
-  //       }
-  //     );
-  //   });
-  //   watch(
-  //     () => this.tokens,
-  //     () => {
-  //       this.updateTokens();
-  //     }
-  //   );
-  // }
 
   async approve(tokenAmount) {
     // console.log('tokenAmount', tokenAmount);
@@ -232,14 +220,28 @@ export class Qizeebread {
   }
 
   async updateStakedBalance(token) {
-    const userInfo = await useQrypto().getUserInfo(QI_STAKING_POOL_ID);
+    const userInfo = await useQrypto().getQizeebreadUserInfo(QI_STAKING_POOL_ID);
     // this.stakeAmount.balance = userInfo[0];
     const balance = userInfo[0];
 
-    console.log('token', token);
     this.updateToken(token, {
       balanceSatoshi: balance,
     });
+  }
+
+  async updatePendingQI() {
+    const pendingQI = await useQrypto().getQizeebreadPendingQi(QI_STAKING_POOL_ID);
+    this.pendingQI = new BigNumber(pendingQI).div(10**18).toFixed(3);
+  }
+
+  async updateAPR() {
+    console.log('this.qiToken.address, useQrypto().qizeebread', this.qiToken.address, useQrypto().qizeebread);
+    const totalStakedQI = await useQrypto().getQRC20Balance(this.qiToken, useQrypto().qizeebread);
+
+    console.log('totalStakedQI', totalStakedQI.toString());
+    const apr = QIZEEBREAD_QI_PER_BLOCK[useNetwork(this.account.network)].times(24 * 3600 * 365).div(new BigNumber(totalStakedQI.toString())).div(QTUM_SECONDS_ONE_BLOCK);
+    console.log('apr', apr.toString());
+    this.apr = apr.toFixed(2);
   }
 }
 
@@ -322,6 +324,29 @@ class Exchange extends Qizeebread {
     }
   }
 
+  async harvest() {
+    const qrypto = useQrypto();
+    try {
+
+      const to = qrypto.wrapHex(qrypto.hexAddress);
+      const method = 'deposit';
+      let params = [QI_STAKING_POOL_ID, 0, to]; // pid, amount, to
+
+      const tx = await qrypto.qizeebreadStake(method, params);
+      const emptyObject = {};
+      if (tx instanceof Transaction) {
+        qrypto.emit('tx', {
+          type: TYPE_QIZEEBREAD_STAKE,
+          raw: tx,
+          emptyObject,
+          emptyObject
+        });
+      }
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.warn('deposit error', e);
+    }
+  }
   watchAll() {
     super.watchAll();
 

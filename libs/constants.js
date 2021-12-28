@@ -75,5 +75,13 @@ export const QI = [
   },
 ];
 
+export const QIZEEBREAD_QI_PER_BLOCK = {
+  [NETWORK.MainNet]: new BigNumber(10).times(10 ** 18),
+  [NETWORK.TestNet]: new BigNumber(10).times(10 ** 18),
+};
+
 export const TYPE_QIZEEBREAD_STAKE = 'qizeebread_stake';
 export const TYPE_QIZEEBREAD_UNSTAKE = 'qizeebread_unstake';
+export const TYPE_QIZEEBREAD_HARVEST = 'qizeebread_harvest';
+// QTUM generates one block in around 30 seconds
+export const QTUM_SECONDS_ONE_BLOCK = 30;
