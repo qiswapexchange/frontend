@@ -61,7 +61,7 @@ export const FACTORY = {
 // QiZeeBread constants
 export const Qizeebread = {
   [NETWORK.MainNet]: '',
-  [NETWORK.TestNet]: '65cf57c4cc78eddc037edca4634ca1914e8fe8f7',
+  [NETWORK.TestNet]: 'f3d23a83497e12bea8dd9e6e69889ef6188d96a3',
 };
 
 export const QI = [

@@ -329,8 +329,8 @@ class Exchange extends Qizeebread {
     try {
 
       const to = qrypto.wrapHex(qrypto.hexAddress);
-      const method = 'deposit';
-      let params = [QI_STAKING_POOL_ID, 0, to]; // pid, amount, to
+      const method = 'withdraw';
+      let params = [QI_STAKING_POOL_ID, 0]; // pid, amount
 
       const tx = await qrypto.qizeebreadStake(method, params);
       const emptyObject = {};

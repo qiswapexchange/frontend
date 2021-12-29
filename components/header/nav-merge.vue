@@ -229,6 +229,7 @@
             {{ $t('nav.swap') }}
           </locale-link>
           <locale-link
+            v-if="isTestNetwork === true"
             to="/qizeebread/stake"
             class="
               text-center
@@ -380,6 +381,11 @@ export default defineComponent({
     const domain = computed(
       () => DOMAIN[account.value?.network || NETWORK.MainNet]
     );
+
+    const isTestNetwork = computed(
+      () => NETWORK[account.value?.network] === NETWORK.TestNet
+    );
+
     const filteredTxs = computed(() =>
       state.swap.txs.filter((tx) => {
         return tx.address === account.value.address;
@@ -435,6 +441,7 @@ export default defineComponent({
       connect,
       toggleMenu,
       copyFinish,
+      isTestNetwork,
     };
   },
 });
