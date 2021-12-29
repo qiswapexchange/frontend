@@ -149,7 +149,6 @@ export default class Qrypto extends EventEmmiter {
   }
 
   getQRC20Balance(token, owner, forceUpdate = false) {
-    console.log('token', token, owner);
     if (!this.loggedIn || !token) {
       return BigNumber(0);
     }
@@ -358,7 +357,6 @@ export default class Qrypto extends EventEmmiter {
     //   amount: MAX_UINT_256,
     //   raw: tx,
     // });
-    console.log('approve qizeebread tx', tx);
     return tx;
   }
 

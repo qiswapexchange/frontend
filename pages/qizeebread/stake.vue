@@ -6,7 +6,7 @@
     />
     <!-- Button -->
     <QizeebreadProcessButtons
-      :type="TYPE_SWAP"
+      :type="TYPE_QIZEEBREAD_STAKE"
       :wanted-amount="qiAmount"
       :token-amount0="tokenAmount0"
       :token-amount1="tokenAmount1"
@@ -30,7 +30,7 @@ import {
   useContext,
 } from '@nuxtjs/composition-api';
 import { useExchange } from '~/libs/qizeebread';
-import { SWAP_EXACT_INPUT, TYPE_SWAP } from '~/libs/constants';
+import { TYPE_QIZEEBREAD_STAKE } from '~/libs/constants';
 
 export default defineComponent({
   transition: {
@@ -51,14 +51,13 @@ export default defineComponent({
     const poolModal = ref(false);
 
     return {
-      TYPE_SWAP,
+      TYPE_QIZEEBREAD_STAKE,
       qizeebread,
       qiAmount,
       tokenAmount0,
       tokenAmount1,
       poolModal,
       theme,
-      SWAP_EXACT_INPUT,
       // method
       stake: qizeebread.stake.bind(qizeebread),
       approve: qizeebread.approve.bind(qizeebread),

@@ -103,6 +103,7 @@ export class Qizeebread {
       this.qiAmount = new TokenAmount(this.qiToken);
       this.stakeAmount = new TokenAmount(this.xQiToken);
       this.updateBalance(this.qiToken, true);
+      this.updateShouldApprove(this.qiToken);
       this.updateStakedBalance(this.xQiToken);
       this.updatePendingQI();
       this.updateAPR();
@@ -116,6 +117,7 @@ export class Qizeebread {
       (account) => {
         if (account?.loggedIn) {
           this.updateBalance(this.qiToken, true);
+          this.updateShouldApprove(this.qiToken);
           this.updateStakedBalance(this.xQiToken);
           this.updatePendingQI();
           this.updateAPR();
@@ -146,7 +148,6 @@ export class Qizeebread {
   }
 
   async approve(tokenAmount) {
-    // console.log('tokenAmount', tokenAmount);
     // const token = tokenAmount.token;
     // this.updateToken(token, {
     //   approving: true,
@@ -173,7 +174,6 @@ export class Qizeebread {
     const token = 'eef715b7bb22a7be5ef67052d91bf724aa210b24';
     try {
       const tx = await useQrypto().tryToApproveQizeebread(token, 0);
-      console.log('tryToApproveQizeebread', tx);
     } catch (e) {
       // eslint-disable-next-line no-console
       console.warn('approve failed', e);
@@ -183,25 +183,23 @@ export class Qizeebread {
   async updateShouldApprove(token) {
     let shouldApprove = false;
     let approving = false;
-    if (token.isQTUM) {
-      shouldApprove = false; 
-    } else {
-      const tx = this.txs.find(
-        (tx) => tx.type === TYPE_APPROVE && tx.token.address === token.address
-      );
-      if (tx) {
-        shouldApprove = tx.raw.confirmations === 0;
-        if (shouldApprove) {
-          approving = true;
-        }
-      } else {
-        shouldApprove = await useQrypto().shouldApprove(token);
+    const tx = this.txs.find(
+      (tx) => tx.type === TYPE_APPROVE && tx.token.address === token.address
+    );
+    if (tx) {
+      shouldApprove = tx.raw.confirmations === 0;
+      if (shouldApprove) {
+        approving = true;
       }
+    } else {
+      shouldApprove = await useQrypto().shouldApprove(token);
     }
     this.updateToken(token, {
       shouldApprove,
       approving,
     });
+
+    console.log('xxx ====>', this.qiToken);
   }
 
   updateToken(token, values) {
@@ -235,12 +233,9 @@ export class Qizeebread {
   }
 
   async updateAPR() {
-    console.log('this.qiToken.address, useQrypto().qizeebread', this.qiToken.address, useQrypto().qizeebread);
     const totalStakedQI = await useQrypto().getQRC20Balance(this.qiToken, useQrypto().qizeebread);
 
-    console.log('totalStakedQI', totalStakedQI.toString());
     const apr = QIZEEBREAD_QI_PER_BLOCK[useNetwork(this.account.network)].times(24 * 3600 * 365).div(new BigNumber(totalStakedQI.toString())).div(QTUM_SECONDS_ONE_BLOCK);
-    console.log('apr', apr.toString());
     this.apr = apr.toFixed(2);
   }
 }

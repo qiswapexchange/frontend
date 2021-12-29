@@ -26,7 +26,6 @@ export default class Pair extends Token {
   }
 
   static updatePairs() {
-    // console.log('update pairs');
     for (const _pairs of Object.values(pairs)) {
       for (const pair of Object.values(_pairs)) {
         pair.init(true);

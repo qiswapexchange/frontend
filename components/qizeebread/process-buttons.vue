@@ -8,7 +8,7 @@
       {{ $t('qizeebread.input') }}
     </button>
     <button
-      v-else-if="shouldApprove === true && isStake()"
+      v-else-if="shouldApprove === true && isStake"
       class="process-button"
       :class="{
         [`bg-${theme}-assist-200 hover:bg-${theme}-assist-100`]: true,
@@ -44,7 +44,7 @@
 <script>
 /* eslint-disable */
 import BigNumber from 'bignumber.js';
-import { TYPE_SWAP, TYPE_QIZEEBREAD_STAKE, TYPE_QIZEEBREAD_UNSTAKE } from '~/libs/constants';
+import { TYPE_QIZEEBREAD_STAKE, TYPE_QIZEEBREAD_UNSTAKE } from '~/libs/constants';
 
 export default {
   props: {

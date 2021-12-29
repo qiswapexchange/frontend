@@ -106,7 +106,6 @@ export default defineComponent({
       commit('swap/setExtensionInstalled', installed)
     );
     qrypto.on('connected', () => {
-      // console.log('connected');
       commit('swap/setConnected', true);
     });
     qrypto.on('txValidating', () => {
@@ -124,7 +123,6 @@ export default defineComponent({
       waitingConfirmation.value = false;
     });
     qrypto.on('tx', (tx) => {
-      console.log('tx listening ====>', tx);
       tx.address = qrypto.account.address;
       tx.raw.on('confirmed', () => {
         dispatch('swap/confirmTx', {
