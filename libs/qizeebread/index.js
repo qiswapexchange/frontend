@@ -219,7 +219,6 @@ export class Qizeebread {
 
   async updateStakedBalance(token) {
     const userInfo = await useQrypto().getQizeebreadUserInfo(QI_STAKING_POOL_ID);
-    // this.stakeAmount.balance = userInfo[0];
     const balance = userInfo[0];
 
     this.updateToken(token, {
@@ -228,14 +227,23 @@ export class Qizeebread {
   }
 
   async updatePendingQI() {
-    const pendingQI = await useQrypto().getQizeebreadPendingQi(QI_STAKING_POOL_ID);
-    this.pendingQI = new BigNumber(pendingQI).div(10**18).toFixed(3);
+    try {
+      const pendingQI = await useQrypto().getQizeebreadPendingQi(QI_STAKING_POOL_ID);
+      this.pendingQI = new BigNumber(pendingQI).div(10**18).toFixed(3);
+    } catch (e) {
+      console.log('error', e);
+    }
   }
 
   async updateAPR() {
     const totalStakedQI = await useQrypto().getQRC20Balance(this.qiToken, useQrypto().qizeebread);
-
-    const apr = QIZEEBREAD_QI_PER_BLOCK[useNetwork(this.account.network)].times(24 * 3600 * 365).div(new BigNumber(totalStakedQI.toString())).div(QTUM_SECONDS_ONE_BLOCK);
+    if (totalStakedQI.eq(0)) {
+      return 0;
+    }
+    const apr = QIZEEBREAD_QI_PER_BLOCK[useNetwork(this.account.network)]
+      .times(24 * 3600 * 365)
+      .div(new BigNumber(totalStakedQI.toString()))
+      .div(QTUM_SECONDS_ONE_BLOCK);
     this.apr = apr.toFixed(2);
   }
 }

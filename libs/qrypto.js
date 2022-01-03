@@ -316,6 +316,7 @@ export default class Qrypto extends EventEmmiter {
     if (!this.loggedIn) {
       return BigNumber(0);
     }
+    console.log('pid ==>', this.qizeebread, pid, this.wrapHex(this.hexAddress))
     return useCache(
       ['pendingQi', pid, this.hexAddress],
       () =>
