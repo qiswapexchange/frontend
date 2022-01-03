@@ -134,6 +134,7 @@ export default class Qrypto extends EventEmmiter {
   }
 
   getTokenBalance(token, forceUpdate = false) {
+    console.log('getting balance', token.address, this.wrapHex(this.hexAddress));
     if (!this.loggedIn || !token) {
       return BigNumber(0);
     }
@@ -316,7 +317,6 @@ export default class Qrypto extends EventEmmiter {
     if (!this.loggedIn) {
       return BigNumber(0);
     }
-    console.log('pid ==>', this.qizeebread, pid, this.wrapHex(this.hexAddress))
     return useCache(
       ['pendingQi', pid, this.hexAddress],
       () =>
@@ -338,31 +338,31 @@ export default class Qrypto extends EventEmmiter {
 
   async tryToApproveQizeebread(token, amount) {
     /** token is address for now */
-    // if (amount.eq(0)) {
-    //   return true;
-    // }
-    // const allowance = await this.allowance(token);
-    // if (BigNumber(allowance).gte(amount)) {
-    //   return true;
-    // }
+    if (amount.eq(0)) {
+      return true;
+    }
+    const allowance = await this.allowance(token);
+    if (BigNumber(allowance).gte(amount)) {
+      return true;
+    }
     // need to set it to 0 first
     // see https://github.com/qtumproject/QRC20Token/blob/master/QRC20Token.sol#L68
-    // if (BigNumber(allowance).gt(0)) {
-    //   const tx = await this.approve(token, 0);
-    //   await tx.confirm();
-    // }
+    if (BigNumber(allowance).gt(0)) {
+      const tx = await this.approve(token, 0);
+      await tx.confirm();
+    }
     const tx = await this.approveQizeebread(token, MAX_UINT_256);
-    // this.emit('tx', {
-    //   type: TYPE_APPROVE,
-    //   token,
-    //   amount: MAX_UINT_256,
-    //   raw: tx,
-    // });
+    this.emit('tx', {
+      type: TYPE_APPROVE,
+      token,
+      amount: MAX_UINT_256,
+      raw: tx,
+    });
     return tx;
   }
 
   approveQizeebread(token, amount) {
-    return this.sendToContract(token, ABI.QRC20, 'approve', [
+    return this.sendToContract(token.address, ABI.QRC20, 'approve', [
       this.wrapHex(this.qizeebread),
       amount,
     ]);

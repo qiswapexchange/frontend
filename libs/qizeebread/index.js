@@ -99,14 +99,16 @@ export class Qizeebread {
     this.watchAccount();
 
     onMounted(() => {
-      this.qiToken = Token.QI[useNetwork(this.account?.network)];
-      this.qiAmount = new TokenAmount(this.qiToken);
-      this.stakeAmount = new TokenAmount(this.xQiToken);
-      this.updateBalance(this.qiToken, true);
-      this.updateShouldApprove(this.qiToken);
-      this.updateStakedBalance(this.xQiToken);
-      this.updatePendingQI();
-      this.updateAPR();
+      if (this.account?.network) {
+        this.qiToken = Token.QI[useNetwork(this.account?.network)];
+        this.qiAmount = new TokenAmount(this.qiToken);
+        this.stakeAmount = new TokenAmount(this.xQiToken);
+        this.updateBalance(this.qiToken, true);
+        this.updateShouldApprove(this.qiToken);
+        this.updateStakedBalance(this.xQiToken);
+        this.updatePendingQI();
+        this.updateAPR();
+      }
     });
   }
 
@@ -116,6 +118,9 @@ export class Qizeebread {
       () => this.account,
       (account) => {
         if (account?.loggedIn) {
+          this.qiToken = Token.QI[useNetwork(this.account?.network)];
+          this.qiAmount = new TokenAmount(this.qiToken);
+          this.stakeAmount = new TokenAmount(this.xQiToken);
           this.updateBalance(this.qiToken, true);
           this.updateShouldApprove(this.qiToken);
           this.updateStakedBalance(this.xQiToken);
@@ -147,37 +152,37 @@ export class Qizeebread {
     );
   }
 
-  async approve(tokenAmount) {
-    // const token = tokenAmount.token;
-    // this.updateToken(token, {
-    //   approving: true,
-    // });
-    // try {
-    //   const tx = await useQrypto().tryToApprove(token, tokenAmount.amount);
-    //   if (tx === true) {
-    //     this.updateToken(token, {
-    //       shouldApprove: false,
-    //       approving: false,
-    //     });
-    //   } else if (tx instanceof Transaction) {
-    //     tx.on('confirmed', () => {
-    //       this.updateToken(token, {
-    //         shouldApprove: false,
-    //         approving: false,
-    //       });
-    //     });
-    //   }
-    // } catch (e) {
-    //   // eslint-disable-next-line no-console
-    //   console.warn('approve failed', e);
-    // }
-    const token = 'eef715b7bb22a7be5ef67052d91bf724aa210b24';
+  async approve() {
+    const token = this.qiAmount.token;
+    this.updateToken(token, {
+      approving: true,
+    });
     try {
-      const tx = await useQrypto().tryToApproveQizeebread(token, 0);
+      const tx = await useQrypto().tryToApproveQizeebread(token, this.qiAmount.amount);
+      if (tx === true) {
+        this.updateToken(token, {
+          shouldApprove: false,
+          approving: false,
+        });
+      } else if (tx instanceof Transaction) {
+        tx.on('confirmed', () => {
+          this.updateToken(token, {
+            shouldApprove: false,
+            approving: false,
+          });
+        });
+      }
     } catch (e) {
       // eslint-disable-next-line no-console
       console.warn('approve failed', e);
     }
+    // const token = 'eef715b7bb22a7be5ef67052d91bf724aa210b24';
+    // try {
+    //   const tx = await useQrypto().tryToApproveQizeebread(token, 0);
+    // } catch (e) {
+    //   // eslint-disable-next-line no-console
+    //   console.warn('approve failed', e);
+    // }
   }
 
   async updateShouldApprove(token) {
@@ -198,8 +203,6 @@ export class Qizeebread {
       shouldApprove,
       approving,
     });
-
-    console.log('xxx ====>', this.qiToken);
   }
 
   updateToken(token, values) {
@@ -207,14 +210,19 @@ export class Qizeebread {
   }
 
   async updateBalance(token, forceUpdate = false) {
+    console.log('we are updating balance', token);
     if (!token) {
       return;
     }
-    const balance = await token.getBalance(forceUpdate);
-
-    this.updateToken(token, {
-      balanceSatoshi: balance,
-    });
+    try {
+      const balance = await token.getBalance(forceUpdate);
+      this.updateToken(token, {
+        balanceSatoshi: balance,
+      });
+    } catch (e) {
+      console.log('erros when updating balance', e);
+    }
+    
   }
 
   async updateStakedBalance(token) {
