@@ -11,6 +11,11 @@ export default [
         name: '_qiPerBlock',
         type: 'uint256',
       },
+      {
+        internalType: 'uint256',
+        name: '_rewardTimestamp',
+        type: 'uint256',
+      },
     ],
     stateMutability: 'nonpayable',
     type: 'constructor',
@@ -340,6 +345,19 @@ export default [
   },
   {
     inputs: [],
+    name: 'rewardStartTimestamp',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
     name: 'rewarder',
     outputs: [
       {
@@ -428,6 +446,19 @@ export default [
       },
     ],
     name: 'setRewarder',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_qiPerBlock',
+        type: 'uint256',
+      },
+    ],
+    name: 'setQiPerBlock',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',

@@ -173,16 +173,8 @@ export class Qizeebread {
         });
       }
     } catch (e) {
-      // eslint-disable-next-line no-console
       console.warn('approve failed', e);
     }
-    // const token = 'eef715b7bb22a7be5ef67052d91bf724aa210b24';
-    // try {
-    //   const tx = await useQrypto().tryToApproveQizeebread(token, 0);
-    // } catch (e) {
-    //   // eslint-disable-next-line no-console
-    //   console.warn('approve failed', e);
-    // }
   }
 
   async updateShouldApprove(token) {
@@ -197,7 +189,7 @@ export class Qizeebread {
         approving = true;
       }
     } else {
-      shouldApprove = await useQrypto().shouldApprove(token);
+      shouldApprove = await useQrypto().shouldApproveQizeebread(token);
     }
     this.updateToken(token, {
       shouldApprove,
@@ -210,7 +202,6 @@ export class Qizeebread {
   }
 
   async updateBalance(token, forceUpdate = false) {
-    console.log('we are updating balance', token);
     if (!token) {
       return;
     }
@@ -337,11 +328,13 @@ class Exchange extends Qizeebread {
 
   async harvest() {
     const qrypto = useQrypto();
+    console.log('we are going to harvest');
     try {
-
       const to = qrypto.wrapHex(qrypto.hexAddress);
       const method = 'withdraw';
       let params = [QI_STAKING_POOL_ID, 0]; // pid, amount
+      // const method = 'deposit';
+      // let params = [QI_STAKING_POOL_ID, 0, to]; // pid, amount
 
       const tx = await qrypto.qizeebreadStake(method, params);
       const emptyObject = {};
@@ -355,7 +348,7 @@ class Exchange extends Qizeebread {
       }
     } catch (e) {
       // eslint-disable-next-line no-console
-      console.warn('deposit error', e);
+      console.warn('harvest error', e);
     }
   }
   watchAll() {

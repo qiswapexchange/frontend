@@ -134,7 +134,6 @@ export default class Qrypto extends EventEmmiter {
   }
 
   getTokenBalance(token, forceUpdate = false) {
-    console.log('getting balance', token.address, this.wrapHex(this.hexAddress));
     if (!this.loggedIn || !token) {
       return BigNumber(0);
     }
@@ -312,7 +311,6 @@ export default class Qrypto extends EventEmmiter {
     );
   }
 
-  
   getQizeebreadPendingQi(pid, forceUpdate = false) {
     if (!this.loggedIn) {
       return BigNumber(0);
@@ -330,10 +328,25 @@ export default class Qrypto extends EventEmmiter {
   }
 
   qizeebreadStake(method, params, value = 0, { gasLimitPlus = 0 } = {}) {
+    console.log('qizeebreadStake', method, params, this.qizeebread);
     return this.safeSendToContract(this.qizeebread, ABI.QIZEEBREAD, method, params, {
       qtumAmount: value,
       gasLimitPlus,
     });
+  }
+
+  async shouldApproveQizeebread(token) {
+    const allowance = await this.allowanceQizeebread(token);
+    return BigNumber(allowance).eq(0);
+  }
+
+  allowanceQizeebread(token) {
+    return useCache(['allowance', token.address], () =>
+      this.return(token.address, ABI.QRC20, 'allowance', [
+        this.wrapHex(this.hexAddress),
+        this.wrapHex(this.qizeebread),
+      ])
+    );
   }
 
   async tryToApproveQizeebread(token, amount) {
