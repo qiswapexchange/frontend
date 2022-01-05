@@ -21,6 +21,7 @@ import {
   QTUM_SECONDS_ONE_BLOCK,
   TYPE_QIZEEBREAD_HARVEST,
 } from '../constants';
+import Transaction from '../transaction';
 import { useQrypto } from '../qrypto';
 import Token from './token';
 import TokenAmount from './token-amount';
@@ -145,7 +146,6 @@ export class Qizeebread {
     watch(
       () => this.stakeAmount.input,
       (input) => {
-        console.log('watch stake amount');
         const amount = BigNumber(input || 0);
         this.stakeAmount.amount = amount;
       }
@@ -286,7 +286,8 @@ class Exchange extends Qizeebread {
 
       const to = qrypto.wrapHex(qrypto.hexAddress);
       const method = 'deposit';
-      let params = [QI_STAKING_POOL_ID, qiAmount.amountSatoshi.toString(), to]; // pid, amount, to
+      // const params = [QI_STAKING_POOL_ID, qiAmount.amountSatoshi.toString(), to]; // pid, amount, to
+      const params = [QI_STAKING_POOL_ID, qiAmount.amountSatoshi, to]; // pid, amount, to
 
       const tx = await qrypto.qizeebreadStake(method, params);
       const emptyObject = {};
@@ -309,7 +310,7 @@ class Exchange extends Qizeebread {
     try {
       const stakeAmount = this.stakeAmount;
       const method = 'withdraw';
-      let params = [QI_STAKING_POOL_ID, stakeAmount.amountSatoshi.toString()];
+      let params = [QI_STAKING_POOL_ID, stakeAmount.amountSatoshi];
       
       const tx = await qrypto.qizeebreadStake(method, params);
       const emptyObject = {};
@@ -328,7 +329,6 @@ class Exchange extends Qizeebread {
 
   async harvest() {
     const qrypto = useQrypto();
-    console.log('we are going to harvest');
     try {
       const to = qrypto.wrapHex(qrypto.hexAddress);
       const method = 'withdraw';
