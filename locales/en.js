@@ -12,6 +12,8 @@ export default {
   nav: {
     index: 'Home',
     transaction: 'Launch Swap',
+    swap: 'Swap',
+    qizeebread: 'QiZeeBread',
     product: 'Products',
     doc: 'Docs',
     contact: 'Contact',
@@ -181,6 +183,16 @@ export default {
     select: 'Select',
     waitingValidating: 'Transaction is being validated.',
     confirmTransaction: 'Please confirm the transaction on QiWallet.',
+  },
+  qizeebread: {
+    stake: 'Stake',
+    staking: 'Staking...',
+    unstake: 'Unstake',
+    unstaking: 'Unstaking...',
+    input: 'Input Amount',
+    approve: 'Approve QI',
+    insufficientQiBalance: 'Insufficient QI Balance',
+    exceededStakedAmount: 'Exceeded staked amount',
   },
   transaction: {
     swap: 'Swap {token0} for {token1}',

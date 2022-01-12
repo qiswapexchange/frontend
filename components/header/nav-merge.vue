@@ -215,6 +215,33 @@
               </div>
             </div>
           </div>
+          <locale-link
+            to="/swap/exchange"
+            class="
+              text-center
+              leading-8
+              md:leading-normal
+              py-4
+              md:mx-6
+              transition-normal
+            "
+          >
+            {{ $t('nav.swap') }}
+          </locale-link>
+          <locale-link
+            v-if="isTestNetwork === true"
+            to="/qizeebread/stake"
+            class="
+              text-center
+              leading-8
+              md:leading-normal
+              py-4
+              md:mx-6
+              transition-normal
+            "
+          >
+            {{ $t('nav.qizeebread') }}
+          </locale-link>
           <a
             :href="`https://${domain}`"
             target="_blank"
@@ -354,6 +381,11 @@ export default defineComponent({
     const domain = computed(
       () => DOMAIN[account.value?.network || NETWORK.MainNet]
     );
+
+    const isTestNetwork = computed(
+      () => NETWORK[account.value?.network] === NETWORK.TestNet
+    );
+
     const filteredTxs = computed(() =>
       state.swap.txs.filter((tx) => {
         return tx.address === account.value.address;
@@ -409,6 +441,7 @@ export default defineComponent({
       connect,
       toggleMenu,
       copyFinish,
+      isTestNetwork,
     };
   },
 });

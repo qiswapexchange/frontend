@@ -59,7 +59,6 @@ export default class Transaction extends EventEmmiter {
   }
 
   async onConfirmed() {
-    // console.log('confirmed!!!');
     await this.updateInfo();
     this.emit('confirmed');
     this.ws.$unsubscribe(

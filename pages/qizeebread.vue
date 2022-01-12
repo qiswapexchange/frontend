@@ -1,26 +1,47 @@
 <template>
   <div class="px-4 flex-grow">
-    <SwapSettingsPanel>
+    <QizeebreadSettingsPanel>
+      <!--  Select part -->
+      <div class="flex justify-between overflow-hidden py-1">
+        <span>APR</span>
+        <span>{{ apr.toString() }} %</span>
+      </div>
+      <div class="flex justify-between overflow-hidden py-1">
+        <span>Rewards</span>
+        <span>{{ pendingRewards.toString() }} QI</span>
+      </div>
+      <div class="flex justify-between overflow-hidden py-1 pb-4">
+        <span></span>
+        <button
+          :class="`bg-${theme}-assist-100`"
+          class="py-1 px-4 rounded hover:opacity-75 transition-normal"
+          @click="harvest"
+        >
+          Claim
+        </button>
+      </div>
+    </QizeebreadSettingsPanel>
+    <QizeebreadSettingsPanel>
       <!--  Select part -->
       <div class="flex rounded-lg overflow-hidden mb-4">
-        <swap-link
-          to="/swap/exchange"
-          :label="$t('swap.exchange')"
+        <qizeebread-link
+          to="/qizeebread/stake"
+          :label="$t('qizeebread.stake')"
           :theme="theme"
-          :active="activeNav === 'exchange'"
+          :active="activeNav === 'stake'"
           right
         />
-        <swap-link
-          to="/swap/pool"
-          :label="$t('swap.pool')"
+        <qizeebread-Link
+          to="/qizeebread/unstake"
+          :label="$t('qizeebread.unstake')"
           :theme="theme"
-          :active="activeNav === 'pool'"
+          :active="activeNav === 'unstake'"
         />
       </div>
 
       <!-- Display part -->
       <nuxt-child />
-    </SwapSettingsPanel>
+    </QizeebreadSettingsPanel>
 
     <!-- Modal box -->
     <Modal v-model="waitingValidating" :can-close="false">
@@ -50,6 +71,7 @@ import {
 import { NETWORK } from '~/libs/constants';
 import { useQrypto } from '~/libs/qrypto';
 import { Token } from '~/libs/swap';
+import { useExchange } from '~/libs/qizeebread';
 import { useWs } from '~/libs/ws';
 
 export default defineComponent({
@@ -57,15 +79,18 @@ export default defineComponent({
     const { store, route, $axios } = useContext();
     const { state, commit, dispatch } = store;
     const qrypto = useQrypto(state.swap.extensionId);
+    const qizeebread = useExchange();
 
     const waitingValidating = ref(false);
     const waitingConfirmation = ref(false);
     const theme = computed(() => state.theme);
     const activeNav = computed(() => {
-      return route.value.path?.match(/swap\/(.+?)(\/|$)/)?.[1] || 'exchange';
+      return (
+        route.value.path?.match(/qizeebread\/(.+?)(\/|$)/)?.[1] || 'exchange'
+      );
     });
+    const apr = computed(() => qizeebread.apr);
 
-    dispatch('swap/loadTxs');
     const installed = computed(() => state.swap.extensionInstalled);
     qrypto.on('account', (account) => {
       commit('swap/setAccount', account);
@@ -114,12 +139,18 @@ export default defineComponent({
         commit('swap/setTokens', tokens);
         dispatch('swap/loadTokens');
       });
+
+    const pendingRewards = computed(() => qizeebread.pendingQI);
+
     return {
       waitingValidating,
       waitingConfirmation,
       theme,
       activeNav,
       installed,
+      apr,
+      pendingRewards,
+      harvest: qizeebread.harvest.bind(qizeebread),
     };
   },
 });

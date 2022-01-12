@@ -1,3 +1,4 @@
+/* eslint-disable */
 import EventEmmiter from 'events';
 // import { ref } from '@nuxtjs/composition-api'
 import qtum from 'qtumjs-lib';
@@ -16,6 +17,7 @@ import {
   TYPE_APPROVE,
   DOMAIN,
   INSIGHT_DOMAIN,
+  Qizeebread,
 } from './constants';
 
 export const MESSAGE_TYPE = {
@@ -78,6 +80,10 @@ export default class Qrypto extends EventEmmiter {
     return FACTORY[useNetwork(this.account?.network)];
   }
 
+  get qizeebread() {
+    return Qizeebread[useNetwork(this.account?.network)];
+  }
+
   handleMessage(event) {
     const { target, message } = event.data;
     if (target !== 'qrypto-inpage') {
@@ -136,6 +142,21 @@ export default class Qrypto extends EventEmmiter {
       () =>
         this.return(token.address, ABI.QRC20, 'balanceOf', [
           this.wrapHex(this.hexAddress),
+        ]),
+      600,
+      forceUpdate
+    );
+  }
+
+  getQRC20Balance(token, owner, forceUpdate = false) {
+    if (!this.loggedIn || !token) {
+      return BigNumber(0);
+    }
+    return useCache(
+      ['balanceOf', token, owner],
+      () =>
+        this.return(token.address, ABI.QRC20, 'balanceOf', [
+          this.wrapHex(owner),
         ]),
       600,
       forceUpdate
@@ -274,6 +295,91 @@ export default class Qrypto extends EventEmmiter {
     ]);
   }
 
+  getQizeebreadUserInfo(pid, forceUpdate = false) {
+    if (!this.loggedIn) {
+      return BigNumber(0);
+    }
+    return useCache(
+      ['userInfo', pid, this.hexAddress],
+      () =>
+        this.return(this.qizeebread, ABI.QIZEEBREAD, 'userInfo', [
+          pid,
+          this.wrapHex(this.hexAddress),
+        ]),
+      600,
+      forceUpdate
+    );
+  }
+
+  getQizeebreadPendingQi(pid, forceUpdate = false) {
+    if (!this.loggedIn) {
+      return BigNumber(0);
+    }
+    return useCache(
+      ['pendingQi', pid, this.hexAddress],
+      () =>
+        this.return(this.qizeebread, ABI.QIZEEBREAD, 'pendingQi', [
+          pid,
+          this.wrapHex(this.hexAddress),
+        ]),
+      600,
+      forceUpdate
+    );
+  }
+
+  qizeebreadStake(method, params, value = 0, { gasLimitPlus = 0 } = {}) {
+    return this.safeSendToContract(this.qizeebread, ABI.QIZEEBREAD, method, params, {
+      qtumAmount: value,
+      gasLimitPlus,
+    });
+  }
+
+  async shouldApproveQizeebread(token) {
+    const allowance = await this.allowanceQizeebread(token);
+    return BigNumber(allowance).eq(0);
+  }
+
+  allowanceQizeebread(token) {
+    return useCache(['allowance', token.address], () =>
+      this.return(token.address, ABI.QRC20, 'allowance', [
+        this.wrapHex(this.hexAddress),
+        this.wrapHex(this.qizeebread),
+      ])
+    );
+  }
+
+  async tryToApproveQizeebread(token, amount) {
+    /** token is address for now */
+    if (amount.eq(0)) {
+      return true;
+    }
+    const allowance = await this.allowance(token);
+    if (BigNumber(allowance).gte(amount)) {
+      return true;
+    }
+    // need to set it to 0 first
+    // see https://github.com/qtumproject/QRC20Token/blob/master/QRC20Token.sol#L68
+    if (BigNumber(allowance).gt(0)) {
+      const tx = await this.approve(token, 0);
+      await tx.confirm();
+    }
+    const tx = await this.approveQizeebread(token, MAX_UINT_256);
+    this.emit('tx', {
+      type: TYPE_APPROVE,
+      token,
+      amount: MAX_UINT_256,
+      raw: tx,
+    });
+    return tx;
+  }
+
+  approveQizeebread(token, amount) {
+    return this.sendToContract(token.address, ABI.QRC20, 'approve', [
+      this.wrapHex(this.qizeebread),
+      amount,
+    ]);
+  }
+
   async rpcCall(method, params = []) {
     if (!this.rpcProvider) {
       throw new Error("RPC Provider doess't exists");
@@ -344,6 +450,7 @@ export default class Qrypto extends EventEmmiter {
       });
       return tx;
     } catch (e) {
+      console.log('error', e);
       alert(e.message);
     }
   }
