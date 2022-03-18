@@ -229,7 +229,6 @@
             {{ $t('nav.swap') }}
           </locale-link>
           <locale-link
-            v-if="isTestNetwork === true"
             to="/qizeebread/stake"
             class="
               text-center
