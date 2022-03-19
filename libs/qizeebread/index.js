@@ -289,7 +289,7 @@ class Exchange extends Qizeebread {
       // const params = [QI_STAKING_POOL_ID, qiAmount.amountSatoshi.toString(), to]; // pid, amount, to
       const params = [QI_STAKING_POOL_ID, qiAmount.amountSatoshi, to]; // pid, amount, to
 
-      const tx = await qrypto.qizeebreadStake(method, params);
+      const tx = await qrypto.qizeebreadStake(method, params, 0, {gasLimitPlus: 50000});
       const emptyObject = {};
       if (tx instanceof Transaction) {
         qrypto.emit('tx', {
@@ -312,7 +312,7 @@ class Exchange extends Qizeebread {
       const method = 'withdraw';
       let params = [QI_STAKING_POOL_ID, stakeAmount.amountSatoshi];
       
-      const tx = await qrypto.qizeebreadStake(method, params);
+      const tx = await qrypto.qizeebreadStake(method, params, 0, {gasLimitPlus: 50000});
       const emptyObject = {};
       if (tx instanceof Transaction) {
         qrypto.emit('tx', {

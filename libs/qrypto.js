@@ -446,7 +446,7 @@ export default class Qrypto extends EventEmmiter {
       const { gasUsed } = result.executionResult;
       const tx = await this.sendToContract(address, abiList, abiName, params, {
         ...options,
-        gasLimit: Math.ceil(gasUsed * 1.1) + options.gasLimitPlus,
+        gasLimit: Math.ceil(gasUsed * 1.5) + options.gasLimitPlus,
       });
       return tx;
     } catch (e) {
