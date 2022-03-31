@@ -26,7 +26,8 @@ export const NETWORK = {
   RegTest: 2,
 };
 export const DOMAIN = {
-  0: 'infoapi.backendq.com',
+  // 0: 'infoapi.backendq.com',
+  0: 'qtum.info',
   1: 'testnet.qtum.info',
 };
 export const INSIGHT_DOMAIN = {
